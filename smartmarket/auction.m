@@ -1,9 +1,9 @@
 function [cq, cp] = auction(bus, gen, gencost, q, p, max_p, auction_type, mpopt)
 %AUCTION  Clear auction based on OPF results.
 %   [cq, cp] = auction(bus, gen, gencost, q, p, max_p, auction_type, mpopt)
-%   Clears a set of bids and offers based on the results of an OPF, where the pricing
-%   is adjusted for network losses and binding constraints. There are 8 types
-%   of auctions implemented here, specified by auction_type.
+%   Clears a set of bids and offers based on the results of an OPF, where the
+%   pricing is adjusted for network losses and binding constraints. There are
+%   8 types of auctions implemented here, specified by auction_type.
 %
 %      0 - discriminative pricing (price equal to offer or bid)
 %      1 - last accepted offer auction
@@ -11,8 +11,9 @@ function [cq, cp] = auction(bus, gen, gencost, q, p, max_p, auction_type, mpopt)
 %      3 - last accepted bid auction
 %      4 - first rejected bid auction
 %      5 - first price auction (marginal unit, offer or bid, sets the price)
-%      6 - second price auction (if offer is marginal, price set by min(FRO,LAB), else max(FRB,LAO)
-%      7 - split the difference pricing (price set by last accepted offer and bid)
+%      6 - second price auction (if offer is marginal, price set by
+%             min(FRO,LAB), else max(FRB,LAO)
+%      7 - split the difference pricing (set by last accepted offer & bid)
 %      8 - LAO sets seller price, LAB sets buyer price
 %
 %   Cleared offer prices (but not bid prices) are clipped to max_p.
