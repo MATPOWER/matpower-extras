@@ -81,6 +81,8 @@ all_zeros = zeros(size(pin));
 gbus	= gen(in, GEN_BUS);						%% indices of buses w/gens
 lamP 	= diag(bus(gbus, LAM_P)) * all_ones;	%% real power prices
 lamQ 	= diag(bus(gbus, LAM_Q)) * all_ones;	%% reactive power prices
+
+%% compute fudge factor for lamP to include price of bundled reactive power
 nz		= find( gen(L, PG) );
 pf			= all_zeros;						%% for loads Q = pf * P
 pf(L(nz))	= gen(L(nz), QG) ./ gen(L(nz), PG);
@@ -88,12 +90,20 @@ Qfudge		= all_zeros;
 Qfudge(L,:)	= diag(pf(L)) * lamQ(L,:);
 
 %%-----  compute shift matrices to add to lamP to get desired pricing  -----
+%% If refP is the lambda P at an arbitrary reference bus, and normP is
+%% the set of offers/bids normalized to the refbus location with bids
+%% normalized to include bundled reactive power as well, then
+%%     gap = normP - refP
+%% In other words, (gap + refP) can be used to form the normal
+%% non-locational bid/offer stack. And since refP is just a constant
+%% it doesn't actually change the shape of the stacks.
 gap = pin - lamP - Qfudge;
 
 DISC_P  = gap;
 DISC_PQ = gap + Qfudge;
 
 LAO = on(G,:) .* gap(G,:) - off(G,:) * max_p;
+LAO( find(LAO(:) > 1e-5) ) = -max_p;	%% don't let gens at Pmin set price
 LAO = max( LAO(:) ) * all_ones;
 
 FRO = off(G,:) .* gap(G,:) + on(G,:) * max_p;
@@ -153,8 +163,15 @@ cpin(L,:) = lamP(L,:) + L_shift(L,:);
 
 %% clip prices by offers and bids
 clip = on .* (pin - cpin);
-cpin(G,:) = cpin(G,:) + (clip(G,:) > 0) .* clip(G,:);
-cpin(L,:) = cpin(L,:) + (clip(L,:) < 0) .* clip(L,:);
+cpin(G,:) = cpin(G,:) + (clip(G,:) > 1e-5) .* clip(G,:);
+cpin(L,:) = cpin(L,:) + (clip(L,:) < -1e-5) .* clip(L,:);
+
+%% make prices uniform after clipping (except for discrim auction)
+%% since clipping may only affect a single block of a generator
+if auction_type ~= 0
+	cpin(G,:) = diag(max(cpin(G,:)')) * all_ones(G,:);	%% equal to largest price in row
+	cpin(L,:) = diag(min(cpin(L,:)')) * all_ones(L,:);	%% equal to smallest price in row
+end
 
 cq(in, :) = cqin;
 cp(in, :) = cpin;
