@@ -80,8 +80,10 @@ max_p = max_p + gap;
 [gen, genoffer] = off2case(gen, gencost, q, p, max_p);
 
 %% set reserve cost equal to reserve offers (replace zero placeholders)
-tmp = size(gencost, 2);
-gencost(reserves, :) = genoffer(reserves, 1:tmp);
+if ~isempty(reserves)
+    tmp = min([ size(gencost, 2) size(genoffer, 2) ]);
+    gencost(reserves, 1:tmp) = genoffer(reserves, 1:tmp);
+end
 
 %% make copy of initial bus voltages and generator outputs
 bus0 = bus(:, [VM, VA]);
@@ -146,7 +148,11 @@ if success      %% OPF solved case fine
         mpopt = mpoption(mpopt, 'VERBOSE', verbose-1);
     end
     [cq, cp] = auction(bus, gen, gencost, q, p, max_p, auction_type, mpopt);
-    k = find( sum( cq' )' );
+    if size(cq, 2) == 1
+        k = find( cq );
+    else
+        k = find( sum( cq' )' );
+    end
     price = cp(:, 1);           %% need this for prices for gens that are shut down
     price(k) = sum( cq(k, :)' .* cp(k, :)' )' ./ sum( cq(k, :)' )';
 else        %% did not converge even with reserves
