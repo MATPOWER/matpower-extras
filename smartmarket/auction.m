@@ -57,7 +57,7 @@ cp      = zeros(size(p));                   %% cleared price offers
 in      = find(gen(:, GEN_STATUS) >= 0);    %% which gens are in the game (non-reserve)
                                             %% (NOTE: can include some that are off-line)
 G       = find( ~isload(gen(in, :)) );   	%% real generators
-L       = find(  isload(gen(in, :)) );   	%% variable loads
+L       = find(  isload(gen(in, :)) );   	%% dispatchable loads
 qin     = q(in, :);             %% reduce quantity offers ...
 pin     = p(in, :);             %% ... and price offers to those gens that are "in"
 cqin    = cq(in, :);

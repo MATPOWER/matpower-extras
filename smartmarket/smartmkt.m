@@ -99,7 +99,7 @@ load_capacity   = sum(bus(:, PD));
 %% with lambdas caused by rounding errors when corner point
 %% of cost function lies at exactly Pmin or Pmax
 if any(find(genoffer(:, MODEL) == PW_LINEAR))
-    gg = find( gen(:, PMAX) > 0 );      %% skip variable loads
+    gg = find( ~isload(gen) );      %% skip dispatchable loads
     gen(gg, PMIN) = gen(gg, PMIN) - 100 * mpopt(16) * ones(size(gg));
     gen(gg, PMAX) = gen(gg, PMAX) + 100 * mpopt(16) * ones(size(gg));
 end
