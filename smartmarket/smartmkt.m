@@ -1,7 +1,7 @@
-function [bus, gen, branch, f, dispatch, success] = ...
+function [cq, cp, bus, gen, branch, f, dispatch, success] = ...
 			smartmkt(baseMVA, bus, gen, gencost, branch, area, q, p, mkt, max_p, u0, t, mpopt)
 %SMARTMKT  Runs the PowerWeb smart market.
-%   [bus, gen, branch, f, dispatch, success] = smartmkt(baseMVA, bus, gen, ...
+%   [cq, cp, bus, gen, branch, f, dispatch, success] = smartmkt(baseMVA, bus, gen, ...
 %   branch, area, gencost, q, p, max_p, u0, t, mpopt) runs the ISO smart market.
 
 %   MATPOWER
@@ -21,10 +21,9 @@ verbose	= mpopt(31);
 margin = 1.05;			%% must have 5% capacity margin if considering losses
 
 %% parse market code
-code		= mkt - 10000;
-discrete	= fix(code/1000);	code = rem(code, 1000);
+code		= mkt - 1000;
 adjust4loc	= fix(code/100);	code = rem(code, 100);
-which_price	= fix(code/10);
+auction_type= fix(code/10);
 
 %% set power flow formulation based on market
 mpopt = mpoption(mpopt, 'PF_DC', adjust4loc == 2);
@@ -78,7 +77,7 @@ p(reserves, :) = ones(length(reserves), np) * (max_offered_p + gap);
 max_p = max_p + gap;
 
 %% set up cost info & generator limits
-[gen, genoffer] = off2case(gen, gencost, q, p, max_p, discrete);
+[gen, genoffer] = off2case(gen, gencost, q, p, max_p);
 
 %% set reserve cost equal to reserve offers (replace zero placeholders)
 tmp = size(gencost, 2);
@@ -142,15 +141,14 @@ end
 %% compute quantities & prices
 if success		%% OPF solved case fine
 	quantity	= gen(:, PG);
-	if discrete
-		%% turn down verbosity one level for call to uniform
-		if verbose
-			mpopt = mpoption(mpopt, 'VERBOSE', verbose-1);
-		end
-		price = uniform(bus, gen, gencost, area, q, p, max_p, which_price, mpopt);
-	else
-		price = marginal(bus, gen, gencost, area, q, p, max_p);
+	%% turn down verbosity one level for call to auction
+	if verbose
+		mpopt = mpoption(mpopt, 'VERBOSE', verbose-1);
 	end
+	[cq, cp] = auction(bus, gen, gencost, q, p, max_p, auction_type, mpopt);
+	k = find( sum( cq' )' );
+	price = zeros(ng, 1);
+	price(k) = sum( cq(k, :)' .* cp(k, :)' )' ./ sum( cq(k, :)' )';
 else		%% did not converge even with reserves
 	quantity	= zeros(ng, 1);
 	price		= max_p * ones(ng, 1);
