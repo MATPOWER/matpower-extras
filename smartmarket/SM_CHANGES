@@ -19,6 +19,10 @@ Please report any bugs you find to Ray Zimmerman <rz10@cornell.edu>.
 Changes since MATPOWER 2.5b3
 ----------------------------
 
+5/30/03
+	- added auction.m, removed everything to do with continuous
+	  offer/bid markets
+
 2/14/01
 	- corrected a comment
 
