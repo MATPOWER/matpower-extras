@@ -56,15 +56,17 @@ for i = 1:ng
             qmax(i) = gen(i, QMAX) * pmin(i) / gen(i, PMIN);
 %           pmax(i) = gen(i, PMAX);     %% no change
             xx = [0; cumsum(qq)]' + pmin(i);
+            yy = [0; cumsum(pp .* qq)]';
+            yy = yy - yy(end);
         else                    %% it's a generator
 %           pmin(i) = qq(1);
 %           pmin(i) = gen(i, PMIN);     %% no change
             pmax(i) = sum(qq);
             xx = [0; cumsum(qq)]';
+            yy = [0; cumsum(pp .* qq)]';
         end
     
         %% form piece-wise linear total cost function
-        yy = [0; cumsum(pp .* qq)]';
         gencost(i, N) = n;
         gencost(i,      COST:2:( COST + 2*n - 1 )) = xx;
         gencost(i,  (COST+1):2:( COST + 2*n     )) = yy;
