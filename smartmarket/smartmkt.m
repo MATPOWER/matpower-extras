@@ -1,8 +1,8 @@
 function [cq, cp, bus, gen, branch, f, dispatch, success] = ...
-			smartmkt(baseMVA, bus, gen, gencost, branch, area, q, p, mkt, max_p, u0, t, mpopt)
+			smartmkt(baseMVA, bus, gen, gencost, branch, areas, q, p, mkt, max_p, u0, t, mpopt)
 %SMARTMKT  Runs the PowerWeb smart market.
 %   [cq, cp, bus, gen, branch, f, dispatch, success] = smartmkt(baseMVA, bus, gen, ...
-%   branch, area, gencost, q, p, max_p, u0, t, mpopt) runs the ISO smart market.
+%   branch, areas, gencost, q, p, max_p, u0, t, mpopt) runs the ISO smart market.
 
 %   MATPOWER
 %   $Id$
@@ -119,7 +119,7 @@ while 1
 		
 		%% attempt OPF
 		[bus, gen, branch, f, success, et] =  uopf(baseMVA, bus, gen, genoffer, ...
-					branch, area, mpopt);
+					branch, areas, mpopt);
 		if verbose & ~success
 			fprintf('\nSMARTMARKET: non-convergent UOPF');
 		end

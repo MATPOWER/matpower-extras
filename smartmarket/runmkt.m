@@ -96,8 +96,8 @@ end
 	GEN_STATUS, PMAX, PMIN, MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN] = idx_gen;
 
 %% read data & convert to internal bus numbering
-[baseMVA, bus, gen, branch, area, gencost] = loadcase(casename);
-[i2e, bus, gen, branch, area] = ext2int(bus, gen, branch, area);
+[baseMVA, bus, gen, branch, areas, gencost] = loadcase(casename);
+[i2e, bus, gen, branch, areas] = ext2int(bus, gen, branch, areas);
 
 %% finish assigning default arguments
 if isempty(u0)
@@ -114,13 +114,13 @@ t0 = clock;
 
 %% run the market
 [cq, cp, bus, gen, branch, f, dispatch, success] = ...
-		smartmkt(baseMVA, bus, gen, gencost, branch, area, q, p, mkt, max_p, u0, t, mpopt);
+		smartmkt(baseMVA, bus, gen, gencost, branch, areas, q, p, mkt, max_p, u0, t, mpopt);
 
 %% compute elapsed time
 et = etime(clock, t0);
 
 %% convert back to original bus numbering & print results
-[bus, gen, branch, area] = int2ext(i2e, bus, gen, branch, area);
+[bus, gen, branch, areas] = int2ext(i2e, bus, gen, branch, areas);
 if fname
 	[fd, msg] = fopen(fname, 'at');
 	if fd == -1
@@ -134,7 +134,7 @@ printmkt(baseMVA, bus, gen, branch, f, t, dispatch, success, et, 1, mpopt);
 
 %% save solved case
 if solvedcase
-	savecase(solvedcase, baseMVA, bus, gen, branch, area, gencost);
+	savecase(solvedcase, baseMVA, bus, gen, branch, areas, gencost);
 end
 
 %% this is just to prevent it from printing baseMVA
