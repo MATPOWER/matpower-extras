@@ -2,7 +2,7 @@
  Change history for SMARTMARKET
 --------------------------------
 
-Version:    3.0b4
+Version:    3.0b4+
 
 maintained by Ray Zimmerman <rz10@cornell.edu>
 
@@ -19,6 +19,9 @@ Changes since MATPOWER 3.0b3
     - Switched to using isload() to check for dispatchable load.
 	- Modified off2case.m to keep Q limits consistent with constant power
 	  factor for dispatchable loads.
+
+11/18/04
+    - Fixed bug in off2case.m for inputs containing zero quantity bids.
 
 9/28/04
     - Modified to auction.m to clip cleared offer prices (but not bid prices)
