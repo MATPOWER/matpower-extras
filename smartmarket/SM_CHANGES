@@ -11,6 +11,19 @@ $Id$
 Copyright (c) 1996-2004 by Power System Engineering Research Center (PSERC)
 See http://www.pserc.cornell.edu/matpower/ for more info.
 
+Changes since MATPOWER 3.0b2
+----------------------------
+
+9/15/04
+    - Fixed bug in auction.m where locational prices were
+      wiped out when generators had only a single block.
+
+    - Fixed small bug in smartmkt.m related to single block
+      generators, and worked around another related to handling
+      of reserve generators when gencost and genoffer are
+      not the same dimension.
+      
+
 Changes since MATPOWER 2.5b3
 ----------------------------
 
