@@ -4,8 +4,10 @@ function [q, p] = case2off(gen, gencost, discrete)
 %   from case variables gen & gencost and whether the offers are discrete
 %   or continuous.
 
-%   by Ray Zimmerman, PSERC Cornell    10/14/97
-%   Copyright (c) 1996, 1997 by Power System Engineering Research Center (PSERC)
+%   MATPOWER
+%   $Id$
+%   by Ray Zimmerman, PSERC Cornell
+%   Copyright (c) 1996-2003 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/ for more info.
 
 %% define named indices into data matrices

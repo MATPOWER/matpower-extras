@@ -7,8 +7,10 @@ function printmkt(baseMVA, bus, gen, branch, f, t, dispatch, success, et, fd, mp
 %   function value is given in f, the duration of the dispatch period (in hours) in
 %   t, and the elapsed time in et.
 
-%   by Ray Zimmerman, PSERC Cornell    12/2/98
-%   Copyright (c) 1996-1998 by Power System Engineering Research Center (PSERC)
+%   MATPOWER
+%   $Id$
+%   by Ray Zimmerman, PSERC Cornell
+%   Copyright (c) 1996-2003 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/ for more info.
 
 %%----- initialization -----

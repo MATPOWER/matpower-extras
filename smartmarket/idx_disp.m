@@ -2,8 +2,10 @@ function [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp
 %IDX_DISP   Defines variables for column indices to dispatch.
 %   [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp
 
-%   by Ray Zimmerman, PSERC Cornell    9/17/97
-%   Copyright (c) 1996, 1997 by Power System Engineering Research Center (PSERC)
+%   MATPOWER
+%   $Id$
+%   by Ray Zimmerman, PSERC Cornell
+%   Copyright (c) 1996-2003 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/ for more info.
 
 %% define the indices

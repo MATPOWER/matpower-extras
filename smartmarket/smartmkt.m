@@ -4,8 +4,10 @@ function [bus, gen, branch, f, dispatch, success] = ...
 %   [bus, gen, branch, f, dispatch, success] = smartmkt(baseMVA, bus, gen, ...
 %   branch, area, gencost, q, p, max_p, u0, t, mpopt) runs the ISO smart market.
 
-%   by Ray Zimmerman, PSERC Cornell    2/14/01
-%   Copyright (c) 1996-2001 by Power System Engineering Research Center (PSERC)
+%   MATPOWER
+%   $Id$
+%   by Ray Zimmerman, PSERC Cornell
+%   Copyright (c) 1996-2003 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/ for more info.
 
 %%-----  initialization  -----

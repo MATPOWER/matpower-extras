@@ -5,8 +5,10 @@ function [gen, gencost] = off2case(gen, gencost, q, p, max_p, discrete)
 %   specified. Updates PMIN, PMAX, GEN_STATUS and all cost info except STARTUP
 %   and SHUTDOWN. Any quantity offered above max_p will be ignored.
 
-%   by Ray Zimmerman, PSERC Cornell    3/14/00
-%   Copyright (c) 1996-2000 by Power System Engineering Research Center (PSERC)
+%   MATPOWER
+%   $Id$
+%   by Ray Zimmerman, PSERC Cornell
+%   Copyright (c) 1996-2003 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/ for more info.
 
 %% define named indices into data matrices
