@@ -35,7 +35,8 @@ verbose = mpopt(31);
 if have_fcn('minopf')
     zero_tol = 1e-5;
 else
-    zero_tol = 0.1;
+    zero_tol = 0.1;     %% fmincon is SO bad with prices that it is
+                        %% NOT recommended for use with auction.m
 end
 
 %% define named indices into data matrices
@@ -88,7 +89,7 @@ lamP    = diag(bus(gbus, LAM_P)) * all_ones;    %% real power prices
 lamQ    = diag(bus(gbus, LAM_Q)) * all_ones;    %% reactive power prices
 
 %% compute fudge factor for lamP to include price of bundled reactive power
-nz      = find( gen(L, PG) );
+nz          = find( gen(L, PG) );
 pf          = all_zeros;                        %% for loads Q = pf * P
 pf(L(nz))   = gen(L(nz), QG) ./ gen(L(nz), PG);
 Qfudge      = all_zeros;
@@ -172,8 +173,8 @@ cpin(G,:) = cpin(G,:) + (clip(G,:) > zero_tol) .* clip(G,:);
 cpin(L,:) = cpin(L,:) + (clip(L,:) < -zero_tol) .* clip(L,:);
 
 %% make prices uniform after clipping (except for discrim auction)
-%% since clipping may only affect a single block of a generator
-if auction_type ~= 0
+%% since clipping may only affect a single block of a multi-block generator
+if auction_type ~= 0 & np > 1
     cpin(G,:) = diag(max(cpin(G,:)')) * all_ones(G,:);  %% equal to largest price in row
     cpin(L,:) = diag(min(cpin(L,:)')) * all_ones(L,:);  %% equal to smallest price in row
 end
