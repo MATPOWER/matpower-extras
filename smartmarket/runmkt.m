@@ -1,9 +1,9 @@
-function [MVAbase, bus, gen, gencost, branch, f, dispatch, success, et] = ...
+function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] = ...
 				runmkt(casename, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
 %RUNMKT  Runs smart market for PowerWeb, computing a new generation
 %        schedule from a set of offers.
 %
-%   [baseMVA, bus, gen, gencost, branch, f, dispatch, success, et] = ...
+%   [baseMVA, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] = ...
 %           runmkt(casename, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
 %
 %   Computes the new generation and price schedules based on the offers
@@ -14,26 +14,34 @@ function [MVAbase, bus, gen, gencost, branch, f, dispatch, success, et] = ...
 %   of the dispatch period in hours, and mpopt is a MATPOWER options vector
 %   (see 'help mpoption' for details). Uses default options if mpopt is not
 %   given. The rows in q and p correspond to the rows in gen and gencost,
-%   and each column corresponds to another data point or block in the
-%   marginal offer. The market codes are defined as the sum of the
+%   and each column corresponds to another block in the marginal offer or
+%   bid. The market codes are defined as the sum of the
 %   following numbers:
-%       10000               - all markets
-%        1000 * discrete    - discrete = 1 for block offers, 0 for continuous
-%                             linear offers
-%         100 * adjust4loc  - adjust4loc = 0 to ignore network,
-%							  1 to compute locational adjustments via AC OPF,
-%                             2 to compute them via DC OPF
-%          10 * which_price - which_price = 1 for last accepted offer, 2 for
-%                             first rejected offer
+%        1000                - all markets
+%         100 * adjust4loc   - adjust4loc = 0 to ignore network,
+%							   1 to compute locational adjustments via AC OPF,
+%                              2 to compute them via DC OPF
+%          10 * auction_type - where the values for auction_type are as follows:
+%
+%      0 - discriminative pricing (price equal to offer or bid)
+%      1 - last accepted offer auction
+%      2 - first rejected offer auction
+%      3 - last accepted bid auction
+%      4 - first rejected bid auction
+%      5 - first price auction (marginal unit, offer or bid, sets the price)
+%      6 - second price auction (if offer is marginal, price set by min(FRO,LAB), else max(FRB,LAO)
+%      7 - split the difference pricing (price set by last accepted offer and bid)
+%      8 - LAO sets seller price, LAB sets buyer price
+%
 %   If p or q are empty or not given, they are created from the generator
-%   cost function. The default is market code is 11110, for the standard
-%   LAO EMPIRE auction. The default max_p is 500, the default u0 is all ones
-%   (assume everything was running) and the default duration t is 1 hour.
-%   The results may optionally be printed to a file (appended
-%   if the file exists) whose name is given in fname (in addition to
-%   printing to STDOUT). Optionally returns the final values of baseMVA,
-%   bus, gen, gencost, branch, f, dispatch, success, and et. If a name is
-%   given in solvedcase, the solved case will be written to a case file
+%   cost function. The default is market code is 1150, where the marginal
+%   block (offer or bid) sets the price. The default max_p is 500, the
+%   default u0 is all ones (assume everything was running) and the default
+%   duration t is 1 hour. The results may optionally be printed to a file
+%   (appended if the file exists) whose name is given in fname (in addition
+%   to printing to STDOUT). Optionally returns the final values of baseMVA,
+%   cq, cp, bus, gen, gencost, branch, f, dispatch, success, and et. If a
+%   name is given in solvedcase, the solved case will be written to a case file
 %   in MATPOWER format with the specified name with a '.m' extension added.
 
 %   MATPOWER
@@ -72,7 +80,7 @@ if nargin < 10
 	end
 end
 if isempty(mkt)
-	mkt = 11110;				%% default market is LAO EMPIRE market
+	mkt = 1150;				%% default market is LAO EMPIRE market
 end
 if isempty(max_p)
 	max_p = 500;				%% default reservation price is 500
@@ -98,15 +106,14 @@ end
 
 %% if q and p not defined, use gencost
 if isempty(q) | isempty(p)
-	discrete = fix((mkt-10000)/1000);
-	[q, p] = case2off(gen, gencost, discrete);
+	[q, p] = case2off(gen, gencost);
 end
 
 %% start the clock
 t0 = clock;
 
 %% run the market
-[bus, gen, branch, f, dispatch, success] = ...
+[cq, cp, bus, gen, branch, f, dispatch, success] = ...
 		smartmkt(baseMVA, bus, gen, gencost, branch, area, q, p, mkt, max_p, u0, t, mpopt);
 
 %% compute elapsed time
