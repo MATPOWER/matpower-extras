@@ -23,6 +23,8 @@ oldgencost = gencost;
 %% do conversion
 pmin = zeros(ng, 1);
 pmax = zeros(ng, 1);
+qmin = zeros(ng, 1);
+qmax = zeros(ng, 1);
 
 gencost             = zeros(ng, COST + 2*np - 1);
 gencost(:, MODEL)   = PW_LINEAR * ones(ng, 1);
@@ -30,7 +32,7 @@ for i = 1:ng
     qq = q(i, :)';          %% column vector of quantity offers for gen i
     pp = p(i, :)';          %% column vector of price offers for gen i
 
-	if isload(gen(i, :))
+    if isload(gen(i, :))
         %% strip zero quantities, and flip bids to turn them into fake offers
         valid = find(qq);
         n = length(valid);
@@ -47,13 +49,16 @@ for i = 1:ng
     %% form piece-wise linear total cost function, set Pmin & Pmax
     if n > 1        %% otherwise, leave all cost info zero (specifically N)
         %% set Pmin and Pmax
-        if isload(gen(i, :))
+        if isload(gen(i, :))    %% it's a load
             pmin(i) = -sum(qq);
-            pmax(i) = gen(i, PMAX);
+            %% scale Q limits to keep original power factor specification
+            qmin(i) = gen(i, QMIN) * pmin(i) / gen(i, PMIN);
+            qmax(i) = gen(i, QMAX) * pmin(i) / gen(i, PMIN);
+%           pmax(i) = gen(i, PMAX);     %% no change
             xx = [0; cumsum(qq)]' + pmin(i);
-        else
+        else                    %% it's a generator
 %           pmin(i) = qq(1);
-            pmin(i) = gen(i, PMIN);
+%           pmin(i) = gen(i, PMIN);     %% no change
             pmax(i) = sum(qq);
             xx = [0; cumsum(qq)]';
         end
@@ -72,8 +77,13 @@ gencost(:, [STARTUP SHUTDOWN]) = oldgencost(:, [STARTUP SHUTDOWN]);
 %% set PMIN, PMAX, GEN_STATUS
 off = find(gencost(:, N) == 0);                 %% find gens with no valid offers
 gen(off, GEN_STATUS) = zeros(length(off), 1);   %% turn them off
-on = find(gen(:, GEN_STATUS) > 0);              %% find generators which are on
-gen(on, PMIN) = pmin(on);
-gen(on, PMAX) = pmax(on);
+G = find( gen(:, GEN_STATUS) > 0 & ~isload(gen) );  %% in-service gens
+L = find( gen(:, GEN_STATUS) > 0 &  isload(gen) );  %% in-service disp loads
+
+%% update limits
+gen(G, PMAX) = pmax(G);
+gen(L, PMIN) = pmin(L);
+gen(L, QMIN) = qmin(L);
+gen(L, QMAX) = qmax(L);
 
 return;
