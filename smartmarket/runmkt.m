@@ -1,7 +1,7 @@
 function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] = ...
 				runmkt(casename, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
 %RUNMKT  Runs smart market for PowerWeb, computing a new generation
-%        schedule from a set of offers.
+%        schedule from a set of offers and bids.
 %
 %   [baseMVA, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] = ...
 %           runmkt(casename, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
@@ -19,7 +19,7 @@ function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] 
 %   following numbers:
 %        1000                - all markets
 %         100 * adjust4loc   - adjust4loc = 0 to ignore network,
-%							   1 to compute locational adjustments via AC OPF,
+%                              1 to compute locational adjustments via AC OPF,
 %                              2 to compute them via DC OPF
 %          10 * auction_type - where the values for auction_type are as follows:
 %
@@ -34,7 +34,7 @@ function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] 
 %      8 - LAO sets seller price, LAB sets buyer price
 %
 %   If p or q are empty or not given, they are created from the generator
-%   cost function. The default is market code is 1150, where the marginal
+%   cost function. The default market code is 1150, where the marginal
 %   block (offer or bid) sets the price. The default max_p is 500, the
 %   default u0 is all ones (assume everything was running) and the default
 %   duration t is 1 hour. The results may optionally be printed to a file
