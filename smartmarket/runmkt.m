@@ -1,5 +1,5 @@
 function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] = ...
-				runmkt(casename, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
+                runmkt(casename, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
 %RUNMKT  Runs smart market for PowerWeb, computing a new generation
 %        schedule from a set of offers and bids.
 %
@@ -47,53 +47,53 @@ function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] 
 %   MATPOWER
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
-%   Copyright (c) 1996-2003 by Power System Engineering Research Center (PSERC)
-%   See http://www.pserc.cornell.edu/ for more info.
+%   Copyright (c) 1996-2004 by Power System Engineering Research Center (PSERC)
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %%-----  initialize  -----
 %% default arguments
 if nargin < 10
-	solvedcase = '';							%% don't save solved case
-	if nargin < 9
-		fname = '';								%% don't print results to a file
-		if nargin < 8
-			mpopt = mpoption;					%% use default options
-			if nargin < 7
-				t = [];							%% use default dispatch period duration (hours)
-				if nargin < 6
-					u0 = [];					%% use default for previous gen commitment
-					if nargin < 5
-						max_p = 500;			%% use default reservation price
-						if nargin < 4
-							mkt = [];			%% use default market
-							if nargin < 3
-								q = []; p = [];	%% p & q not defined (will use gencost)
-								if nargin < 1
-									casename = 'case9';	%% default data file is 'case9.m'
-								end
-							end
-						end
-					end
-				end
-			end
-		end
-	end
+    solvedcase = '';                            %% don't save solved case
+    if nargin < 9
+        fname = '';                             %% don't print results to a file
+        if nargin < 8
+            mpopt = mpoption;                   %% use default options
+            if nargin < 7
+                t = [];                         %% use default dispatch period duration (hours)
+                if nargin < 6
+                    u0 = [];                    %% use default for previous gen commitment
+                    if nargin < 5
+                        max_p = 500;            %% use default reservation price
+                        if nargin < 4
+                            mkt = [];           %% use default market
+                            if nargin < 3
+                                q = []; p = []; %% p & q not defined (will use gencost)
+                                if nargin < 1
+                                    casename = 'case9'; %% default data file is 'case9.m'
+                                end
+                            end
+                        end
+                    end
+                end
+            end
+        end
+    end
 end
 if isempty(mkt)
-	mkt = 1150;				%% default market is LAO EMPIRE market
+    mkt = 1150;             %% default market is LAO EMPIRE market
 end
 if isempty(max_p)
-	max_p = 500;				%% default reservation price is 500
+    max_p = 500;                %% default reservation price is 500
 end
 if isempty(t)
-	t = 1;						%% default dispatch duration in hours
+    t = 1;                      %% default dispatch duration in hours
 end
 
 %% define named indices into data matrices
 [PQ, PV, REF, NONE, BUS_I, BUS_TYPE, PD, QD, GS, BS, BUS_AREA, VM, ...
-	VA, BASE_KV, ZONE, VMAX, VMIN, LAM_P, LAM_Q, MU_VMAX, MU_VMIN] = idx_bus;
+    VA, BASE_KV, ZONE, VMAX, VMIN, LAM_P, LAM_Q, MU_VMAX, MU_VMIN] = idx_bus;
 [GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, ...
-	GEN_STATUS, PMAX, PMIN, MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN] = idx_gen;
+    GEN_STATUS, PMAX, PMIN, MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN] = idx_gen;
 
 %% read data & convert to internal bus numbering
 [baseMVA, bus, gen, branch, areas, gencost] = loadcase(casename);
@@ -101,12 +101,12 @@ end
 
 %% finish assigning default arguments
 if isempty(u0)
-	u0 = ones(size(gen, 1), 1);	%% default for previous gen commitment, all on
+    u0 = ones(size(gen, 1), 1); %% default for previous gen commitment, all on
 end
 
 %% if q and p not defined, use gencost
 if isempty(q) | isempty(p)
-	[q, p] = case2off(gen, gencost);
+    [q, p] = case2off(gen, gencost);
 end
 
 %% start the clock
@@ -114,7 +114,7 @@ t0 = clock;
 
 %% run the market
 [cq, cp, bus, gen, branch, f, dispatch, success] = ...
-		smartmkt(baseMVA, bus, gen, gencost, branch, areas, q, p, mkt, max_p, u0, t, mpopt);
+        smartmkt(baseMVA, bus, gen, gencost, branch, areas, q, p, mkt, max_p, u0, t, mpopt);
 
 %% compute elapsed time
 et = etime(clock, t0);
@@ -122,19 +122,19 @@ et = etime(clock, t0);
 %% convert back to original bus numbering & print results
 [bus, gen, branch, areas] = int2ext(i2e, bus, gen, branch, areas);
 if fname
-	[fd, msg] = fopen(fname, 'at');
-	if fd == -1
-		error(msg);
-	else
-		printmkt(baseMVA, bus, gen, branch, f, t, dispatch, success, et, fd, mpopt);
-		fclose(fd);
-	end
+    [fd, msg] = fopen(fname, 'at');
+    if fd == -1
+        error(msg);
+    else
+        printmkt(baseMVA, bus, gen, branch, f, t, dispatch, success, et, fd, mpopt);
+        fclose(fd);
+    end
 end
 printmkt(baseMVA, bus, gen, branch, f, t, dispatch, success, et, 1, mpopt);
 
 %% save solved case
 if solvedcase
-	savecase(solvedcase, baseMVA, bus, gen, branch, areas, gencost);
+    savecase(solvedcase, baseMVA, bus, gen, branch, areas, gencost);
 end
 
 %% this is just to prevent it from printing baseMVA
