@@ -6,7 +6,7 @@ function [q, p] = case2off(gen, gencost)
 %   MATPOWER
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
-%   Copyright (c) 1996-2004 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2005 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %% define named indices into data matrices
@@ -30,7 +30,7 @@ if any(i_poly)
         ig = i_poly(i);     %% index to gen
         Pmin = gen(ig, PMIN);
         Pmax = gen(ig, PMAX);
-        if gen(ig, PMIN) == 0
+        if Pmin == 0
             step = (Pmax - Pmin) / (npts - 1);
             xx = [Pmin:step:Pmax];
         else
