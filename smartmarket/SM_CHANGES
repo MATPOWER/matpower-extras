@@ -11,6 +11,19 @@ $Id$
 Copyright (c) 1996-2004 by Power System Engineering Research Center (PSERC)
 See http://www.pserc.cornell.edu/matpower/ for more info.
 
+
+Changes since MATPOWER 3.0b3
+----------------------------
+
+9/28/04
+    - Modified to auction.m to clip cleared offer prices (but not bid prices)
+      to max_p. Other changes to make it more robust for cases with
+      very large bid/offer gap.
+    
+    - Added conditionals to skip over code related to import gens (including
+      offer and max_p adjustments) when there are no import generators.
+
+
 Changes since MATPOWER 3.0b2
 ----------------------------
 
