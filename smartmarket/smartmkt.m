@@ -161,6 +161,8 @@ if success      %% OPF solved case fine
 else        %% did not converge even with imports
     quantity    = zeros(ng, 1);
     price       = max_p * ones(ng, 1);
+    cq = zeros(size(q));
+    cp = zeros(size(p));
 end
 
 %% compute costs in $ (note, NOT $/hr)

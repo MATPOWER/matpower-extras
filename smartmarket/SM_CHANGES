@@ -20,8 +20,9 @@ Changes since MATPOWER 3.0b3
       to max_p. Other changes to make it more robust for cases with
       very large bid/offer gap.
     
-    - Added conditionals to skip over code related to import gens (including
-      offer and max_p adjustments) when there are no import generators.
+    - In smartmkt.m added conditionals to skip over code related to import
+      gens (including offer and max_p adjustments) when there are no import
+      generators. Fixed missing return args bug when OPF did not converge.
 
 
 Changes since MATPOWER 3.0b2
