@@ -30,7 +30,7 @@ for i = 1:ng
     qq = q(i, :)';          %% column vector of quantity offers for gen i
     pp = p(i, :)';          %% column vector of price offers for gen i
 
-    if gen(i, PMIN) < 0 & gen(i, PMAX) <=0
+	if isload(gen(i, :))
         %% strip zero quantities, and flip bids to turn them into fake offers
         valid = find(qq);
         n = length(valid);
@@ -47,7 +47,7 @@ for i = 1:ng
     %% form piece-wise linear total cost function, set Pmin & Pmax
     if n > 1        %% otherwise, leave all cost info zero (specifically N)
         %% set Pmin and Pmax
-        if gen(i, PMIN) < 0 & gen(i, PMAX) <=0
+        if isload(gen(i, :))
             pmin(i) = -sum(qq);
             pmax(i) = gen(i, PMAX);
             xx = [0; cumsum(qq)]' + pmin(i);
