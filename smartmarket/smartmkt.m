@@ -54,29 +54,32 @@ dispatch = zeros(ng, PENALTY);
 %% find reserve generators
 reserves = find(gen(:, GEN_STATUS) == -1);
 
-%% modify p so that reserves come in at reservation price + gap
-%% or, alternatively, max offered price + gap
-%% and all actual offers above reservation price are kept out
-
-%% find max offer price less than max_p
-gap = 5;        %% set the gap between reservation price and max reserve price
-on = find(gen(:, GEN_STATUS) > 0);  %% which generators are on?
-on_p = p(on,:);                     %% get submatrix to do vector mods
-in  = find(on_p <= max_p);          %% which blocks are in?
-out = find(on_p >  max_p);          %% which blocks are out?
-max_offered_p = max(on_p(in));      %% maximum offered price
-on_p(out) = on_p(out) + gap;        %% make sure blocks above max_p are still
-                                    %% eliminated by reservation price + gap
-p(on, :) = on_p;                    %% put back submatrix
-
-%% set price at which reserves come in
-p(reserves, :) = ones(length(reserves), np) * (max_offered_p + gap);
-% p(reserves, :) = ones(length(reserves), np) * (max_p + gap);
-
-%% bump up max price
-max_p = max_p + gap;
+if ~isempty(reserves)
+	%% modify p so that reserves come in at reservation price + gap
+	%% or, alternatively, max offered price + gap
+	%% and all actual offers above reservation price are kept out
+	
+	%% find max offer price less than max_p
+	gap = 5;        %% set the gap between reservation price and max reserve price
+	on = find(gen(:, GEN_STATUS) > 0);  %% which generators are on?
+	on_p = p(on,:);                     %% get submatrix to do vector mods
+	in  = find(on_p <= max_p);          %% which blocks are in?
+	out = find(on_p >  max_p);          %% which blocks are out?
+	max_offered_p = max(on_p(in));      %% maximum offered price
+	on_p(out) = on_p(out) + gap;        %% make sure blocks above max_p are still
+										%% eliminated by reservation price + gap
+	p(on, :) = on_p;                    %% put back submatrix
+	
+	%% set price at which reserves come in
+	p(reserves, :) = ones(length(reserves), np) * (max_offered_p + gap);
+	% p(reserves, :) = ones(length(reserves), np) * (max_p + gap);
+	
+	%% bump up max price
+	max_p = max_p + gap;
+end
 
 %% set up cost info & generator limits
+%% eliminates offers (but not bids) above max_p
 [gen, genoffer] = off2case(gen, gencost, q, p, max_p);
 
 %% set reserve cost equal to reserve offers (replace zero placeholders)
@@ -128,7 +131,7 @@ while 1
     end
     
     %% should we retry?
-    if ~success & ~withreserves
+    if ~success & ~withreserves & ~isempty(reserves)
         if verbose
             fprintf('\nSMARTMARKET: turning on reserve generators\n\n');
         end
