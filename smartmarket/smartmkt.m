@@ -95,9 +95,9 @@ load_capacity	= sum(bus(:, PD));
 %% with lambdas caused by rounding errors when corner point
 %% of cost function lies at exactly Pmin or Pmax
 if any(find(genoffer(:, MODEL) == PW_LINEAR))
-	ng = size(gen, 1);
-	gen(:, PMIN) = gen(:, PMIN) - 100 * mpopt(16) * ones(ng, 1);
-	gen(:, PMAX) = gen(:, PMAX) + 100 * mpopt(16) * ones(ng, 1);
+	gg = find( gen(:, PMAX) > 0 );		%% skip variable loads
+	gen(gg, PMIN) = gen(gg, PMIN) - 100 * mpopt(16) * ones(size(gg));
+	gen(gg, PMAX) = gen(gg, PMAX) + 100 * mpopt(16) * ones(size(gg));
 end
 
 %%-----  solve the optimization problem  -----
