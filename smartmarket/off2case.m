@@ -33,7 +33,7 @@ for i = 1:ng
     if gen(i, PMIN) < 0 & gen(i, PMAX) <=0
         %% strip zero quantities, and flip bids to turn them into fake offers
         valid = find(qq);
-        n = length(qq);
+        n = length(valid);
         qq = qq(valid(n:-1:1)); %% column vector of quantities of valid offers for gen i
         pp = pp(valid(n:-1:1)); %% column vector of prices of valid offers for gen i
     else
