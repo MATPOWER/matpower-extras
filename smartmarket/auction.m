@@ -32,6 +32,11 @@ end
 
 %% options
 verbose = mpopt(31);
+if exist('minopf') == 3
+    zero_tol = 1e-5;
+else
+    zero_tol = 0.1;
+end
 
 %% define named indices into data matrices
 [PQ, PV, REF, NONE, BUS_I, BUS_TYPE, PD, QD, GS, BS, BUS_AREA, VM, ...
@@ -103,7 +108,7 @@ DISC_P  = gap;
 DISC_PQ = gap + Qfudge;
 
 LAO = on(G,:) .* gap(G,:) - off(G,:) * max_p;
-LAO( find(LAO(:) > 1e-5) ) = -max_p;    %% don't let gens at Pmin set price
+LAO( find(LAO(:) > zero_tol) ) = -max_p;    %% don't let gens at Pmin set price
 LAO = max( LAO(:) ) * all_ones;
 
 FRO = off(G,:) .* gap(G,:) + on(G,:) * max_p;
@@ -142,7 +147,7 @@ elseif auction_type == 5
     G_shift = all_zeros;
     L_shift = Qfudge;
 elseif auction_type == 6
-    if abs(LAO(1,1)) < 1e-5
+    if abs(LAO(1,1)) < zero_tol
         G_shift = min(FRO(1,1),LAB_P(1,1)) * all_ones;
         L_shift = min(FRO(1,1),LAB_P(1,1)) + Qfudge;
     else
@@ -163,8 +168,8 @@ cpin(L,:) = lamP(L,:) + L_shift(L,:);
 
 %% clip prices by offers and bids
 clip = on .* (pin - cpin);
-cpin(G,:) = cpin(G,:) + (clip(G,:) > 1e-5) .* clip(G,:);
-cpin(L,:) = cpin(L,:) + (clip(L,:) < -1e-5) .* clip(L,:);
+cpin(G,:) = cpin(G,:) + (clip(G,:) > zero_tol) .* clip(G,:);
+cpin(L,:) = cpin(L,:) + (clip(L,:) < -zero_tol) .* clip(L,:);
 
 %% make prices uniform after clipping (except for discrim auction)
 %% since clipping may only affect a single block of a generator
