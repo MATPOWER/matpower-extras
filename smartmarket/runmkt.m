@@ -8,7 +8,7 @@ function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] 
 %
 %   Computes the new generation and price schedules based on the offers
 %   submitted, where offers are specified by q and p, mkt tells it what
-%   type of market to use, max_p is the reservation price, u0 is a vector
+%   type of market to use, max_p is the price cap, u0 is a vector
 %   containing the commitment status of each generator from the previous
 %   period (for computing startup/shutdown costs), t is the time duration
 %   of the dispatch period in hours, and mpopt is a MATPOWER options vector
@@ -29,8 +29,9 @@ function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] 
 %      3 - last accepted bid auction
 %      4 - first rejected bid auction
 %      5 - first price auction (marginal unit, offer or bid, sets the price)
-%      6 - second price auction (if offer is marginal, price set by min(FRO,LAB), else max(FRB,LAO)
-%      7 - split the difference pricing (price set by last accepted offer and bid)
+%      6 - second price auction (if offer is marginal, then price is set
+%                                   by min(FRO,LAB), if bid, then max(FRB,LAO)
+%      7 - split the difference pricing (price set by last accepted offer & bid)
 %      8 - LAO sets seller price, LAB sets buyer price
 %
 %   If p or q are empty or not given, they are created from the generator
@@ -53,21 +54,21 @@ function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] 
 %%-----  initialize  -----
 %% default arguments
 if nargin < 10
-    solvedcase = '';                            %% don't save solved case
+    solvedcase = '';                        %% don't save solved case
     if nargin < 9
-        fname = '';                             %% don't print results to a file
+        fname = '';                         %% don't print results to a file
         if nargin < 8
-            mpopt = mpoption;                   %% use default options
+            mpopt = mpoption;               %% use default options
             if nargin < 7
-                t = [];                         %% use default dispatch period duration (hours)
+                t = [];                     %% use default dispatch period duration (hours)
                 if nargin < 6
-                    u0 = [];                    %% use default for previous gen commitment
+                    u0 = [];                %% use default for previous gen commitment
                     if nargin < 5
-                        max_p = 500;            %% use default reservation price
+                        max_p = 500;        %% use default price cap
                         if nargin < 4
-                            mkt = [];           %% use default market
+                            mkt = [];       %% use default market
                             if nargin < 3
-                                q = []; p = []; %% p & q not defined (will use gencost)
+                                q = []; p = []; %% p & q not defined (use gencost)
                                 if nargin < 1
                                     casename = 'case9'; %% default data file is 'case9.m'
                                 end
@@ -83,10 +84,10 @@ if isempty(mkt)
     mkt = 1150;             %% default market is LAO EMPIRE market
 end
 if isempty(max_p)
-    max_p = 500;                %% default reservation price is 500
+    max_p = 500;            %% default price cap is 500
 end
 if isempty(t)
-    t = 1;                      %% default dispatch duration in hours
+    t = 1;                  %% default dispatch duration in hours
 end
 
 %% define named indices into data matrices

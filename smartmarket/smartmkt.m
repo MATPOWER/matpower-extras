@@ -55,19 +55,19 @@ dispatch = zeros(ng, PENALTY);
 imports = find(gen(:, GEN_STATUS) == -1);
 
 if ~isempty(imports)
-	%% modify p so that imports come in at reservation price + gap
+	%% modify p so that imports come in at price cap + gap
 	%% or, alternatively, max offered price + gap
-	%% and all actual offers above reservation price are kept out
+	%% and all actual offers above price cap are kept out
 	
 	%% find max offer price less than max_p
-	gap = 5;        %% set the gap between reservation price and max import price
+	gap = 5;        %% set the gap between price cap and max import price
 	on = find(gen(:, GEN_STATUS) > 0);  %% which generators are on?
 	on_p = p(on,:);                     %% get submatrix to do vector mods
 	in  = find(on_p <= max_p);          %% which blocks are in?
 	out = find(on_p >  max_p);          %% which blocks are out?
 	max_offered_p = max(on_p(in));      %% maximum offered price
 	on_p(out) = on_p(out) + gap;        %% make sure blocks above max_p are still
-										%% eliminated by reservation price + gap
+										%% eliminated by price cap + gap
 	p(on, :) = on_p;                    %% put back submatrix
 	
 	%% set price at which imports come in
