@@ -14,6 +14,8 @@ function [cq, cp] = auction(bus, gen, gencost, q, p, max_p, auction_type, mpopt)
 %      6 - second price auction (if offer is marginal, price set by min(FRO,LAB), else max(FRB,LAO)
 %      7 - split the difference pricing (price set by last accepted offer and bid)
 %      8 - LAO sets seller price, LAB sets buyer price
+%
+%   Cleared offer prices (but not bid prices) are clipped to max_p.
 
 %   MATPOWER
 %   $Id$
@@ -38,6 +40,7 @@ else
     zero_tol = 0.1;     %% fmincon is SO bad with prices that it is
                         %% NOT recommended for use with auction.m
 end
+big_num = 1e6;
 
 %% define named indices into data matrices
 [PQ, PV, REF, NONE, BUS_I, BUS_TYPE, PD, QD, GS, BS, BUS_AREA, VM, ...
@@ -108,21 +111,21 @@ gap = pin - lamP - Qfudge;
 DISC_P  = gap;
 DISC_PQ = gap + Qfudge;
 
-LAO = on(G,:) .* gap(G,:) - off(G,:) * max_p;
-LAO( find(LAO(:) > zero_tol) ) = -max_p;    %% don't let gens at Pmin set price
+LAO = on(G,:) .* gap(G,:) - off(G,:) * big_num;
+LAO( find(LAO(:) > zero_tol) ) = -big_num;  %% don't let gens @ Pmin set price
 LAO = max( LAO(:) ) * all_ones;
 
-FRO = off(G,:) .* gap(G,:) + on(G,:) * max_p;
+FRO = off(G,:) .* gap(G,:) + on(G,:) * big_num;
 FRO = min( FRO(:) ) * all_ones;
 
 if ~isempty(L)
-    LAB_P = on(L,:) .* gap(L,:) + off(L,:) * max_p;
+    LAB_P = on(L,:) .* gap(L,:) + off(L,:) * big_num;
     LAB_P = min( LAB_P(:) ) * all_ones;
     
-    FRB_P = off(L,:) .* gap(L,:) - on(L,:) * max_p;
+    FRB_P = off(L,:) .* gap(L,:) - on(L,:) * big_num;
     FRB_P = max( FRB_P(:) ) * all_ones;
 else
-    LAB_P = max_p * all_ones;
+    LAB_P = big_num * all_ones;
     FRB_P = LAB_P;
 end
 LAB_PQ = LAB_P + Qfudge;
@@ -167,10 +170,13 @@ end
 cpin(G,:) = lamP(G,:) + G_shift(G,:);
 cpin(L,:) = lamP(L,:) + L_shift(L,:);
 
-%% clip prices by offers and bids
+%% clip cleared prices by offers and bids
 clip = on .* (pin - cpin);
 cpin(G,:) = cpin(G,:) + (clip(G,:) > zero_tol) .* clip(G,:);
 cpin(L,:) = cpin(L,:) + (clip(L,:) < -zero_tol) .* clip(L,:);
+
+%% clip cleared offer prices by max_p
+cpin(G,:) = cpin(G,:) + (cpin(G,:) > max_p) .* (max_p - cpin(G,:));
 
 %% make prices uniform after clipping (except for discrim auction)
 %% since clipping may only affect a single block of a multi-block generator
