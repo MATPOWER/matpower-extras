@@ -48,7 +48,7 @@ for i = 1:ng
 	if n > 1		%% otherwise, leave all cost info zero (specifically N)
 		%% set Pmin and Pmax
 		if gen(i, PMIN) < 0 & gen(i, PMAX) <=0
-			pmin(i) = gen(i, PMAX) - sum(qq);
+			pmin(i) = -sum(qq);
 			pmax(i) = gen(i, PMAX);
 			xx = [0; cumsum(qq)]' + pmin(i);
 		else
