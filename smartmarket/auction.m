@@ -32,7 +32,7 @@ end
 
 %% options
 verbose = mpopt(31);
-if exist('minopf') == 3
+if have_fcn('minopf')
     zero_tol = 1e-5;
 else
     zero_tol = 0.1;
