@@ -71,8 +71,9 @@ sigma = [
 	0.02 * abs(Sbus)	+ 0.0052 * fullscale * ones(nb,1);
 	0.02 * abs(V0)		+ 0.0052 * 1.1 * ones(nb,1);
 ] ./ 3;
-W = spdiag( sigma .^ 2 );
-WInv = spdiag( 1 ./ sigma .^ 2 );
+ns = length(sigma);
+W = spdiags( sigma .^ 2, 0, ns, ns );
+WInv = spdiags( 1 ./ sigma .^ 2, 0, ns, ns );
 
 %% covariance of measurement residual
 %R = H * inv( H' * WInv * H ) * H';
