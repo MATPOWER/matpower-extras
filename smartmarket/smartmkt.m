@@ -147,7 +147,7 @@ if success		%% OPF solved case fine
 	end
 	[cq, cp] = auction(bus, gen, gencost, q, p, max_p, auction_type, mpopt);
 	k = find( sum( cq' )' );
-	price = zeros(ng, 1);
+	price = cp(:, 1);			%% need this for prices for gens that are shut down
 	price(k) = sum( cq(k, :)' .* cp(k, :)' )' ./ sum( cq(k, :)' )';
 else		%% did not converge even with reserves
 	quantity	= zeros(ng, 1);
