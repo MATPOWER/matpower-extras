@@ -19,17 +19,26 @@ Please report any bugs you find to Ray Zimmerman <rz10@cornell.edu>.
 Changes since MATPOWER 2.5b3
 ----------------------------
 
+7/2/04
+	- Fixed smartmarket.m to print correct prices even for decommitted
+	  gens
+
+	- Fixed auction.m so that gens at Pmin are not able to set the price
+	  and each gen still gets a uniform price even if price is clipped by
+	  the offer/bid of a single block. Added lots of tests.
+
 5/30/03
-	- added auction.m, removed everything to do with continuous
-	  offer/bid markets
+	- Added auction.m, removed everything to do with continuous
+	  offer/bid markets.
 
 2/14/01
-	- corrected a comment
+	- Corrected a comment.
 
 4/3/00
-    - modified smartmkt.m so that reserve generators come in, not
+    - Modified smartmkt.m so that reserve generators come in, not
 	  at the reservation price, but at $5 above the highest
 	  offer price (excluding offers above reservation price).
 
 3/14/00
-    - made changes to off2case.m to fix problems with negative generation
+    - Made changes to off2case.m to fix problems with negative
+      generation.
