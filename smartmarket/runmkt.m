@@ -69,7 +69,7 @@ if nargin < 10
 							if nargin < 3
 								q = []; p = [];	%% p & q not defined (will use gencost)
 								if nargin < 1
-									casename = 'case';	%% default data file is 'case.m'
+									casename = 'case9';	%% default data file is 'case9.m'
 								end
 							end
 						end
