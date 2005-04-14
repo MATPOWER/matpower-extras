@@ -14,6 +14,10 @@ See http://www.pserc.cornell.edu/matpower/ for more info.
 Changes since MATPOWER 3.0.0
 ----------------------------
 
+4/14/05
+    - Fixed a bug in auction.m where a withheld offer could end up with
+      a tiny bit being accepted, which messed up the prices.
+
 4/6/05
     - Shifted the total cost function generated for bids to intersect the
       origin instead of (Pmin, 0) in off2case.m. This results in objective
