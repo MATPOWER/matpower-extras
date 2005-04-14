@@ -82,6 +82,9 @@ for i = 1:length(in)        %% generator in(i)
         end
     end
 end
+
+offered = pin <= max_p;                         %% make sure we haven't
+accept(G, :) = offered(G, :) .* accept(G, :);   %% accepted any withheld offers
 on  = (accept  > 0);
 off = (accept == 0);
 all_ones  = ones(size(pin));
