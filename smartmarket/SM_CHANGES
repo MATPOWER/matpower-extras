@@ -14,6 +14,11 @@ See http://www.pserc.cornell.edu/matpower/ for more info.
 Changes since MATPOWER 3.0.0
 ----------------------------
 
+4/25/05
+    - Fixed a bug in auction.m where prices for rejected bids were computed
+      erroneously based on a unity power factor instead of the one defined
+      by PMIN and the Q limits.
+
 4/14/05
     - Fixed a bug in auction.m where a withheld offer could end up with
       a tiny bit being accepted, which messed up the prices.

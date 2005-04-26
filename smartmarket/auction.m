@@ -98,7 +98,9 @@ lamQ    = diag(bus(gbus, LAM_Q)) * all_ones;    %% reactive power prices
 %% compute fudge factor for lamP to include price of bundled reactive power
 nz          = find( gen(L, PG) );
 pf          = all_zeros;                        %% for loads Q = pf * P
-pf(L(nz))   = gen(L(nz), QG) ./ gen(L(nz), PG);
+Qlim = 	(gen(L, QMIN) == 0) .* gen(L, QMAX) + ...
+		(gen(L, QMAX) == 0) .* gen(L, QMIN);
+pf(L) = Qlim ./ gen(L, PMIN);
 Qfudge      = all_zeros;
 Qfudge(L,:) = diag(pf(L)) * lamQ(L,:);
 
@@ -197,7 +199,7 @@ if verbose
     %% compute locational adjustment for generators
     ref_p = max(lamP(:,1));
     % ref_p = max(bus(:, LAM_P));
-    adjustment = ref_p - lamP(:,1);                     %% locational price adjustment
+    adjustment = ref_p - lamP(:,1);         %% locational price adjustment
     
     %% form 1-d vectors of all valid offers & corresponding adjustments, acceptance
     i = find(qin & pin <= max_p);
