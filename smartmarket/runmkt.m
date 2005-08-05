@@ -95,7 +95,7 @@ end
     VA, BASE_KV, ZONE, VMAX, VMIN, LAM_P, LAM_Q, MU_VMAX, MU_VMIN] = idx_bus;
 [GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, GEN_STATUS, ...
     PMAX, PMIN, MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN, QMAX2, QMIN2, ...
-    RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q] = idx_gen;
+    RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q, APF] = idx_gen;
 
 %% read data & convert to internal bus numbering
 [baseMVA, bus, gen, branch, areas, gencost] = loadcase(casename);

@@ -23,7 +23,7 @@ function [MVAbase, bus, gen, branch, success, et] = runse(casename, mpopt, fname
     ANGMIN, ANGMAX, MU_ANGMIN, MU_ANGMAX] = idx_brch;
 [GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, GEN_STATUS, ...
     PMAX, PMIN, MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN, QMAX2, QMIN2, ...
-    RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q] = idx_gen;
+    RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q, APF] = idx_gen;
 
 %% default arguments
 if nargin < 4

@@ -29,7 +29,7 @@ OUT_RAW         = mpopt(43);
 %% define named indices into data matrices
 [GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, GEN_STATUS, ...
     PMAX, PMIN, MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN, QMAX2, QMIN2, ...
-    RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q] = idx_gen;
+    RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q, APF] = idx_gen;
 [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp;
 
 %% parameters
