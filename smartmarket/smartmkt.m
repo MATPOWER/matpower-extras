@@ -153,13 +153,14 @@ if success      %% OPF solved case fine
         mpopt = mpoption(mpopt, 'VERBOSE', verbose-1);
     end
     [cq, cp] = auction(bus, gen, gencost, q, p, max_p, auction_type, mpopt);
+    price = cp(:, 1);           %% need this for prices for gens that are shut down
     if size(cq, 2) == 1
         k = find( cq );
+		price(k) = cp(k, :);
     else
         k = find( sum( cq' )' );
+		price(k) = sum( cq(k, :)' .* cp(k, :)' )' ./ sum( cq(k, :)' )';
     end
-    price = cp(:, 1);           %% need this for prices for gens that are shut down
-    price(k) = sum( cq(k, :)' .* cp(k, :)' )' ./ sum( cq(k, :)' )';
 else        %% did not converge even with imports
     quantity    = zeros(ng, 1);
     price       = max_p * ones(ng, 1);

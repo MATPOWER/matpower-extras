@@ -14,6 +14,10 @@ See http://www.pserc.cornell.edu/matpower/ for more info.
 Changes since MATPOWER 3.0.0
 ----------------------------
 
+8/11/05
+    - Fixed a bug in smartmkt.m which caused incorrect prices to be printed
+      in the market summary for single block offers.
+
 4/25/05
     - Fixed a bug in auction.m where prices for rejected bids were computed
       erroneously based on a unity power factor instead of the one defined
