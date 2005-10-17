@@ -1,47 +1,48 @@
-function [cq, cp, bus, gen, branch, f, dispatch, success] = ...
-            smartmkt(baseMVA, bus, gen, gencost, branch, areas, q, p, mkt, max_p, u0, t, mpopt)
+function [co, cb, bus, gen, branch, f, dispatch, success] = ...
+            smartmkt(mpc, offers, bids, mkt, mpopt)
 %SMARTMKT  Runs the PowerWeb smart market.
-%   [cq, cp, bus, gen, branch, f, dispatch, success] = smartmkt(baseMVA, bus, gen, ...
-%   branch, areas, gencost, q, p, max_p, u0, t, mpopt) runs the ISO smart market.
+%   [co, cb, bus, gen, branch, f, dispatch, success] = smartmkt(mpc, ...
+%		offers, bids, mkt, mpopt) runs the ISO smart market.
 
 %   MATPOWER
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
-%   Copyright (c) 1996-2004 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2005 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %%-----  initialization  -----
 %% default arguments
-if nargin < 13
+if nargin < 5
     mpopt = mpoption;       %% use default options
 end
 
 %% options
 verbose = mpopt(31);
-margin = 1.05;          %% must have 5% capacity margin if considering losses
 
-%% parse market code
-code        = mkt - 1000;
-adjust4loc  = fix(code/100);    code = rem(code, 100);
-auction_type= fix(code/10);
+%% initialize some stuff
+G = find( ~isload(mpc.gen) );       %% real generators
+L = find(  isload(mpc.gen) );       %% dispatchable loads
+if isfield(offers, 'Q') | isfield(bids, 'Q')
+    haveQ = 1;
+else
+    haveQ = 0;
+end
+
+if haveQ & ~isempty(L) & mkt.auction_type ~= 0 & ...
+        mkt.auction_type ~= 1 & mkt.auction_type ~= 5
+    error(['Combined active/reactive power markets with constant power factor ', ...
+            'dispatchable loads are only implemented for auction types 0, 1 & 5']);
+end
 
 %% set power flow formulation based on market
-mpopt = mpoption(mpopt, 'PF_DC', adjust4loc == 2);
-
-if adjust4loc ~= 1
-    margin = 1;         %% no margin needed without a network or with loss-less power flow
-    if adjust4loc == 0
-        error('The non-network version of the smart market has not yet been implemented.');
-    end
-end
-success = 0;
+mpopt = mpoption(mpopt, 'PF_DC', strcmp(mkt.OPF, 'DC'));
 
 %% define named indices into data matrices
 [PQ, PV, REF, NONE, BUS_I, BUS_TYPE, PD, QD, GS, BS, BUS_AREA, VM, ...
     VA, BASE_KV, ZONE, VMAX, VMIN, LAM_P, LAM_Q, MU_VMAX, MU_VMIN] = idx_bus;
-[GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, GEN_STATUS, ...
-    PMAX, PMIN, MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN, QMAX2, QMIN2, ...
-    RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q, APF] = idx_gen;
+[GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, GEN_STATUS, PMAX, PMIN, ...
+    MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN, PC1, PC2, QC1MIN, QC1MAX, ...
+    QC2MIN, QC2MAX, RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q, APF] = idx_gen;
 [F_BUS, T_BUS, BR_R, BR_X, BR_B, RATE_A, RATE_B, RATE_C, ...
     TAP, SHIFT, BR_STATUS, PF, QF, PT, QT, MU_SF, MU_ST, ...
     ANGMIN, ANGMAX, MU_ANGMIN, MU_ANGMAX] = idx_brch;
@@ -49,53 +50,12 @@ success = 0;
 [PW_LINEAR, POLYNOMIAL, MODEL, STARTUP, SHUTDOWN, N, COST] = idx_cost;
 [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp;
 
-%% initialize dispatch
-[ng, np] = size(q);
-dispatch = zeros(ng, PENALTY);
-
-%% find import generators
-imports = find(gen(:, GEN_STATUS) == -1);
-
-if ~isempty(imports)
-	%% modify p so that imports come in at price cap + gap
-	%% or, alternatively, max offered price + gap
-	%% and all actual offers above price cap are kept out
-	
-	%% find max offer price less than max_p
-	gap = 5;        %% set the gap between price cap and max import price
-	on = find(gen(:, GEN_STATUS) > 0);  %% which generators are on?
-	on_p = p(on,:);                     %% get submatrix to do vector mods
-	in  = find(on_p <= max_p);          %% which blocks are in?
-	out = find(on_p >  max_p);          %% which blocks are out?
-	max_offered_p = max(on_p(in));      %% maximum offered price
-	on_p(out) = on_p(out) + gap;        %% make sure blocks above max_p are still
-										%% eliminated by price cap + gap
-	p(on, :) = on_p;                    %% put back submatrix
-	
-	%% set price at which imports come in
-	p(imports, :) = ones(length(imports), np) * (max_offered_p + gap);
-	% p(imports, :) = ones(length(imports), np) * (max_p + gap);
-	
-	%% bump up max price
-	max_p = max_p + gap;
-end
-
 %% set up cost info & generator limits
-%% eliminates offers (but not bids) above max_p
-[gen, genoffer] = off2case(gen, gencost, q, p, max_p);
-
-%% set import cost equal to import offers (replace zero placeholders)
-if ~isempty(imports)
-    tmp = min([ size(gencost, 2) size(genoffer, 2) ]);
-    gencost(imports, 1:tmp) = genoffer(imports, 1:tmp);
-end
-
-%% make copy of initial bus voltages and generator outputs
-bus0 = bus(:, [VM, VA]);
-gen0 = gen(:, [PG, QG, VG]);
-
-%% compute total load capacity
-load_capacity   = sum(bus(:, PD));
+%% eliminates offers (but not bids) above mkt.max_p
+lim = struct( 'P', struct(  'max_offer',            mkt.max_p, ...
+                            'max_cleared_offer',    mkt.max_p ) );
+lim = pricelimits(lim, isfield(offers, 'Q') | isfield(bids, 'Q'));
+[gen, genoffer] = off2case(mpc.gen, mpc.gencost, offers, bids, lim);
 
 %% move Pmin and Pmax limits out slightly to avoid problems
 %% with lambdas caused by rounding errors when corner point
@@ -107,74 +67,114 @@ if any(find(genoffer(:, MODEL) == PW_LINEAR))
 end
 
 %%-----  solve the optimization problem  -----
-withreserves    = 0;
-while 1
-    %% check for sufficient generation
-    on = find(gen(:, GEN_STATUS) > 0);      %% which generators are on?
-    gen_capacity    = sum(gen(on, PMAX));
-    if gen_capacity < load_capacity * margin & ~withreserves
-        %%-----  insufficient generation, try again with imports  -----
-        success = 0;
-        if verbose
-            fprintf('\nSMARTMARKET: insufficient generation');
-        end
-    else
-        %%-----  sufficient generation, attempt OPF  -----
-        %% restore voltages and gen outputs from original case
-        bus(:, [VM, VA]) = bus0;
-        gen(:, [PG, QG, VG]) = gen0;
-        
-        %% attempt OPF
-        [bus, gen, branch, f, success, et] =  uopf(baseMVA, bus, gen, genoffer, ...
-                    branch, areas, mpopt);
-        if verbose & ~success
-            fprintf('\nSMARTMARKET: non-convergent UOPF');
-        end
-    end
-    
-    %% should we retry?
-    if ~success & ~withreserves & ~isempty(imports)
-        if verbose
-            fprintf('\nSMARTMARKET: turning on import generators\n\n');
-        end
-        gen(imports, GEN_STATUS) = 2 * ones(size(imports));
-        withreserves = 1;
-    else
-        break;
-    end
+%% attempt OPF
+[bus, gen, branch, f, success, et] =  uopf(mpc.baseMVA, mpc.bus, gen, ...
+            genoffer, mpc.branch, mpc.areas, mpopt);
+if verbose & ~success
+    fprintf('\nSMARTMARKET: non-convergent UOPF');
 end
 
 %%-----  compute quantities, prices & costs  -----
 %% compute quantities & prices
+ng = size(gen, 1);
 if success      %% OPF solved case fine
-    quantity    = gen(:, PG);
-    %% turn down verbosity one level for call to auction
-    if verbose
-        mpopt = mpoption(mpopt, 'VERBOSE', verbose-1);
-    end
-    [cq, cp] = auction(bus, gen, gencost, q, p, max_p, auction_type, mpopt);
-    price = cp(:, 1);           %% need this for prices for gens that are shut down
-    if size(cq, 2) == 1
-        k = find( cq );
-		price(k) = cp(k, :);
+    %% get nodal marginal prices from OPF
+    gbus    = gen(:, GEN_BUS);                     %% indices of buses w/gens
+    npP 	= max([ size(offers.P.qty, 2) size(bids.P.qty, 2) ]);
+    lamP    = diag(bus(gbus, LAM_P)) * ones(ng, npP);    %% real power prices
+    lamQ    = diag(bus(gbus, LAM_Q)) * ones(ng, npP);    %% reactive power prices
+    
+    %% compute fudge factor for lamP to include price of bundled reactive power
+    pf   = zeros(ng, npP);                        %% for loads Q = pf * P
+    Qlim =  (gen(L, QMIN) == 0) .* gen(L, QMAX) + ...
+            (gen(L, QMAX) == 0) .* gen(L, QMIN);
+    pf(L) = Qlim ./ gen(L, PMIN);
+
+    gtee_prc.offer = 1;         %% guarantee that cleared offers are >= offers
+    Poffer = offers.P;
+    Poffer.lam = lamP(G,:);
+    Poffer.total_qty = gen(G, PG);
+    
+    Pbid = bids.P;
+    Pbid.total_qty = -gen(L, PG);
+    if haveQ
+        Pbid.lam = lamP(L,:);   %% use unbundled lambdas
+        gtee_prc.bid = 0;       %% allow cleared bids to be above bid price
     else
-        k = find( sum( cq' )' );
-		price(k) = sum( cq(k, :)' .* cp(k, :)' )' ./ sum( cq(k, :)' )';
+        Pbid.lam = lamP(L,:) + diag(pf(L)) * lamQ(L,:); %% used bundled lambdas
+        gtee_prc.bid = 1;       %% guarantee that cleared bids are <= bids
+    end
+
+    [co.P, cb.P] = auction(Poffer, Pbid, mkt.auction_type, lim.P, gtee_prc);
+
+    if haveQ
+        npQ = max([ size(offers.Q.qty, 2) size(bids.Q.qty, 2) ]);
+        
+        %% get nodal marginal prices from OPF
+        lamP    = diag(bus(gbus, LAM_P)) * ones(ng, npQ);    %% real power prices
+        lamQ    = diag(bus(gbus, LAM_Q)) * ones(ng, npQ);    %% reactive power prices
+
+%         %% compute fudge factor for lamP to include price of bundled reactive power
+%         pf   = zeros(ng, npQ);                        %% for loads P = pf * Q
+%         Qlim =  (gen(L, QMIN) == 0) .* gen(L, QMAX) + ...
+%                 (gen(L, QMAX) == 0) .* gen(L, QMIN);
+%         kk = find(Qlim);
+%         pf(L(kk)) = gen(L(kk), PMIN) ./ Qlim(kk);
+    
+        Qoffer = offers.Q;
+        Qoffer.lam = lamQ;      %% use unbundled lambdas
+%         Qoffer.lam(L,:) = lamQ(L,:) + diag(pf(L)) * lamP(L,:);
+        Qoffer.total_qty = (gen(:, QG) > 0) .* gen(:, QG);
+        
+        Qbid = bids.Q;
+        Qbid.lam = lamQ;        %% use unbundled lambdas
+%         Qbid.lam(L,:) = lamQ(L,:) + diag(pf(L)) * lamP(L,:);
+        Qbid.total_qty = (gen(:, QG) < 0) .* -gen(:, QG);
+
+        [co.Q, cb.Q] = auction(Qoffer, Qbid, mkt.auction_type, lim.Q, gtee_prc);
+    end
+
+    quantity    = gen(:, PG);
+    price       = zeros(ng, 1);
+    price(G)    = offers.P.prc(:, 1);   %% need these for prices for
+    price(L)    = bids.P.prc(:, 1);     %% gens that are shut down
+    if npP == 1
+        k = find( co.P.qty );
+        price(G(k)) = co.P.prc(k, :);
+        k = find( cb.P.qty );
+        price(L(k)) = cb.P.prc(k, :);
+    else
+        k = find( sum( co.P.qty' )' );
+        price(G(k)) = sum( co.P.qty(k, :)' .* co.P.prc(k, :)' )' ./ sum( co.P.qty(k, :)' )';
+        k = find( sum( cb.P.qty' )' );
+        price(L(k)) = sum( cb.P.qty(k, :)' .* cb.P.prc(k, :)' )' ./ sum( cb.P.qty(k, :)' )';
     end
 else        %% did not converge even with imports
     quantity    = zeros(ng, 1);
-    price       = max_p * ones(ng, 1);
-    cq = zeros(size(q));
-    cp = zeros(size(p));
+    price       = mkt.max_p * ones(ng, 1);
+    co.P.qty = zeros(size(offers.P.qty));
+    co.P.prc = zeros(size(offers.P.prc));
+    cb.P.qty = zeros(size(bids.P.qty));
+    cb.P.prc = zeros(size(bids.P.prc));
+    if haveQ
+        co.Q.qty = zeros(size(offers.Q.qty));
+        co.Q.prc = zeros(size(offers.Q.prc));
+        cb.Q.qty = zeros(size(bids.Q.qty));
+        cb.Q.prc = zeros(size(bids.Q.prc));
+    end
 end
 
+
 %% compute costs in $ (note, NOT $/hr)
-fcost   = t * totcost(gencost, zeros(ng, 1) );                          %% fixed costs
-vcost   = t * totcost(gencost, quantity     ) - fcost;                  %% variable costs
-scost   = (~u0 & gen(:, GEN_STATUS) >  0) .* gencost(:, STARTUP) + ...  %% startup costs
-          ( u0 & gen(:, GEN_STATUS) <= 0) .* gencost(:, SHUTDOWN);      %% shutdown costs
+fcost   = mkt.t * totcost(mpc.gencost, zeros(ng, 1) );      %% fixed costs
+vcost   = mkt.t * totcost(mpc.gencost, quantity     ) - fcost;  %% variable costs
+scost   =   (~mkt.u0 & gen(:, GEN_STATUS) >  0) .* ...
+                mpc.gencost(:, STARTUP) + ...               %% startup costs
+            ( mkt.u0 & gen(:, GEN_STATUS) <= 0) .* ...
+                mpc.gencost(:, SHUTDOWN);                   %% shutdown costs
 
 %% store in dispatch
+dispatch = zeros(ng, PENALTY);
 dispatch(:, [QUANTITY PRICE FCOST VCOST SCOST]) = [quantity price fcost vcost scost];
 
 return;
