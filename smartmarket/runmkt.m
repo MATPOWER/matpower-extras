@@ -48,7 +48,7 @@ function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] 
 %   MATPOWER
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
-%   Copyright (c) 1996-2004 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2005 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %%-----  initialize  -----
@@ -80,67 +80,64 @@ if nargin < 10
         end
     end
 end
-if isempty(mkt)
-    mkt = 1150;             %% default market is LAO EMPIRE market
-end
-if isempty(max_p)
-    max_p = 500;            %% default price cap is 500
-end
-if isempty(t)
-    t = 1;                  %% default dispatch duration in hours
-end
 
 %% define named indices into data matrices
 [PQ, PV, REF, NONE, BUS_I, BUS_TYPE, PD, QD, GS, BS, BUS_AREA, VM, ...
     VA, BASE_KV, ZONE, VMAX, VMIN, LAM_P, LAM_Q, MU_VMAX, MU_VMIN] = idx_bus;
-[GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, GEN_STATUS, ...
-    PMAX, PMIN, MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN, QMAX2, QMIN2, ...
-    RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q, APF] = idx_gen;
+[GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, GEN_STATUS, PMAX, PMIN, ...
+    MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN, PC1, PC2, QC1MIN, QC1MAX, ...
+    QC2MIN, QC2MAX, RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q, APF] = idx_gen;
 
 %% read data & convert to internal bus numbering
-[baseMVA, bus, gen, branch, areas, gencost] = loadcase(casename);
-[i2e, bus, gen, branch, areas] = ext2int(bus, gen, branch, areas);
+mpc = loadcase(casename);
 
-%% finish assigning default arguments
-if isempty(u0)
-    u0 = ones(size(gen, 1), 1); %% default for previous gen commitment, all on
-end
+%% find indices for gens and variable loads
+ng = size(mpc.gen, 1);
+gbus = mpc.gen(:, GEN_BUS);
+G = find( ~isload(mpc.gen) );   %% real generators
+L = find(  isload(mpc.gen) );   %% variable loads
 
-%% if q and p not defined, use gencost
+%% create offers, bids
 if isempty(q) | isempty(p)
-    [q, p] = case2off(gen, gencost);
+	offers.P.qty = [];
+	offers.P.prc = [];
+	bids.P.qty = [];
+	bids.P.prc = [];
+else
+	offers.P.qty = q(G, :);
+	offers.P.prc = p(G, :);
+	bids.P.qty = q(L, :);
+	bids.P.prc = p(L, :);
 end
 
-%% start the clock
-t0 = clock;
-
-%% run the market
-[cq, cp, bus, gen, branch, f, dispatch, success] = ...
-        smartmkt(baseMVA, bus, gen, gencost, branch, areas, q, p, mkt, max_p, u0, t, mpopt);
-
-%% compute elapsed time
-et = etime(clock, t0);
-
-%% convert back to original bus numbering & print results
-[bus, gen, branch, areas] = int2ext(i2e, bus, gen, branch, areas);
-if fname
-    [fd, msg] = fopen(fname, 'at');
-    if fd == -1
-        error(msg);
-    else
-        printmkt(baseMVA, bus, gen, branch, f, t, dispatch, success, et, fd, mpopt);
-        fclose(fd);
-    end
+%% parse market code
+code        = mkt - 1000;
+adjust4loc  = fix(code/100);    code = rem(code, 100);
+auction_type= fix(code/10);
+if adjust4loc == 2
+    OPF = 'DC';
+elseif adjust4loc == 1
+    OPF = 'AC';
+else
+    error('invalid market code');
 end
-printmkt(baseMVA, bus, gen, branch, f, t, dispatch, success, et, 1, mpopt);
 
-%% save solved case
-if solvedcase
-    savecase(solvedcase, baseMVA, bus, gen, branch, areas, gencost);
-end
+mkt = struct(   'auction_type', auction_type, 'OPF', OPF, ...
+                'max_p', max_p, 't', t', 'u0', u0   );
+[mpc_out, co, cb, f, dispatch, success, et] = ...
+                runmarket(mpc, offers, bids, mkt, mpopt, fname, solvedcase);
+
+cq(G, :) = co.P.qty;
+cp(G, :) = co.P.prc;
+cq(L, :) = cb.P.qty;
+cp(L, :) = cb.P.prc;
+bus = mpc_out.bus;
+gen = mpc_out.gen;
+gencost = mpc_out.gencost;
+branch = mpc_out.branch;
 
 %% this is just to prevent it from printing baseMVA
 %% when called with no output arguments
-if nargout, MVAbase = baseMVA; end
+if nargout, MVAbase = mpc_out.baseMVA; end
 
 return;
