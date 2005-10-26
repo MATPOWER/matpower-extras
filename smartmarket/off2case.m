@@ -45,7 +45,6 @@ function [gen, gencost] = off2case(gen, gencost, offers, bids, lim)
 [PW_LINEAR, POLYNOMIAL, MODEL, STARTUP, SHUTDOWN, N, COST] = idx_cost;
 
 %% default args and stuff
-zero_tol = 1e-5;
 if nargin < 5
 	lim = [];
 	if nargin < 4
@@ -231,11 +230,15 @@ for i = 1:nGL
         Pgencost(i,  (COST+1):2:( COST + 2*npP - 1 )) = yyP;
 	else
 		%% no capacity bid/offered for active power
-		if npQ & ~isload(gen(i,:)) & gen(i, PMIN) <= 0 & gen(i, PMAX) >= 0
+		if npQ & gen(i, PMIN) <= 0 & gen(i, PMAX) >= 0
 			%% but we do have a reactive bid/offer and we can dispatch
 			%% at zero real power without shutting down
 			Pmin = 0;
 			Pmax = 0;
+			if isload(gen(i, :))
+				Qmin = gen(i, QMIN) * Pmin / gen(i, PMIN);
+				Qmax = gen(i, QMAX) * Pmin / gen(i, PMIN);
+			end
 		else			%% none for reactive either
 			%% shut down the unit
 			gen(i, GEN_STATUS) = 0;
@@ -249,7 +252,7 @@ for i = 1:nGL
 		if gen(i, QMAX) > 0
 			Qmax = min([ Qmax max(xxQ) ]);
 			if Qmax >= gen(i, QMIN) & Qmax <= gen(i, QMAX)
-				if isload(gen(i, :)) & Qmax > min([ zero_tol, gen(i, QMAX) ])
+				if isload(gen(i, :))
 					Pmin = gen(i, PMIN) * Qmax / gen(i, QMAX);
 				end
 			else
@@ -260,11 +263,11 @@ for i = 1:nGL
 		if gen(i, QMIN) < 0
 			Qmin = max([ Qmin min(xxQ) ]);
 			if Qmin >= gen(i, QMIN) & Qmin <= gen(i, QMAX)
-				if isload(gen(i, :)) & Qmin < max([ -zero_tol, gen(i, QMIN) ])
+				if isload(gen(i, :))
 					Pmin = gen(i, PMIN) * Qmin / gen(i, QMIN);
 				end
 			else
-				error(sprintf('bid quantity (%g) must be between max(0,-QMAX) (%g) and -QMIN (%g)', ...
+				error(sprintf('reactive bid quantity (%g) must be between max(0,-QMAX) (%g) and -QMIN (%g)', ...
 					-Qmin, max([0 -gen(i, QMAX)]), -gen(i, QMIN)));
 			end
 		end
@@ -274,13 +277,21 @@ for i = 1:nGL
 		Qgencost(i,      COST:2:( COST + 2*npQ - 2 )) = xxQ;
 		Qgencost(i,  (COST+1):2:( COST + 2*npQ - 1 )) = yyQ;
 	else
+		%% no capacity bid/offered for reactive power
 		if haveQ
-			%% no capacity bid/offered for reactive power
-			if npP & ~isload(gen(i,:)) & gen(i, QMIN) <= 0 & gen(i, QMAX) >= 0
+			if npP & gen(i, QMIN) <= 0 & gen(i, QMAX) >= 0
 				%% but we do have an active bid/offer and we can dispatch
 				%% at zero reactive power without shutting down
 				Qmin = 0;
 				Qmax = 0;
+				if isload(gen(i, :))
+					if gen(i, QMAX) > 0
+						Pmin = gen(i, PMIN) * Qmax / gen(i, QMAX);
+					end
+					if gen(i, QMIN) < 0
+						Pmin = gen(i, PMIN) * Qmin / gen(i, QMIN);
+					end
+				end
 			else			%% none for reactive either
 				%% shut down the unit
 				gen(i, GEN_STATUS) = 0;
