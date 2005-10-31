@@ -12,7 +12,7 @@ function [mpc_out, co, cb, f, dispatch, success, et] = ...
 %       auction_type - market used for dispatch and pricing
 %       t            - time duration of the dispatch period in hours
 %       u0           - vector of gen commitment status from prev period
-%       max_p        - price cap
+%       lim          - offer/bid/price limits (see 'help pricelimits')
 %       OPF          - 'AC' or 'DC', default is 'AC'
 %
 %   mpopt is an optional MATPOWER options vector (see 'help mpoption' for
@@ -30,15 +30,17 @@ function [mpc_out, co, cb, f, dispatch, success, et] = ...
 %      8 - LAO sets seller price, LAB sets buyer price
 %
 %   The default auction_type is 5, where the marginal block (offer or bid)
-%   sets the price. The default max_p is 500, the default u0 is all ones
-%   (assume everything was running) and the default duration t is 1 hour. The
-%   results may optionally be printed to a file (appended if the file exists)
-%   whose name is given in fname (in addition to printing to STDOUT).
-%   Optionally returns the final values of the solved case in mpc_out, the
-%   cleared offers and bids in co and cb, the objective function value f,
-%   the old style dispatch matrix, the convergence status of the OPF in success,
-%   and the elapsed time et. If a name is given in solvedcase, the solved case
-%   will be written to a case file in MATPOWER format with the specified name.
+%   sets the price. The default lim sets no offer/bid or price limits. The
+%   default previous commitment status u0 is all ones (assume everything was
+%   running) and the default duration t is 1 hour. The results may
+%   optionally be printed to a file (appended if the file exists) whose name
+%   is given in fname (in addition to printing to STDOUT). Optionally
+%   returns the final values of the solved case in mpc_out, the cleared
+%   offers and bids in co and cb, the objective function value f, the old
+%   style dispatch matrix, the convergence status of the OPF in success, and
+%   the elapsed time et. If a name is given in solvedcase, the solved case
+%   will be written to a case file in MATPOWER format with the specified
+%   name.
 
 %   MATPOWER
 %   $Id$
@@ -84,7 +86,7 @@ mpc = loadcase(mpc);
 
 %% assign default arguments
 if isempty(mkt)
-    mkt = struct( 'OPF', [], 'auction_type', [], 'max_p', [], 'u0', [], 't', []);
+    mkt = struct( 'OPF', [], 'auction_type', [], 'lim', [], 'u0', [], 't', []);
 end
 if ~isfield(mkt, 'OPF') | isempty(mkt.OPF)
     mkt.OPF = 'AC';         %% default OPF is AC
@@ -92,8 +94,8 @@ end
 if ~isfield(mkt, 'auction_type') | isempty(mkt.auction_type)
     mkt.auction_type = 5;   %% default auction type is first price
 end
-if ~isfield(mkt, 'max_p') | isempty(mkt.max_p)
-    mkt.max_p = 500;        %% default price cap is 500
+if ~isfield(mkt, 'lim') | isempty(mkt.lim)
+    mkt.lim = pricelimits([], isfield(offers, 'Q') | isfield(bids, 'Q'));
 end
 if ~isfield(mkt, 'u0') | isempty(mkt.u0)
     mkt.u0 = ones(size(mpc.gen, 1), 1); %% default for previous gen commitment, all on

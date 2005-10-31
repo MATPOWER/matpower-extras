@@ -51,11 +51,8 @@ mpopt = mpoption(mpopt, 'PF_DC', strcmp(mkt.OPF, 'DC'));
 [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp;
 
 %% set up cost info & generator limits
-%% eliminates offers (but not bids) above mkt.max_p
-lim = struct( 'P', struct(  'max_offer',            mkt.max_p, ...
-                            'max_cleared_offer',    mkt.max_p ) );
-lim = pricelimits(lim, isfield(offers, 'Q') | isfield(bids, 'Q'));
-[gen, genoffer] = off2case(mpc.gen, mpc.gencost, offers, bids, lim);
+mkt.lim = pricelimits(mkt.lim, isfield(offers, 'Q') | isfield(bids, 'Q'));
+[gen, genoffer] = off2case(mpc.gen, mpc.gencost, offers, bids, mkt.lim);
 
 %% move Pmin and Pmax limits out slightly to avoid problems
 %% with lambdas caused by rounding errors when corner point
@@ -105,7 +102,7 @@ if success      %% OPF solved case fine
         gtee_prc.bid = 1;       %% guarantee that cleared bids are <= bids
     end
 
-    [co.P, cb.P] = auction(Poffer, Pbid, mkt.auction_type, lim.P, gtee_prc);
+    [co.P, cb.P] = auction(Poffer, Pbid, mkt.auction_type, mkt.lim.P, gtee_prc);
 
     if haveQ
         npQ = max([ size(offers.Q.qty, 2) size(bids.Q.qty, 2) ]);
@@ -131,7 +128,7 @@ if success      %% OPF solved case fine
 %         Qbid.lam(L,:) = lamQ(L,:) + diag(pf(L)) * lamP(L,:);
         Qbid.total_qty = (gen(:, QG) < 0) .* -gen(:, QG);
 
-        [co.Q, cb.Q] = auction(Qoffer, Qbid, mkt.auction_type, lim.Q, gtee_prc);
+        [co.Q, cb.Q] = auction(Qoffer, Qbid, mkt.auction_type, mkt.lim.Q, gtee_prc);
     end
 
     quantity    = gen(:, PG);
@@ -151,7 +148,7 @@ if success      %% OPF solved case fine
     end
 else        %% did not converge even with imports
     quantity    = zeros(ng, 1);
-    price       = mkt.max_p * ones(ng, 1);
+    price       = mkt.lim.P.max_offer * ones(ng, 1);
     co.P.qty = zeros(size(offers.P.qty));
     co.P.prc = zeros(size(offers.P.prc));
     cb.P.qty = zeros(size(bids.P.qty));

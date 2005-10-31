@@ -122,8 +122,11 @@ else
     error('invalid market code');
 end
 
+%% eliminates offers (but not bids) above max_p
+lim = struct( 'P', struct( 'max_offer',         max_p, ...
+                           'max_cleared_offer', max_p ) );
 mkt = struct(   'auction_type', auction_type, 'OPF', OPF, ...
-                'max_p', max_p, 't', t', 'u0', u0   );
+                'lim', lim, 't', t', 'u0', u0   );
 [mpc_out, co, cb, f, dispatch, success, et] = ...
                 runmarket(mpc, offers, bids, mkt, mpopt, fname, solvedcase);
 
