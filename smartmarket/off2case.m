@@ -35,14 +35,14 @@ function [gen, gencost] = off2case(gen, gencost, offers, bids, lim)
 %   MATPOWER
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
-%   Copyright (c) 1996-2005 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2006 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %% define named indices into data matrices
 [GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, GEN_STATUS, PMAX, PMIN, ...
     MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN, PC1, PC2, QC1MIN, QC1MAX, ...
     QC2MIN, QC2MAX, RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q, APF] = idx_gen;
-[PW_LINEAR, POLYNOMIAL, MODEL, STARTUP, SHUTDOWN, N, COST] = idx_cost;
+[PW_LINEAR, POLYNOMIAL, MODEL, STARTUP, SHUTDOWN, NCOST, COST] = idx_cost;
 
 %% default args and stuff
 if nargin < 5
@@ -103,7 +103,7 @@ if haveQ
 end
 np = np + 1;
 if any(idxPo + idxPb == 0)  %% some gens have no offer or bid, use original cost
-    np = max([ np ceil(ngc-N)/2 ]);
+    np = max([ np ceil(ngc-NCOST)/2 ]);
 end
 
 %% initialize new cost matrices
@@ -228,7 +228,7 @@ for i = 1:nGL
         end
 
         %% update gencost
-        Pgencost(i, N) = npP;
+        Pgencost(i, NCOST) = npP;
         Pgencost(i,      COST:2:( COST + 2*npP - 2 )) = xxP;
         Pgencost(i,  (COST+1):2:( COST + 2*npP - 1 )) = yyP;
     else
@@ -246,7 +246,7 @@ for i = 1:nGL
             %% shut down the unit
             gen(i, GEN_STATUS) = 0;
         end
-        Pgencost(i, N:ngc) = gencost(i, N:ngc);
+        Pgencost(i, NCOST:ngc) = gencost(i, NCOST:ngc);
     end
 
     %% update reactive part of gen and gencost
@@ -276,7 +276,7 @@ for i = 1:nGL
         end
 
         %% update gencost
-        Qgencost(i, N) = npQ;
+        Qgencost(i, NCOST) = npQ;
         Qgencost(i,      COST:2:( COST + 2*npQ - 2 )) = xxQ;
         Qgencost(i,  (COST+1):2:( COST + 2*npQ - 1 )) = yyQ;
     else
@@ -299,7 +299,7 @@ for i = 1:nGL
                 %% shut down the unit
                 gen(i, GEN_STATUS) = 0;
             end
-            Qgencost(i, N:ngc) = gencost(nGL+i, N:ngc);
+            Qgencost(i, NCOST:ngc) = gencost(nGL+i, NCOST:ngc);
         end
     end
 
@@ -311,8 +311,8 @@ end
 if ~haveQ
     Qgencost = zeros(0, size(Pgencost, 2));
 end
-np = max([ Pgencost(:, N); Qgencost(:, N) ]);
-ngc = N + 2*np;
+np = max([ Pgencost(:, NCOST); Qgencost(:, NCOST) ]);
+ngc = NCOST + 2*np;
 gencost = [ Pgencost(:, 1:ngc); Qgencost(:, 1:ngc) ];
 
 return;
@@ -347,7 +347,7 @@ end
 n = length(qq) + 1;             %% number of points to define pwl function
 
 %% form piece-wise linear total cost function
-if n > 1        %% otherwise, leave all cost info zero (specifically N)
+if n > 1        %% otherwise, leave all cost info zero (specifically NCOST)
     xx = [0 cumsum(qq)];
     yy = [0 cumsum(pp .* qq)];
     if isbid
