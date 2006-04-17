@@ -233,20 +233,16 @@ for i = 1:nGL
         Pgencost(i,  (COST+1):2:( COST + 2*npP - 1 )) = yyP;
     else
         %% no capacity bid/offered for active power
-        if npQ & gen(i, PMIN) <= 0 & gen(i, PMAX) >= 0
+        if npQ & ~isload(gen(i,:)) & gen(i, PMIN) <= 0 & gen(i, PMAX) >= 0
             %% but we do have a reactive bid/offer and we can dispatch
             %% at zero real power without shutting down
             Pmin = 0;
             Pmax = 0;
-            if isload(gen(i, :))
-                Qmin = gen(i, QMIN) * Pmin / gen(i, PMIN);
-                Qmax = gen(i, QMAX) * Pmin / gen(i, PMIN);
-            end
+            Pgencost(i, 1:ngc) = gencost(i, 1:ngc);
         else            %% none for reactive either
             %% shut down the unit
             gen(i, GEN_STATUS) = 0;
         end
-        Pgencost(i, NCOST:ngc) = gencost(i, NCOST:ngc);
     end
 
     %% update reactive part of gen and gencost
@@ -287,19 +283,22 @@ for i = 1:nGL
                 %% at zero reactive power without shutting down
                 Qmin = 0;
                 Qmax = 0;
-                if isload(gen(i, :))
-                    if gen(i, QMAX) > 0
-                        Pmin = gen(i, PMIN) * Qmax / gen(i, QMAX);
-                    end
-                    if gen(i, QMIN) < 0
-                        Pmin = gen(i, PMIN) * Qmin / gen(i, QMIN);
-                    end
+                if isload(gen(i, :)) & (gen(i, QMAX) > 0 | gen(i, QMIN) < 0)
+                    Pmin = 0;
                 end
+                Qgencost(i, 1:ngc) = gencost(nGL+i, 1:ngc);
             else            %% none for reactive either
                 %% shut down the unit
                 gen(i, GEN_STATUS) = 0;
             end
-            Qgencost(i, NCOST:ngc) = gencost(nGL+i, NCOST:ngc);
+        end
+    end
+
+    %% do not modify cost if gen is shut down
+    if gen(i, GEN_STATUS) == 0
+        Pgencost(i, 1:ngc) = gencost(i, 1:ngc);
+        if haveQ
+            Qgencost(i, 1:ngc) = gencost(nGL+i, 1:ngc);
         end
     end
 
