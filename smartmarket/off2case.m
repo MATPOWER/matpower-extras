@@ -281,10 +281,12 @@ for i = 1:nGL
             if npP & gen(i, QMIN) <= 0 & gen(i, QMAX) >= 0
                 %% but we do have an active bid/offer and we can dispatch
                 %% at zero reactive power without shutting down
-                Qmin = 0;
-                Qmax = 0;
                 if isload(gen(i, :)) & (gen(i, QMAX) > 0 | gen(i, QMIN) < 0)
-                    Pmin = 0;
+                    %% shut down the unit
+                    gen(i, GEN_STATUS) = 0;
+                else
+                    Qmin = 0;
+                    Qmax = 0;
                 end
                 Qgencost(i, 1:ngc) = gencost(nGL+i, 1:ngc);
             else            %% none for reactive either
@@ -294,18 +296,18 @@ for i = 1:nGL
         end
     end
 
-    %% do not modify cost if gen is shut down
-    if gen(i, GEN_STATUS) == 0
+    if gen(i, GEN_STATUS)       %% running
+        gen(i, PMIN) = Pmin;    %% update limits
+        gen(i, PMAX) = Pmax;
+        gen(i, QMIN) = Qmin;
+        gen(i, QMAX) = Qmax;
+    else                        %% shut down
+        %% do not modify cost
         Pgencost(i, 1:ngc) = gencost(i, 1:ngc);
         if haveQ
             Qgencost(i, 1:ngc) = gencost(nGL+i, 1:ngc);
         end
     end
-
-    gen(i, PMIN) = Pmin;
-    gen(i, PMAX) = Pmax;
-    gen(i, QMIN) = Qmin;
-    gen(i, QMAX) = Qmax;
 end
 if ~haveQ
     Qgencost = zeros(0, size(Pgencost, 2));
