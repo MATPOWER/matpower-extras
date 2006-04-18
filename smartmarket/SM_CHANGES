@@ -14,6 +14,18 @@ See http://www.pserc.cornell.edu/matpower/ for more info.
 Changes since MATPOWER 3.0.0
 ----------------------------
 
+4/17/06
+    - Fixed some bugs in off2case.m and added additional tests related to
+      shutting down loads with zero qty bids. It now properly shuts down
+      any load with a zero qty P bid, and loads with zero qty Q bids if and
+      only if the load has a non-unity power factor.
+
+10/26/05
+    - Fixed bug in off2case.m where P-only load was turned off by zero qty Q
+      bid. Added corresponding test.
+    - Fix in off2case.m for div by zero when Q portion of gencost is not
+      specified and we have zero Q bid qty.
+
 10/17/05
     - Rewrite of much of the code to handle reactive power. Added runmarket.m,
       pricelimits.m. Made runmkt a wrapper around new runmarket.
