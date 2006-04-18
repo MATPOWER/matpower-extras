@@ -279,12 +279,12 @@ for i = 1:nGL
         %% no capacity bid/offered for reactive power
         if haveQ
             if npP & gen(i, QMIN) <= 0 & gen(i, QMAX) >= 0
-                %% but we do have an active bid/offer and we can dispatch
-                %% at zero reactive power without shutting down
+                %% but we do have an active bid/offer and we might be able to
+                %% dispatch at zero reactive power without shutting down
                 if isload(gen(i, :)) & (gen(i, QMAX) > 0 | gen(i, QMIN) < 0)
-                    %% shut down the unit
+                    %% load w/non-unity power factor, zero Q => must shut down
                     gen(i, GEN_STATUS) = 0;
-                else
+                else    %% can dispatch at zero reactive without shutting down
                     Qmin = 0;
                     Qmax = 0;
                 end
