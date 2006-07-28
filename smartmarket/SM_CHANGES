@@ -14,6 +14,13 @@ See http://www.pserc.cornell.edu/matpower/ for more info.
 Changes since MATPOWER 3.0.0
 ----------------------------
 
+8/1/06
+    - Released version 3.1b1.
+
+7/10/06
+    - Corrected costs of dispatchable gens in t_auction_case.m so that the
+	  cost is 0 at 0 output and negative at Pmin.
+
 4/17/06
     - Fixed some bugs in off2case.m and added additional tests related to
       shutting down loads with zero qty bids. It now properly shuts down
