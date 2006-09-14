@@ -2,7 +2,7 @@
  Change history for SMARTMARKET
 --------------------------------
 
-Version:    3.1b1
+Version:    3.1b2
 
 maintained by Ray Zimmerman <rz10@cornell.edu>
 
@@ -10,6 +10,13 @@ MATPOWER
 $Id$
 Copyright (c) 1996-2005 by Power System Engineering Research Center (PSERC)
 See http://www.pserc.cornell.edu/matpower/ for more info.
+
+Changes since MATPOWER 3.1b1
+----------------------------
+
+9/15/06
+    - Released version 3.1b2.
+
 
 Changes since MATPOWER 3.0.0
 ----------------------------
