@@ -133,8 +133,8 @@ if success      %% OPF solved case fine
 
     quantity    = gen(:, PG);
     price       = zeros(ng, 1);
-    price(G)    = offers.P.prc(:, 1);   %% need these for prices for
-    price(L)    = bids.P.prc(:, 1);     %% gens that are shut down
+    price(G)    = co.P.prc(:, 1);   %% need these for prices for
+    price(L)    = cb.P.prc(:, 1);   %% gens that are shut down
     if npP == 1
         k = find( co.P.qty );
         price(G(k)) = co.P.prc(k, :);
