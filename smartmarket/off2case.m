@@ -408,7 +408,7 @@ if nPo == nGL
 elseif nPo == nG
     idxPo(G) = [1:nG]';
 elseif nPo ~= 0
-    error('number of real power offers must be zero or match either the number of generators or the total number of rows in gen');
+    error('number of active power offers must be zero or match either the number of generators or the total number of rows in gen');
 end
 
 %% active power bid indices
@@ -417,7 +417,7 @@ if nPb == nGL
 elseif nPb == nL
     idxPb(L) = [1:nL]';
 elseif nPb ~= 0
-    error('number of real power bids must be zero or match the number of dispatchable loads or the total number of rows in gen');
+    error('number of active power bids must be zero or match either the number of dispatchable loads or the total number of rows in gen');
 end
 
 if haveQ
@@ -427,7 +427,7 @@ if haveQ
     elseif nQo == nG
         idxQo(G) = [1:nG]';
     elseif nQo ~= 0
-        error('number of reactive power offers must be zero or match the number of generators or the total number of rows in gen');
+        error('number of reactive power offers must be zero or match either the number of generators or the total number of rows in gen');
     end
     
     %% reactive power bid indices
