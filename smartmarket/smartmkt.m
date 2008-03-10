@@ -22,6 +22,7 @@ verbose = mpopt(31);
 %% initialize some stuff
 G = find( ~isload(mpc.gen) );       %% real generators
 L = find(  isload(mpc.gen) );       %% dispatchable loads
+nL = length(L);
 if isfield(offers, 'Q') | isfield(bids, 'Q')
     haveQ = 1;
 else
@@ -66,7 +67,7 @@ end
 %%-----  solve the optimization problem  -----
 %% attempt OPF
 [bus, gen, branch, f, success, et] =  uopf(mpc.baseMVA, mpc.bus, gen, ...
-            genoffer, mpc.branch, mpc.areas, mpopt);
+            mpc.branch, mpc.areas, genoffer, mpopt);
 if verbose & ~success
     fprintf('\nSMARTMARKET: non-convergent UOPF');
 end
@@ -78,8 +79,8 @@ if success      %% OPF solved case fine
     %% get nodal marginal prices from OPF
     gbus    = gen(:, GEN_BUS);                     %% indices of buses w/gens
     npP 	= max([ size(offers.P.qty, 2) size(bids.P.qty, 2) ]);
-    lamP    = diag(bus(gbus, LAM_P)) * ones(ng, npP);    %% real power prices
-    lamQ    = diag(bus(gbus, LAM_Q)) * ones(ng, npP);    %% reactive power prices
+    lamP    = spdiags(bus(gbus, LAM_P), 0, ng, ng) * ones(ng, npP);    %% real power prices
+    lamQ    = spdiags(bus(gbus, LAM_Q), 0, ng, ng) * ones(ng, npP);    %% reactive power prices
     
     %% compute fudge factor for lamP to include price of bundled reactive power
     pf   = zeros(ng, npP);                        %% for loads Q = pf * P
@@ -98,7 +99,7 @@ if success      %% OPF solved case fine
         Pbid.lam = lamP(L,:);   %% use unbundled lambdas
         gtee_prc.bid = 0;       %% allow cleared bids to be above bid price
     else
-        Pbid.lam = lamP(L,:) + diag(pf(L)) * lamQ(L,:); %% used bundled lambdas
+        Pbid.lam = lamP(L,:) + spdiags(pf(L), 0, nL, nL) * lamQ(L,:); %% used bundled lambdas
         gtee_prc.bid = 1;       %% guarantee that cleared bids are <= bids
     end
 
@@ -108,8 +109,8 @@ if success      %% OPF solved case fine
         npQ = max([ size(offers.Q.qty, 2) size(bids.Q.qty, 2) ]);
         
         %% get nodal marginal prices from OPF
-        lamP    = diag(bus(gbus, LAM_P)) * ones(ng, npQ);    %% real power prices
-        lamQ    = diag(bus(gbus, LAM_Q)) * ones(ng, npQ);    %% reactive power prices
+        lamP    = spdiags(bus(gbus, LAM_P), 0, ng, ng) * ones(ng, npQ);    %% real power prices
+        lamQ    = spdiags(bus(gbus, LAM_Q), 0, ng, ng) * ones(ng, npQ);    %% reactive power prices
 
 %         %% compute fudge factor for lamP to include price of bundled reactive power
 %         pf   = zeros(ng, npQ);                        %% for loads P = pf * Q
@@ -120,12 +121,12 @@ if success      %% OPF solved case fine
     
         Qoffer = offers.Q;
         Qoffer.lam = lamQ;      %% use unbundled lambdas
-%         Qoffer.lam(L,:) = lamQ(L,:) + diag(pf(L)) * lamP(L,:);
+%         Qoffer.lam(L,:) = lamQ(L,:) + spdiags(pf(L), 0, nL, nL) * lamP(L,:);
         Qoffer.total_qty = (gen(:, QG) > 0) .* gen(:, QG);
         
         Qbid = bids.Q;
         Qbid.lam = lamQ;        %% use unbundled lambdas
-%         Qbid.lam(L,:) = lamQ(L,:) + diag(pf(L)) * lamP(L,:);
+%         Qbid.lam(L,:) = lamQ(L,:) + spdiags(pf(L), 0, nL, nL) * lamP(L,:);
         Qbid.total_qty = (gen(:, QG) < 0) .* -gen(:, QG);
 
         [co.Q, cb.Q] = auction(Qoffer, Qbid, mkt.auction_type, mkt.lim.Q, gtee_prc);
