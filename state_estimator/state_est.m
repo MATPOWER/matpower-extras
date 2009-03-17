@@ -73,8 +73,8 @@ sigma = [
     0.02 * abs(V0)      + 0.0052 * 1.1 * ones(nb,1);
 ] ./ 3;
 ns = length(sigma);
-W = spdiags( sigma .^ 2, 0, ns, ns );
-WInv = spdiags( 1 ./ sigma .^ 2, 0, ns, ns );
+W = sparse(1:ns, 1:ns ,  sigma .^ 2, ns, ns );
+WInv = sparse(1:ns, 1:ns ,  1 ./ sigma .^ 2, ns, ns );
 
 %% covariance of measurement residual
 %R = H * inv( H' * WInv * H ) * H';
