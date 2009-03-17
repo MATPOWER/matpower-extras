@@ -54,11 +54,9 @@ function [co, cb] = auction(offers, bids, auction_type, limit_prc, gtee_prc)
 [AREA_I, PRICE_REF_BUS] = idx_area;
 
 %% initialize some stuff
-if have_fcn('minopf')
-    zero_tol = 1e-5;
-else
-    zero_tol = 0.1;     %% fmincon is SO bad with prices that it is
-end                     %% NOT recommended for use with auction.m
+zero_tol = 1e-5;
+% zero_tol = 0.1;   %% fmincon is SO bad with prices that it is
+                    %% NOT recommended for use with auction.m
 big_num = 1e6;
 if isempty(bids)
     bids = struct(  'qty', [], ...
