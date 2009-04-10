@@ -51,7 +51,6 @@ function [co, cb] = auction(offers, bids, auction_type, limit_prc, gtee_prc)
 [GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, GEN_STATUS, PMAX, PMIN, ...
     MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN, PC1, PC2, QC1MIN, QC1MAX, ...
     QC2MIN, QC2MAX, RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q, APF] = idx_gen;
-[AREA_I, PRICE_REF_BUS] = idx_area;
 
 %% initialize some stuff
 zero_tol = 1e-5;

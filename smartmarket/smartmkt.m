@@ -47,7 +47,6 @@ mpopt = mpoption(mpopt, 'PF_DC', strcmp(mkt.OPF, 'DC'));
 [F_BUS, T_BUS, BR_R, BR_X, BR_B, RATE_A, RATE_B, RATE_C, ...
     TAP, SHIFT, BR_STATUS, PF, QF, PT, QT, MU_SF, MU_ST, ...
     ANGMIN, ANGMAX, MU_ANGMIN, MU_ANGMAX] = idx_brch;
-[AREA_I, PRICE_REF_BUS] = idx_area;
 [PW_LINEAR, POLYNOMIAL, MODEL, STARTUP, SHUTDOWN, NCOST, COST] = idx_cost;
 [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp;
 
