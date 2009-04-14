@@ -81,8 +81,8 @@ end
 
 %% read data & convert to internal bus numbering
 mpc = loadcase(mpc);
-[i2e, mpc.bus, mpc.gen, mpc.branch, mpc.areas] = ...
-    ext2int(mpc.bus, mpc.gen, mpc.branch, mpc.areas);
+[i2e, mpc.bus, mpc.gen, mpc.branch] = ...
+    ext2int(mpc.bus, mpc.gen, mpc.branch);
 
 %% assign default arguments
 if isempty(mkt)
@@ -128,7 +128,7 @@ et = etime(clock, t0);
 %% convert back to original bus numbering & print results
 gencost = mpc.gencost;
 baseMVA =  mpc.baseMVA;
-[bus, gen, branch, areas] = int2ext(i2e, bus, gen, branch, mpc.areas);
+[bus, gen, branch] = int2ext(i2e, bus, gen, branch);
 if fname
     [fd, msg] = fopen(fname, 'at');
     if fd == -1
@@ -142,7 +142,7 @@ printmkt(baseMVA, bus, gen, branch, f, mkt.t, dispatch, success, et, 1, mpopt);
 
 %% save solved case
 if solvedcase
-    savecase(solvedcase, baseMVA, bus, gen, branch, areas, gencost);
+    savecase(solvedcase, baseMVA, bus, gen, branch, gencost);
 end
 
 if nargout
@@ -150,8 +150,7 @@ if nargout
                         'bus',     bus, ...
                         'gen',     gen, ...
                         'gencost', gencost, ...
-                        'branch',  branch, ...
-                        'areas',   areas   );
+                        'branch',  branch   );
 end
 
 return;

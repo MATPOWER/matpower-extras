@@ -66,7 +66,7 @@ end
 %%-----  solve the optimization problem  -----
 %% attempt OPF
 [bus, gen, branch, f, success, et] =  uopf(mpc.baseMVA, mpc.bus, gen, ...
-            mpc.branch, mpc.areas, genoffer, mpopt);
+            mpc.branch, [], genoffer, mpopt);
 if verbose & ~success
     fprintf('\nSMARTMARKET: non-convergent UOPF');
 end
