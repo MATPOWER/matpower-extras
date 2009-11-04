@@ -88,5 +88,3 @@ end
 
 %% print remaining opf output
 printpf(baseMVA, bus, gen, branch, f, success, et, fd, mpopt);
-
-return;

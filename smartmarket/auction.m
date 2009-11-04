@@ -206,8 +206,6 @@ if auction_type ~= 0
     end
 end
 
-return;
-
 
 function [cqty, on, off] = clear_qty(qty, total_cqty, mask)
 %CLEAR_QTY  Computed cleared offer/bid quantities from totals.
@@ -245,5 +243,3 @@ end
 
 on  = (accept  > 0);
 off = (accept == 0);
-
-return;

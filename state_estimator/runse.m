@@ -173,5 +173,3 @@ end
 %% this is just to prevent it from printing baseMVA
 %% when called with no output arguments
 if nargout, MVAbase = baseMVA; end
-
-return;

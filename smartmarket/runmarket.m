@@ -152,5 +152,3 @@ if nargout
                         'gencost', gencost, ...
                         'branch',  branch   );
 end
-
-return;

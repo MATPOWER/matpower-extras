@@ -26,5 +26,3 @@ FCOST           = 3;    %% fixed cost in $/MWh
 VCOST           = 4;    %% variable cost in $/MWh
 SCOST           = 5;    %% startup cost in $
 PENALTY         = 6;    %% penalty cost in $ (not used)
-
-return;

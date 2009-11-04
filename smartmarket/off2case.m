@@ -316,8 +316,6 @@ np = max([ Pgencost(:, NCOST); Qgencost(:, NCOST) ]);
 ngc = NCOST + 2*np;
 gencost = [ Pgencost(:, 1:ngc); Qgencost(:, 1:ngc) ];
 
-return;
-
 
 %%-----  offbid2pwl()  -----
 function [xx, yy, n] = offbid2pwl(qty, prc, isbid, lim)
@@ -359,8 +357,6 @@ else
     xx = [];
     yy = [];
 end
-
-return;
 
 %%-----  idx_vecs()  -----
 function [idxPo, idxPb, idxQo, idxQb] = idx_vecs(offers, bids, G, L, haveQ)
@@ -437,5 +433,3 @@ if haveQ
         error('number of reactive power bids must be zero or match the total number of rows in gen');
     end
 end
-
-return;

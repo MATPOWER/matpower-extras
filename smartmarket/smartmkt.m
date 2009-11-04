@@ -173,5 +173,3 @@ scost   =   (~mkt.u0 & gen(:, GEN_STATUS) >  0) .* ...
 %% store in dispatch
 dispatch = zeros(ng, PENALTY);
 dispatch(:, [QUANTITY PRICE FCOST VCOST SCOST]) = [quantity price fcost vcost scost];
-
-return;

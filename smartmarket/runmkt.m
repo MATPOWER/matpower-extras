@@ -142,5 +142,3 @@ branch = mpc_out.branch;
 %% this is just to prevent it from printing baseMVA
 %% when called with no output arguments
 if nargout, MVAbase = mpc_out.baseMVA; end
-
-return;

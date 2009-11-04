@@ -32,8 +32,6 @@ else
     end
 end
 
-return;
-
 
 
 function lim = fill_lim(lim)
@@ -46,5 +44,3 @@ else
     if ~isfield(lim, 'max_cleared_offer'), lim.max_cleared_offer = []; end
     if ~isfield(lim, 'min_cleared_bid'),   lim.min_cleared_bid = [];   end
 end
-
-return;
