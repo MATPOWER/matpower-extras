@@ -14,6 +14,12 @@ See http://www.pserc.cornell.edu/matpower/ for more info.
 Changes since MATPOWER 3.1b2
 ----------------------------
 
+11/4/09
+    - Removed unnecessary 'return' statement at end of all M-files. If
+      anything it should be an 'end' statement, but even that is
+      optional, so we just let functions get terminated by the
+      end-of-file or another function declaration.
+
 5/15/07
     - Fixed a display bug where it would show the offer/bid price rather than
       the price of the cleared offer/bid for generators with zero output.
