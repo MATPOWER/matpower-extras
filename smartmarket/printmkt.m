@@ -82,7 +82,7 @@ if OUT_RAW
     fprintf(fd, '----------  raw PW::Dispatch data below  ----------\n');
     fprintf(fd, 'dispatch\n');
     fprintf(fd, '%d\t%.8g\t%.8g\t%.8g\t%.8g\t%.8g\t%.8g\t%.8g\n', ...
-                [[1:ng]' dispatch(:, [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY]) pay-cost]');
+                [(1:ng)' dispatch(:, [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY]) pay-cost]');
     fprintf(fd, '----------  raw PW::Dispatch data above  ----------\n');
 end
 

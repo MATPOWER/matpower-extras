@@ -145,8 +145,8 @@ Qte=branch(:,QT);
 nbr = length(Pfe);
 subplot(3,2,1), plot(180/pi*(angle(Vlf)-angle(V)),'.'), title('Voltage Angle (deg)');
 subplot(3,2,2), plot(abs(Vlf)-abs(V),'.'), title('Voltage Magnitude (p.u.)');
-subplot(3,2,3), plot([1:nbr],(Pfe-Pflf),'r.',[1:nbr],(Pte-Ptlf),'b.'), title('Real Flow (MW)');
-subplot(3,2,4), plot([1:nbr],(Qfe-Qflf),'r.',[1:nbr],(Qte-Qtlf),'b.'), title('Reactive Flow (MVAr)');
+subplot(3,2,3), plot((1:nbr),(Pfe-Pflf),'r.',(1:nbr),(Pte-Ptlf),'b.'), title('Real Flow (MW)');
+subplot(3,2,4), plot((1:nbr),(Qfe-Qflf),'r.',(1:nbr),(Qte-Qtlf),'b.'), title('Reactive Flow (MVAr)');
 subplot(3,2,5), plot(baseMVA*real(Sbuslf-Sbus), '.'), title('Real Injection (MW)');
 subplot(3,2,6), plot(baseMVA*imag(Sbuslf-Sbus), '.'), title('Reactive Injection (MVAr)');
 %%--------------------  end state estimator code  --------------------

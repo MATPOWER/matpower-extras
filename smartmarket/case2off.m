@@ -33,7 +33,7 @@ if any(i_poly)
         Pmax = gen(ig, PMAX);
         if Pmin == 0
             step = (Pmax - Pmin) / (npts - 1);
-            xx = [Pmin:step:Pmax];
+            xx = (Pmin:step:Pmax);
         else
             step = (Pmax - Pmin) / (npts - 2);
             xx = [0 Pmin:step:Pmax];
