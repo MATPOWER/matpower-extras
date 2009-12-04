@@ -25,7 +25,6 @@ max_it  = mpopt(3);
 verbose = mpopt(31);
 
 %% initialize
-j = sqrt(-1);
 converged = 0;
 i = 0;
 nb = length(V0);
@@ -173,7 +172,7 @@ while (~converged && ibd <= max_it_bad_data)
         %% update voltage
         VVa = VVa + dx(1:nb-1);
         VVm = VVm + dx(nb:2*nb-2);
-        V(nref) = VVm .* exp(j * VVa);
+        V(nref) = VVm .* exp(1j * VVa);
 
         %% compute estimated measurement
         Sfe = V(f) .* conj(Yf * V);
