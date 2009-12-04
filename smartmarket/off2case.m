@@ -84,7 +84,7 @@ if haveQ
         gencost(G+nGL, COST+2) =  1;
         gencost(L+nGL, COST)   = -1;
     elseif size(gencost, 1) ~= 2 * nGL
-        error(sprintf('gencost should have either %d or %d rows', nGL, 2*nGL));
+        error('gencost should have either %d or %d rows', nGL, 2*nGL);
     end
 end
 
@@ -119,7 +119,7 @@ for i = 1:nGL
     %% convert active power bids & offers into piecewise linear segments
     if idxPb(i)     %% there is a bid for this unit
         if gen(i, PMIN) >= 0 && any(bids.P.qty(idxPb(i), :))
-            error(sprintf('Pmin >= 0, bid not allowed for gen %d', i));
+            error('Pmin >= 0, bid not allowed for gen %d', i);
         end
         [xxPb, yyPb, nPb] = offbid2pwl(bids.P.qty(idxPb(i), :), bids.P.prc(idxPb(i), :), 1, lim.P.min_bid);
     else
@@ -127,7 +127,7 @@ for i = 1:nGL
     end
     if idxPo(i)     %% there is an offer for this unit
         if gen(i, PMAX) <= 0 && any(offers.P.qty(idxPo(i), :))
-            error(sprintf('Pmax <= 0, offer not allowed for gen %d', i));
+            error('Pmax <= 0, offer not allowed for gen %d', i);
         end
         [xxPo, yyPo, nPo] = offbid2pwl(offers.P.qty(idxPo(i), :), offers.P.prc(idxPo(i), :), 0, lim.P.max_offer);
     else
@@ -137,7 +137,7 @@ for i = 1:nGL
     if haveQ
         if idxQb(i)     %% there is a bid for this unit
             if gen(i, QMIN) >= 0 && any(bids.Q.qty(idxQb(i), :))
-                error(sprintf('Qmin >= 0, reactive bid not allowed for gen %d', i));
+                error('Qmin >= 0, reactive bid not allowed for gen %d', i);
             end
             [xxQb, yyQb, nQb] = offbid2pwl(bids.Q.qty(idxQb(i), :), bids.Q.prc(idxQb(i), :), 1, lim.Q.min_bid);
         else
@@ -145,7 +145,7 @@ for i = 1:nGL
         end
         if idxQo(i)     %% there is an offer for this unit
             if gen(i, QMAX) <= 0 && any(offers.Q.qty(idxQo(i), :))
-                error(sprintf('Qmax <= 0, reactive offer not allowed for gen %d', i));
+                error('Qmax <= 0, reactive offer not allowed for gen %d', i);
             end
             [xxQo, yyQo, nQo] = offbid2pwl(offers.Q.qty(idxQo(i), :), offers.Q.prc(idxQo(i), :), 0, lim.Q.max_offer);
         else
@@ -159,8 +159,8 @@ for i = 1:nGL
     %% collect the pwl segments for active power
     if nPb > 1 && nPo > 1           %% bid and offer (positive and negative qtys)
         if xxPb(end) | yyPb(end) | xxPo(1) | yyPo(1)
-            error(fprintf('Oops ... these 4 numbers should be zero: %g %g %g %g\n', ...
-                xxPb(end), yyPb(end), xxPo(1), yyPo(1)));
+            error('Oops ... these 4 numbers should be zero: %g %g %g %g\n', ...
+                xxPb(end), yyPb(end), xxPo(1), yyPo(1));
         end
         xxP = [xxPb xxPo(2:end)];
         yyP = [yyPb yyPo(2:end)];
@@ -180,8 +180,8 @@ for i = 1:nGL
     %% collect the pwl segments for reactive power
     if nQb > 1 && nQo > 1           %% bid and offer (positive and negative qtys)
         if xxQb(end) | yyQb(end) | xxQo(1) | yyQo(1)
-            error(fprintf('Oops ... these 4 numbers should be zero: %g %g %g %g\n', ...
-                xxQb(end), yyQb(end), xxQo(1), yyQo(1)));
+            error('Oops ... these 4 numbers should be zero: %g %g %g %g\n', ...
+                xxQb(end), yyQb(end), xxQo(1), yyQo(1));
         end
         xxQ = [xxQb xxQo(2:end)];
         yyQ = [yyQb yyQo(2:end)];
@@ -210,8 +210,8 @@ for i = 1:nGL
         if gen(i, PMAX) > 0
             Pmax = max(xxP);
             if Pmax < gen(i, PMIN) || Pmax > gen(i, PMAX)
-                error(sprintf('offer quantity (%g) must be between max(0,PMIN) (%g) and PMAX (%g)', ...
-                    Pmax, max([0,gen(i, PMIN)]), gen(i, PMAX)));
+                error('offer quantity (%g) must be between max(0,PMIN) (%g) and PMAX (%g)', ...
+                    Pmax, max([0,gen(i, PMIN)]), gen(i, PMAX));
             end
         end
         if gen(i, PMIN) < 0
@@ -222,8 +222,8 @@ for i = 1:nGL
                     Qmax = gen(i, QMAX) * Pmin / gen(i, PMIN);
                 end
             else
-                error(sprintf('bid quantity (%g) must be between max(0,-PMAX) (%g) and -PMIN (%g)', ...
-                    -Pmin, max([0 -gen(i, PMAX)]), -gen(i, PMIN)));
+                error('bid quantity (%g) must be between max(0,-PMAX) (%g) and -PMIN (%g)', ...
+                    -Pmin, max([0 -gen(i, PMAX)]), -gen(i, PMIN));
             end
         end
 
@@ -255,8 +255,8 @@ for i = 1:nGL
                     Pmin = gen(i, PMIN) * Qmax / gen(i, QMAX);
                 end
             else
-                error(sprintf('reactive offer quantity (%g) must be between max(0,QMIN) (%g) and QMAX (%g)', ...
-                    Qmax, max([0,gen(i, QMIN)]), gen(i, QMAX)));
+                error('reactive offer quantity (%g) must be between max(0,QMIN) (%g) and QMAX (%g)', ...
+                    Qmax, max([0,gen(i, QMIN)]), gen(i, QMAX));
             end
         end
         if gen(i, QMIN) < 0
@@ -266,8 +266,8 @@ for i = 1:nGL
                     Pmin = gen(i, PMIN) * Qmin / gen(i, QMIN);
                 end
             else
-                error(sprintf('reactive bid quantity (%g) must be between max(0,-QMAX) (%g) and -QMIN (%g)', ...
-                    -Qmin, max([0 -gen(i, QMAX)]), -gen(i, QMIN)));
+                error('reactive bid quantity (%g) must be between max(0,-QMAX) (%g) and -QMIN (%g)', ...
+                    -Qmin, max([0 -gen(i, QMAX)]), -gen(i, QMIN));
             end
         end
 
@@ -380,21 +380,21 @@ end
 
 %% make sure dimensions of qty and prc offers/bids match
 if any(size(offers.P.qty) ~= size(offers.P.prc))
-    error(sprintf('dimensions of offers.P.qty (%d x %d) and offers.P.prc (%d x %d) do not match',...
-        size(offers.P.qty), size(offers.P.prc)));
+    error('dimensions of offers.P.qty (%d x %d) and offers.P.prc (%d x %d) do not match',...
+        size(offers.P.qty), size(offers.P.prc));
 end
 if any(size(bids.P.qty) ~= size(bids.P.prc))
-    error(sprintf('dimensions of bids.P.qty (%d x %d) and bids.P.prc (%d x %d) do not match',...
-        size(bids.P.qty), size(bids.P.prc)));
+    error('dimensions of bids.P.qty (%d x %d) and bids.P.prc (%d x %d) do not match',...
+        size(bids.P.qty), size(bids.P.prc));
 end
 if haveQ
     if any(size(offers.Q.qty) ~= size(offers.Q.prc))
-        error(sprintf('dimensions of offers.Q.qty (%d x %d) and offers.Q.prc (%d x %d) do not match',...
-            size(offers.Q.qty), size(offers.Q.prc)));
+        error('dimensions of offers.Q.qty (%d x %d) and offers.Q.prc (%d x %d) do not match',...
+            size(offers.Q.qty), size(offers.Q.prc));
     end
     if any(size(bids.Q.qty) ~= size(bids.Q.prc))
-        error(sprintf('dimensions of bids.Q.qty (%d x %d) and bids.Q.prc (%d x %d) do not match',...
-            size(bids.Q.qty), size(bids.Q.prc)));
+        error('dimensions of bids.Q.qty (%d x %d) and bids.Q.prc (%d x %d) do not match',...
+            size(bids.Q.qty), size(bids.Q.prc));
     end
 end
 
