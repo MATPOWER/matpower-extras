@@ -98,7 +98,7 @@ else                                %% AC formulation
         alg = mpopt(1);
     if alg == 1
         [V, success, iterations] = newtonpf(Ybus, Sbus, V0, ref, pv, pq, mpopt);
-    elseif alg == 2 | alg == 3
+    elseif alg == 2 || alg == 3
         [Bp, Bpp] = makeB(baseMVA, bus, branch, alg);
         [V, success, iterations] = fdpf(Ybus, Sbus, V0, Bp, Bpp, ref, pv, pq, mpopt);
     elseif alg == 4

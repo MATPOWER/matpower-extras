@@ -98,7 +98,7 @@ G = find( ~isload(mpc.gen) );   %% real generators
 L = find(  isload(mpc.gen) );   %% variable loads
 
 %% create offers, bids
-if isempty(q) | isempty(p)
+if isempty(q) || isempty(p)
 	offers.P.qty = [];
 	offers.P.prc = [];
 	bids.P.qty = [];

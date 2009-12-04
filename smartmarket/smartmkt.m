@@ -23,14 +23,14 @@ verbose = mpopt(31);
 G = find( ~isload(mpc.gen) );       %% real generators
 L = find(  isload(mpc.gen) );       %% dispatchable loads
 nL = length(L);
-if isfield(offers, 'Q') | isfield(bids, 'Q')
+if isfield(offers, 'Q') || isfield(bids, 'Q')
     haveQ = 1;
 else
     haveQ = 0;
 end
 
-if haveQ & ~isempty(L) & mkt.auction_type ~= 0 & ...
-        mkt.auction_type ~= 1 & mkt.auction_type ~= 5
+if haveQ && ~isempty(L) && mkt.auction_type ~= 0 && ...
+        mkt.auction_type ~= 1 && mkt.auction_type ~= 5
     error(['Combined active/reactive power markets with constant power factor ', ...
             'dispatchable loads are only implemented for auction types 0, 1 & 5']);
 end
@@ -51,7 +51,7 @@ mpopt = mpoption(mpopt, 'PF_DC', strcmp(mkt.OPF, 'DC'));
 [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp;
 
 %% set up cost info & generator limits
-mkt.lim = pricelimits(mkt.lim, isfield(offers, 'Q') | isfield(bids, 'Q'));
+mkt.lim = pricelimits(mkt.lim, isfield(offers, 'Q') || isfield(bids, 'Q'));
 [gen, genoffer] = off2case(mpc.gen, mpc.gencost, offers, bids, mkt.lim);
 
 %% move Pmin and Pmax limits out slightly to avoid problems
@@ -67,7 +67,7 @@ end
 %% attempt OPF
 [bus, gen, branch, f, success, et] =  uopf(mpc.baseMVA, mpc.bus, gen, ...
             mpc.branch, [], genoffer, mpopt);
-if verbose & ~success
+if verbose && ~success
     fprintf('\nSMARTMARKET: non-convergent UOPF');
 end
 

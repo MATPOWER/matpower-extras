@@ -142,7 +142,7 @@ ww = [ nref; nb+nref ];
 one_at_a_time = 1; max_it_bad_data = 50;
 % one_at_a_time = 0; max_it_bad_data = 5;
 ibd = 1;
-while (~converged & ibd <= max_it_bad_data)
+while (~converged && ibd <= max_it_bad_data)
     nm = length(vv);
     baddata = 0;
 
@@ -161,7 +161,7 @@ while (~converged & ibd <= max_it_bad_data)
     %%-----  do Newton iterations  -----
     max_it = 100;
     i = 0;
-    while (~converged & i < max_it)
+    while (~converged && i < max_it)
         %% update iteration counter
         i = i + 1;
         

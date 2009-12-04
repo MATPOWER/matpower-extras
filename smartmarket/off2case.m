@@ -51,7 +51,7 @@ if nargin < 5
         bids = [];
     end
 end
-if isfield(offers, 'Q') | isfield(bids, 'Q')
+if isfield(offers, 'Q') || isfield(bids, 'Q')
     haveQ = 1;
 else
     haveQ = 0;
@@ -118,7 +118,7 @@ end
 for i = 1:nGL
     %% convert active power bids & offers into piecewise linear segments
     if idxPb(i)     %% there is a bid for this unit
-        if gen(i, PMIN) >= 0 & any(bids.P.qty(idxPb(i), :))
+        if gen(i, PMIN) >= 0 && any(bids.P.qty(idxPb(i), :))
             error(sprintf('Pmin >= 0, bid not allowed for gen %d', i));
         end
         [xxPb, yyPb, nPb] = offbid2pwl(bids.P.qty(idxPb(i), :), bids.P.prc(idxPb(i), :), 1, lim.P.min_bid);
@@ -126,7 +126,7 @@ for i = 1:nGL
         nPb = 0;
     end
     if idxPo(i)     %% there is an offer for this unit
-        if gen(i, PMAX) <= 0 & any(offers.P.qty(idxPo(i), :))
+        if gen(i, PMAX) <= 0 && any(offers.P.qty(idxPo(i), :))
             error(sprintf('Pmax <= 0, offer not allowed for gen %d', i));
         end
         [xxPo, yyPo, nPo] = offbid2pwl(offers.P.qty(idxPo(i), :), offers.P.prc(idxPo(i), :), 0, lim.P.max_offer);
@@ -136,7 +136,7 @@ for i = 1:nGL
     %% convert reactive power bids & offers into piecewise linear segments
     if haveQ
         if idxQb(i)     %% there is a bid for this unit
-            if gen(i, QMIN) >= 0 & any(bids.Q.qty(idxQb(i), :))
+            if gen(i, QMIN) >= 0 && any(bids.Q.qty(idxQb(i), :))
                 error(sprintf('Qmin >= 0, reactive bid not allowed for gen %d', i));
             end
             [xxQb, yyQb, nQb] = offbid2pwl(bids.Q.qty(idxQb(i), :), bids.Q.prc(idxQb(i), :), 1, lim.Q.min_bid);
@@ -144,7 +144,7 @@ for i = 1:nGL
             nQb = 0;
         end
         if idxQo(i)     %% there is an offer for this unit
-            if gen(i, QMAX) <= 0 & any(offers.Q.qty(idxQo(i), :))
+            if gen(i, QMAX) <= 0 && any(offers.Q.qty(idxQo(i), :))
                 error(sprintf('Qmax <= 0, reactive offer not allowed for gen %d', i));
             end
             [xxQo, yyQo, nQo] = offbid2pwl(offers.Q.qty(idxQo(i), :), offers.Q.prc(idxQo(i), :), 0, lim.Q.max_offer);
@@ -157,7 +157,7 @@ for i = 1:nGL
     end
 
     %% collect the pwl segments for active power
-    if nPb > 1 & nPo > 1            %% bid and offer (positive and negative qtys)
+    if nPb > 1 && nPo > 1           %% bid and offer (positive and negative qtys)
         if xxPb(end) | yyPb(end) | xxPo(1) | yyPo(1)
             error(fprintf('Oops ... these 4 numbers should be zero: %g %g %g %g\n', ...
                 xxPb(end), yyPb(end), xxPo(1), yyPo(1)));
@@ -165,11 +165,11 @@ for i = 1:nGL
         xxP = [xxPb xxPo(2:end)];
         yyP = [yyPb yyPo(2:end)];
         npP = nPb + nPo - 1;
-    elseif  nPb <= 1 & nPo > 1  %% offer only
+    elseif  nPb <= 1 && nPo > 1 %% offer only
         xxP = xxPo;
         yyP = yyPo;
         npP = nPo;
-    elseif  nPb > 1 & nPo <= 1  %% bid only
+    elseif  nPb > 1 && nPo <= 1 %% bid only
         xxP = xxPb;
         yyP = yyPb;
         npP = nPb;
@@ -178,7 +178,7 @@ for i = 1:nGL
     end
 
     %% collect the pwl segments for reactive power
-    if nQb > 1 & nQo > 1            %% bid and offer (positive and negative qtys)
+    if nQb > 1 && nQo > 1           %% bid and offer (positive and negative qtys)
         if xxQb(end) | yyQb(end) | xxQo(1) | yyQo(1)
             error(fprintf('Oops ... these 4 numbers should be zero: %g %g %g %g\n', ...
                 xxQb(end), yyQb(end), xxQo(1), yyQo(1)));
@@ -186,11 +186,11 @@ for i = 1:nGL
         xxQ = [xxQb xxQo(2:end)];
         yyQ = [yyQb yyQo(2:end)];
         npQ = nQb + nQo - 1;
-    elseif  nQb <= 1 & nQo > 1  %% offer only
+    elseif  nQb <= 1 && nQo > 1 %% offer only
         xxQ = xxQo;
         yyQ = yyQo;
         npQ = nQo;
-    elseif  nQb > 1 & nQo <= 1  %% bid only
+    elseif  nQb > 1 && nQo <= 1 %% bid only
         xxQ = xxQb;
         yyQ = yyQb;
         npQ = nQb;
@@ -209,14 +209,14 @@ for i = 1:nGL
         %% update gen limits
         if gen(i, PMAX) > 0
             Pmax = max(xxP);
-            if Pmax < gen(i, PMIN) | Pmax > gen(i, PMAX)
+            if Pmax < gen(i, PMIN) || Pmax > gen(i, PMAX)
                 error(sprintf('offer quantity (%g) must be between max(0,PMIN) (%g) and PMAX (%g)', ...
                     Pmax, max([0,gen(i, PMIN)]), gen(i, PMAX)));
             end
         end
         if gen(i, PMIN) < 0
             Pmin = min(xxP);
-            if Pmin >= gen(i, PMIN) & Pmin <= gen(i, PMAX)
+            if Pmin >= gen(i, PMIN) && Pmin <= gen(i, PMAX)
                 if isload(gen(i, :))
                     Qmin = gen(i, QMIN) * Pmin / gen(i, PMIN);
                     Qmax = gen(i, QMAX) * Pmin / gen(i, PMIN);
@@ -233,7 +233,7 @@ for i = 1:nGL
         Pgencost(i,  (COST+1):2:( COST + 2*npP - 1 )) = yyP;
     else
         %% no capacity bid/offered for active power
-        if npQ & ~isload(gen(i,:)) & gen(i, PMIN) <= 0 & gen(i, PMAX) >= 0
+        if npQ && ~isload(gen(i,:)) && gen(i, PMIN) <= 0 && gen(i, PMAX) >= 0
             %% but we do have a reactive bid/offer and we can dispatch
             %% at zero real power without shutting down
             Pmin = 0;
@@ -250,7 +250,7 @@ for i = 1:nGL
         %% update gen limits
         if gen(i, QMAX) > 0
             Qmax = min([ Qmax max(xxQ) ]);
-            if Qmax >= gen(i, QMIN) & Qmax <= gen(i, QMAX)
+            if Qmax >= gen(i, QMIN) && Qmax <= gen(i, QMAX)
                 if isload(gen(i, :))
                     Pmin = gen(i, PMIN) * Qmax / gen(i, QMAX);
                 end
@@ -261,7 +261,7 @@ for i = 1:nGL
         end
         if gen(i, QMIN) < 0
             Qmin = max([ Qmin min(xxQ) ]);
-            if Qmin >= gen(i, QMIN) & Qmin <= gen(i, QMAX)
+            if Qmin >= gen(i, QMIN) && Qmin <= gen(i, QMAX)
                 if isload(gen(i, :))
                     Pmin = gen(i, PMIN) * Qmin / gen(i, QMIN);
                 end
@@ -278,10 +278,10 @@ for i = 1:nGL
     else
         %% no capacity bid/offered for reactive power
         if haveQ
-            if npP & gen(i, QMIN) <= 0 & gen(i, QMAX) >= 0
+            if npP && gen(i, QMIN) <= 0 && gen(i, QMAX) >= 0
                 %% but we do have an active bid/offer and we might be able to
                 %% dispatch at zero reactive power without shutting down
-                if isload(gen(i, :)) & (gen(i, QMAX) > 0 | gen(i, QMIN) < 0)
+                if isload(gen(i, :)) && (gen(i, QMAX) > 0 || gen(i, QMIN) < 0)
                     %% load w/non-unity power factor, zero Q => must shut down
                     gen(i, GEN_STATUS) = 0;
                 else    %% can dispatch at zero reactive without shutting down
@@ -325,7 +325,7 @@ if any(qty < 0)
 end
 
 %% strip zero quantities and optionally strip prices beyond lim
-if nargin < 4 | isempty(lim)
+if nargin < 4 || isempty(lim)
     valid = find(qty);
 else
     if isbid

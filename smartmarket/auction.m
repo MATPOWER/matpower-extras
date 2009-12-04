@@ -63,7 +63,7 @@ if isempty(bids)
                     'lam', [], ...
                     'total_qty', [] );
 end
-if nargin < 4 | isempty(limit_prc)
+if nargin < 4 || isempty(limit_prc)
     limit_prc = struct( 'max_offer', [], 'min_bid', [], ...
                         'max_cleared_offer', [], 'min_cleared_bid', [] );
 else
@@ -73,7 +73,7 @@ else
     if ~isfield(limit_prc, 'min_cleared_bid'),   limit_prc.min_cleared_bid = [];   end
 end
 
-if nargin < 5 | isempty(gtee_prc)
+if nargin < 5 || isempty(gtee_prc)
     gtee_prc = struct(  'offer', 1, 'bid', 1    );
 else
     if ~isfield(gtee_prc, 'offer'), gtee_prc.offer = 1; end

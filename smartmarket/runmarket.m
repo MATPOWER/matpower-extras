@@ -88,24 +88,24 @@ mpc = loadcase(mpc);
 if isempty(mkt)
     mkt = struct( 'OPF', [], 'auction_type', [], 'lim', [], 'u0', [], 't', []);
 end
-if ~isfield(mkt, 'OPF') | isempty(mkt.OPF)
+if ~isfield(mkt, 'OPF') || isempty(mkt.OPF)
     mkt.OPF = 'AC';         %% default OPF is AC
 end
-if ~isfield(mkt, 'auction_type') | isempty(mkt.auction_type)
+if ~isfield(mkt, 'auction_type') || isempty(mkt.auction_type)
     mkt.auction_type = 5;   %% default auction type is first price
 end
-if ~isfield(mkt, 'lim') | isempty(mkt.lim)
-    mkt.lim = pricelimits([], isfield(offers, 'Q') | isfield(bids, 'Q'));
+if ~isfield(mkt, 'lim') || isempty(mkt.lim)
+    mkt.lim = pricelimits([], isfield(offers, 'Q') || isfield(bids, 'Q'));
 end
-if ~isfield(mkt, 'u0') | isempty(mkt.u0)
+if ~isfield(mkt, 'u0') || isempty(mkt.u0)
     mkt.u0 = ones(size(mpc.gen, 1), 1); %% default for previous gen commitment, all on
 end
-if ~isfield(mkt, 't') | isempty(mkt.t)
+if ~isfield(mkt, 't') || isempty(mkt.t)
     mkt.t = 1;              %% default dispatch duration in hours
 end
 
 %% if offers not defined, use gencost
-if isempty(offers) | isempty(offers.P.qty)
+if isempty(offers) || isempty(offers.P.qty)
     [q, p] = case2off(mpc.gen, mpc.gencost);
 
     %% find indices for gens and variable loads
