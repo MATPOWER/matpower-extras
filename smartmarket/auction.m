@@ -115,7 +115,7 @@ bid_diff   = bids.prc   - bids.lam;
 
 %% shift.LAO + lambda is equal to the last accepted offer
 shift.LAO = o.on .* offer_diff - o.off * big_num;
-shift.LAO( find(shift.LAO(:) > zero_tol) ) = -big_num;  %% don't let gens @ Pmin set price
+shift.LAO( shift.LAO(:) > zero_tol ) = -big_num;    %% don't let gens @ Pmin set price
 shift.LAO = max( shift.LAO(:) );
 
 %% shift.FRO + lambda is equal to the first rejected offer

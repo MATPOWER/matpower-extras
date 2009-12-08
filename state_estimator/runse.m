@@ -132,7 +132,6 @@ bus(pq, QD) = -imag(Sbus(pq)) * baseMVA;
 %% ... gen outputs at PV buses
 on = find(gen(:, GEN_STATUS) > 0);      %% which generators are on?
 gbus = gen(on, GEN_BUS);                %% what buses are they at?
-refgen = find(gbus == ref);             %% which is(are) the reference gen(s)?
 gen(on, PG) = real(Sbus(gbus)) * baseMVA + bus(gbus, PD);   %% inj P + local Pd
 %% ... line flows, reference bus injections, etc.
 [bus, gen, branch] = pfsoln(baseMVA, bus, gen, branch, Ybus, Yf, Yt, V, ref, pv, pq);

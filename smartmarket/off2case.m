@@ -158,7 +158,7 @@ for i = 1:nGL
 
     %% collect the pwl segments for active power
     if nPb > 1 && nPo > 1           %% bid and offer (positive and negative qtys)
-        if xxPb(end) | yyPb(end) | xxPo(1) | yyPo(1)
+        if xxPb(end) || yyPb(end) || xxPo(1) || yyPo(1)
             error('Oops ... these 4 numbers should be zero: %g %g %g %g\n', ...
                 xxPb(end), yyPb(end), xxPo(1), yyPo(1));
         end
@@ -179,7 +179,7 @@ for i = 1:nGL
 
     %% collect the pwl segments for reactive power
     if nQb > 1 && nQo > 1           %% bid and offer (positive and negative qtys)
-        if xxQb(end) | yyQb(end) | xxQo(1) | yyQo(1)
+        if xxQb(end) || yyQb(end) || xxQo(1) || yyQo(1)
             error('Oops ... these 4 numbers should be zero: %g %g %g %g\n', ...
                 xxQb(end), yyQb(end), xxQo(1), yyQo(1));
         end

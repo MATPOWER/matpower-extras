@@ -44,9 +44,6 @@ mpopt = mpoption(mpopt, 'PF_DC', strcmp(mkt.OPF, 'DC'));
 [GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, GEN_STATUS, PMAX, PMIN, ...
     MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN, PC1, PC2, QC1MIN, QC1MAX, ...
     QC2MIN, QC2MAX, RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q, APF] = idx_gen;
-[F_BUS, T_BUS, BR_R, BR_X, BR_B, RATE_A, RATE_B, RATE_C, ...
-    TAP, SHIFT, BR_STATUS, PF, QF, PT, QT, MU_SF, MU_ST, ...
-    ANGMIN, ANGMAX, MU_ANGMIN, MU_ANGMAX] = idx_brch;
 [PW_LINEAR, POLYNOMIAL, MODEL, STARTUP, SHUTDOWN, NCOST, COST] = idx_cost;
 [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp;
 
@@ -108,7 +105,7 @@ if success      %% OPF solved case fine
         npQ = max([ size(offers.Q.qty, 2) size(bids.Q.qty, 2) ]);
         
         %% get nodal marginal prices from OPF
-        lamP    = sparse(1:ng, 1:ng, bus(gbus, LAM_P), ng, ng) * ones(ng, npQ); %% real power prices
+%         lamP    = sparse(1:ng, 1:ng, bus(gbus, LAM_P), ng, ng) * ones(ng, npQ); %% real power prices
         lamQ    = sparse(1:ng, 1:ng, bus(gbus, LAM_Q), ng, ng) * ones(ng, npQ); %% reactive power prices
 
 %         %% compute fudge factor for lamP to include price of bundled reactive power
