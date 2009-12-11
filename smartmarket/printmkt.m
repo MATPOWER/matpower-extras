@@ -1,6 +1,6 @@
-function printmkt(baseMVA, bus, gen, branch, f, t, dispatch, success, et, fd, mpopt)
+function printmkt(r, t, dispatch, success, fd, mpopt)
 %PRINTMKT   Prints results of ISO computation.
-%   printmkt(baseMVA, bus, gen, branch, f, t, dispatch, success, et, fd, mpopt)
+%   printmkt(results, t, dispatch, success, fd, mpopt)
 %   prints results of ISO computation to fd (a file descriptor which defaults
 %   to STDOUT). mpopt is a MATPOWER options vector (see 'help mpoption' for
 %   details). Uses default options if this parameter is not given. The objective
@@ -15,12 +15,13 @@ function printmkt(baseMVA, bus, gen, branch, f, t, dispatch, success, et, fd, mp
 
 %%----- initialization -----
 %% default arguments
-if nargin < 11
+if nargin < 6
     mpopt = mpoption;   %% use default options
-    if nargin < 10
+    if nargin < 5
         fd = 1;         %% print to stdio by default
     end
 end
+gen = r.gen;
 
 %% options
 OUT_ALL         = mpopt(32);
@@ -87,4 +88,4 @@ if OUT_RAW
 end
 
 %% print remaining opf output
-printpf(baseMVA, bus, gen, branch, f, success, et, fd, mpopt);
+printpf(r, fd, mpopt);

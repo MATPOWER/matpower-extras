@@ -1,8 +1,8 @@
-function [mpc_out, co, cb, f, dispatch, success, et] = ...
+function [r, co, cb, f, dispatch, success, et] = ...
                 runmarket(mpc, offers, bids, mkt, mpopt, fname, solvedcase)
 %RUNMARKET  Runs PowerWeb-style smart market.
 %
-%   [mpc_out, co, cb, f, dispatch, success, et] = ...
+%   [results, co, cb, f, dispatch, success, et] = ...
 %           runmarket(mpc, offers, bids, mkt, mpopt, fname, solvedcase)
 %
 %   Computes the new generation and price schedules (cleared offers and bids)
@@ -35,7 +35,7 @@ function [mpc_out, co, cb, f, dispatch, success, et] = ...
 %   running) and the default duration t is 1 hour. The results may
 %   optionally be printed to a file (appended if the file exists) whose name
 %   is given in fname (in addition to printing to STDOUT). Optionally
-%   returns the final values of the solved case in mpc_out, the cleared
+%   returns the final values of the solved case in results, the cleared
 %   offers and bids in co and cb, the objective function value f, the old
 %   style dispatch matrix, the convergence status of the OPF in success, and
 %   the elapsed time et. If a name is given in solvedcase, the solved case
@@ -74,8 +74,6 @@ end
 
 %% read data & convert to internal bus numbering
 mpc = loadcase(mpc);
-[i2e, mpc.bus, mpc.gen, mpc.branch] = ...
-    ext2int(mpc.bus, mpc.gen, mpc.branch);
 
 %% assign default arguments
 if isempty(mkt)
@@ -112,36 +110,28 @@ end
 t0 = clock;
 
 %% run the market
-[co, cb, bus, gen, branch, f, dispatch, success] = ...
-        smartmkt(mpc, offers, bids, mkt, mpopt);
+[co, cb, r, dispatch, success] = smartmkt(mpc, offers, bids, mkt, mpopt);
 
 %% compute elapsed time
 et = etime(clock, t0);
 
-%% convert back to original bus numbering & print results
-gencost = mpc.gencost;
-baseMVA =  mpc.baseMVA;
-[bus, gen, branch] = int2ext(i2e, bus, gen, branch);
+%% print results
 if fname
     [fd, msg] = fopen(fname, 'at');
     if fd == -1
         error(msg);
     else
-        printmkt(baseMVA, bus, gen, branch, f, mkt.t, dispatch, success, et, fd, mpopt);
+        printmkt(r, mkt.t, dispatch, success, fd, mpopt);
         fclose(fd);
     end
 end
-printmkt(baseMVA, bus, gen, branch, f, mkt.t, dispatch, success, et, 1, mpopt);
+printmkt(r, mkt.t, dispatch, success, 1, mpopt);
 
 %% save solved case
 if solvedcase
-    savecase(solvedcase, baseMVA, bus, gen, branch, gencost);
+    savecase(solvedcase, r);
 end
 
-if nargout
-    mpc_out = struct(   'baseMVA', baseMVA, ...
-                        'bus',     bus, ...
-                        'gen',     gen, ...
-                        'gencost', gencost, ...
-                        'branch',  branch   );
+if nargout > 3
+    f = r.f;
 end

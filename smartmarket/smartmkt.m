@@ -1,7 +1,7 @@
-function [co, cb, bus, gen, branch, f, dispatch, success] = ...
+function [co, cb, r, dispatch, success] = ...
             smartmkt(mpc, offers, bids, mkt, mpopt)
 %SMARTMKT  Runs the PowerWeb smart market.
-%   [co, cb, bus, gen, branch, f, dispatch, success] = smartmkt(mpc, ...
+%   [co, cb, results, dispatch, success] = smartmkt(mpc, ...
 %		offers, bids, mkt, mpopt) runs the ISO smart market.
 
 %   MATPOWER
@@ -62,8 +62,11 @@ end
 
 %%-----  solve the optimization problem  -----
 %% attempt OPF
-[bus, gen, branch, f, success, et] =  uopf(mpc.baseMVA, mpc.bus, gen, ...
-            mpc.branch, [], genoffer, mpopt);
+mpc2 = mpc;
+mpc2.gen = gen;
+mpc2.gencost = genoffer;
+[r, success] = uopf(mpc2, mpopt);
+[bus, gen] = deal(r.bus, r.gen);
 if verbose && ~success
     fprintf('\nSMARTMARKET: non-convergent UOPF');
 end
