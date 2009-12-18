@@ -2,7 +2,7 @@
  Change history for SMARTMARKET
 --------------------------------
 
-Version:    4.0-dev
+Version:    4.0b1
 
 maintained by Ray Zimmerman <rz10@cornell.edu>
 
@@ -13,6 +13,9 @@ See http://www.pserc.cornell.edu/matpower/ for more info.
 
 Changes since MATPOWER 3.1b2
 ----------------------------
+
+12/24/09
+    - Released version 4.0b1.
 
 12/11/09
     - Updated runmarket, smartmkt, printmkt to pass full OPF results
