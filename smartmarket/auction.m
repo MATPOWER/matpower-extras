@@ -105,7 +105,6 @@ cb.prc  = zeros(nrb, ncb);              %% cleared bid prices
 %% The locationally adjusted offer/bid price, when normalized to an arbitrary
 %% reference location where lambda is equal to ref_lam, is:
 %%      norm_prc = prc + (ref_lam - lam)
-%%      norm_prc = prc * (ref_lam / lam)
 %% Then we can define the difference between the normalized offer/bid prices
 %% and the ref_lam as:
 %%      diff = norm_prc - ref_lam = prc - lam
