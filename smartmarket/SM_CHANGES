@@ -11,8 +11,9 @@ $Id$
 Copyright (c) 1996-2007 by Power System Engineering Research Center (PSERC)
 See http://www.pserc.cornell.edu/matpower/ for more info.
 
-Changes since MATPOWER 3.1b2
-----------------------------
+
+Changes since MATPOWER 3.2
+--------------------------
 
 12/24/09
     - Released version 4.0b1.
@@ -34,6 +35,10 @@ Changes since MATPOWER 3.1b2
     - Deprecate use of 'areas' data matrix. Remove it everywhere
       possible without breaking backward compatibility with version 1
       case files, which required it.
+
+
+Changes since MATPOWER 3.1b2
+----------------------------
 
 5/15/07
     - Fixed a display bug where it would show the offer/bid price rather than
