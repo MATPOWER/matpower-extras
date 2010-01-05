@@ -68,7 +68,7 @@ if haveQ
     end
 end
 
-%% indexes and sizes
+%% indices and sizes
 ngc = size(gencost, 2);
 G = find( ~isload(gen) );       %% real generators
 L = find(  isload(gen) );       %% dispatchable loads
