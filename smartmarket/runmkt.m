@@ -1,10 +1,10 @@
 function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] = ...
-                runmkt(casename, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
+                runmkt(casedata, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
 %RUNMKT  Runs smart market for PowerWeb, computing a new generation
 %        schedule from a set of offers and bids.
 %
 %   [baseMVA, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] = ...
-%           runmkt(casename, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
+%           runmkt(casedata, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
 %
 %   Computes the new generation and price schedules based on the offers
 %   submitted, where offers are specified by q and p, mkt tells it what
@@ -70,7 +70,7 @@ if nargin < 10
                             if nargin < 3
                                 q = []; p = []; %% p & q not defined (use gencost)
                                 if nargin < 1
-                                    casename = 'case9'; %% default data file is 'case9.m'
+                                    casedata = 'case9'; %% default data file is 'case9.m'
                                 end
                             end
                         end
@@ -82,7 +82,7 @@ if nargin < 10
 end
 
 %% read data & convert to internal bus numbering
-mpc = loadcase(casename);
+mpc = loadcase(casedata);
 
 %% find indices for gens and variable loads
 G = find( ~isload(mpc.gen) );   %% real generators

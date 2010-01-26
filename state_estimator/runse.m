@@ -1,8 +1,8 @@
-function [MVAbase, bus, gen, branch, success, et] = runse(casename, mpopt, fname, solvedcase)
+function [MVAbase, bus, gen, branch, success, et] = runse(casedata, mpopt, fname, solvedcase)
 %RUNSE  Runs a state estimator.
 %
 %   [baseMVA, bus, gen, branch, success, et] = ...
-%           runse(casename, mpopt, fname, solvedcase)
+%           runse(casedata, mpopt, fname, solvedcase)
 %
 %   Runs a state estimator (after a Newton power flow). Under construction with
 %   parts based on code from James S. Thorp.
@@ -33,7 +33,7 @@ if nargin < 4
         if nargin < 2
             mpopt = mpoption;       %% use default options
             if nargin < 1
-                casename = 'case9'; %% default data file is 'case9.m'
+                casedata = 'case9'; %% default data file is 'case9.m'
             end
         end
     end
@@ -43,7 +43,7 @@ end
 dc = mpopt(10);                     %% use DC formulation?
 
 %% read data & convert to internal bus numbering
-[baseMVA, bus, gen, branch] = loadcase(casename);
+[baseMVA, bus, gen, branch] = loadcase(casedata);
 [i2e, bus, gen, branch] = ext2int(bus, gen, branch);
 
 %% get bus index lists of each type of bus
