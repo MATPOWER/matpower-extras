@@ -8,8 +8,19 @@ maintained by Ray Zimmerman <rz10@cornell.edu>
 
 MATPOWER
 $Id$
-Copyright (c) 1996-2007 by Power System Engineering Research Center (PSERC)
+Copyright (c) 1996-2010 by Power System Engineering Research Center (PSERC)
 See http://www.pserc.cornell.edu/matpower/ for more info.
+
+
+Changes since MATPOWER 4.0b1
+----------------------------
+
+2/11/10
+    - Fixed bug in design of auction code. Prices are now scaled instead
+      of shifted when modified according specified pricing rule
+      (e.g. LAO, FRO, LAB, FRB, split-the-difference, etc.). Auctions
+      with both real and reactive offers/bids must be type 0 or 5, type
+      1 = LAO is no longer allowed.
 
 
 Changes since MATPOWER 3.2

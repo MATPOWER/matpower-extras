@@ -2,12 +2,12 @@ function [co, cb, r, dispatch, success] = ...
             smartmkt(mpc, offers, bids, mkt, mpopt)
 %SMARTMKT  Runs the PowerWeb smart market.
 %   [co, cb, results, dispatch, success] = smartmkt(mpc, ...
-%		offers, bids, mkt, mpopt) runs the ISO smart market.
+%       offers, bids, mkt, mpopt) runs the ISO smart market.
 
 %   MATPOWER
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
-%   Copyright (c) 1996-2006 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2010 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %%-----  initialization  -----
@@ -29,10 +29,9 @@ else
     haveQ = 0;
 end
 
-if haveQ && ~isempty(L) && mkt.auction_type ~= 0 && ...
-        mkt.auction_type ~= 1 && mkt.auction_type ~= 5
-    error(['Combined active/reactive power markets with constant power factor ', ...
-            'dispatchable loads are only implemented for auction types 0, 1 & 5']);
+if haveQ && mkt.auction_type ~= 0 && mkt.auction_type ~= 5
+    error(['smartmkt: Combined active/reactive power markets ', ...
+            'are only implemented for auction types 0 and 5']);
 end
 
 %% set power flow formulation based on market
@@ -76,16 +75,16 @@ end
 ng = size(gen, 1);
 if success      %% OPF solved case fine
     %% get nodal marginal prices from OPF
-    gbus    = gen(:, GEN_BUS);                     %% indices of buses w/gens
-    npP 	= max([ size(offers.P.qty, 2) size(bids.P.qty, 2) ]);
+    gbus    = gen(:, GEN_BUS);                  %% indices of buses w/gens
+    npP     = max([ size(offers.P.qty, 2) size(bids.P.qty, 2) ]);
     lamP    = sparse(1:ng, 1:ng, bus(gbus, LAM_P), ng, ng) * ones(ng, npP); %% real power prices
     lamQ    = sparse(1:ng, 1:ng, bus(gbus, LAM_Q), ng, ng) * ones(ng, npP); %% reactive power prices
     
     %% compute fudge factor for lamP to include price of bundled reactive power
-    pf   = zeros(ng, npP);                        %% for loads Q = pf * P
+    pf   = zeros(length(L), 1);                 %% for loads Q = pf * P
     Qlim =  (gen(L, QMIN) == 0) .* gen(L, QMAX) + ...
             (gen(L, QMAX) == 0) .* gen(L, QMIN);
-    pf(L) = Qlim ./ gen(L, PMIN);
+    pf = Qlim ./ gen(L, PMIN);
 
     gtee_prc.offer = 1;         %% guarantee that cleared offers are >= offers
     Poffer = offers.P;
@@ -98,7 +97,7 @@ if success      %% OPF solved case fine
         Pbid.lam = lamP(L,:);   %% use unbundled lambdas
         gtee_prc.bid = 0;       %% allow cleared bids to be above bid price
     else
-        Pbid.lam = lamP(L,:) + sparse(1:nL, 1:nL, pf(L), nL, nL) * lamQ(L,:); %% used bundled lambdas
+        Pbid.lam = lamP(L,:) + sparse(1:nL, 1:nL, pf, nL, nL) * lamQ(L,:);  %% bundled lambdas
         gtee_prc.bid = 1;       %% guarantee that cleared bids are <= bids
     end
 
@@ -108,26 +107,18 @@ if success      %% OPF solved case fine
         npQ = max([ size(offers.Q.qty, 2) size(bids.Q.qty, 2) ]);
         
         %% get nodal marginal prices from OPF
-%         lamP    = sparse(1:ng, 1:ng, bus(gbus, LAM_P), ng, ng) * ones(ng, npQ); %% real power prices
         lamQ    = sparse(1:ng, 1:ng, bus(gbus, LAM_Q), ng, ng) * ones(ng, npQ); %% reactive power prices
 
-%         %% compute fudge factor for lamP to include price of bundled reactive power
-%         pf   = zeros(ng, npQ);                        %% for loads P = pf * Q
-%         Qlim =  (gen(L, QMIN) == 0) .* gen(L, QMAX) + ...
-%                 (gen(L, QMAX) == 0) .* gen(L, QMIN);
-%         kk = find(Qlim);
-%         pf(L(kk)) = gen(L(kk), PMIN) ./ Qlim(kk);
-    
         Qoffer = offers.Q;
         Qoffer.lam = lamQ;      %% use unbundled lambdas
-%         Qoffer.lam(L,:) = lamQ(L,:) + sparse(1:nL, 1:nL, pf(L), nL, nL) * lamP(L,:);
         Qoffer.total_qty = (gen(:, QG) > 0) .* gen(:, QG);
         
         Qbid = bids.Q;
         Qbid.lam = lamQ;        %% use unbundled lambdas
-%         Qbid.lam(L,:) = lamQ(L,:) + sparse(1:nL, 1:nL, pf(L), nL, nL) * lamP(L,:);
         Qbid.total_qty = (gen(:, QG) < 0) .* -gen(:, QG);
 
+        %% too complicated to scale with mixed bids/offers
+        %% (only auction_types 0 and 5 allowed)
         [co.Q, cb.Q] = auction(Qoffer, Qbid, mkt.auction_type, mkt.lim.Q, gtee_prc);
     end
 

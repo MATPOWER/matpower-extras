@@ -53,6 +53,7 @@ function [co, cb] = auction(offers, bids, auction_type, limit_prc, gtee_prc)
     QC2MIN, QC2MAX, RAMP_AGC, RAMP_10, RAMP_30, RAMP_Q, APF] = idx_gen;
 
 %% initialize some stuff
+delta = 1e-3;       %% prices smaller than this are not used to determine X
 zero_tol = 1e-5;
 % zero_tol = 0.1;   %% fmincon is SO bad with prices that it is
                     %% NOT recommended for use with auction.m
@@ -72,7 +73,6 @@ else
     if ~isfield(limit_prc, 'max_cleared_offer'), limit_prc.max_cleared_offer = []; end
     if ~isfield(limit_prc, 'min_cleared_bid'),   limit_prc.min_cleared_bid = [];   end
 end
-
 if nargin < 5 || isempty(gtee_prc)
     gtee_prc = struct(  'offer', 1, 'bid', 1    );
 else
@@ -98,41 +98,26 @@ else
 end
 
 %% initialize cleared prices
-co.prc  = zeros(nro, nco);              %% cleared offer prices
-cb.prc  = zeros(nrb, ncb);              %% cleared bid prices
+co.prc = zeros(nro, nco);       %% cleared offer prices
+cb.prc = zeros(nrb, ncb);       %% cleared bid prices
 
-%%-----  compute shift values to add to lam to get desired pricing  -----
+%%-----  compute exchange rates to scale lam to get desired pricing  -----
 %% The locationally adjusted offer/bid price, when normalized to an arbitrary
 %% reference location where lambda is equal to ref_lam, is:
-%%      norm_prc = prc + (ref_lam - lam)
-%% Then we can define the difference between the normalized offer/bid prices
-%% and the ref_lam as:
-%%      diff = norm_prc - ref_lam = prc - lam
-%% This diff represents the gap between the marginal unit (setting lambda)
+%%      norm_prc = prc * (ref_lam / lam)
+%% Then we can define the ratio between the normalized offer/bid prices
+%% and the ref_lam as an exchange rate X:
+%%      X = norm_prc / ref_lam = prc / lam
+%% This X represents the ratio between the marginal unit (setting lambda)
 %% and the offer/bid price in question.
-offer_diff = offers.prc - offers.lam;
-bid_diff   = bids.prc   - bids.lam;
 
-%% shift.LAO + lambda is equal to the last accepted offer
-shift.LAO = o.on .* offer_diff - o.off * big_num;
-shift.LAO( shift.LAO(:) > zero_tol ) = -big_num;    %% don't let gens @ Pmin set price
-shift.LAO = max( shift.LAO(:) );
-
-%% shift.FRO + lambda is equal to the first rejected offer
-shift.FRO = o.off .* offer_diff + o.on * big_num;
-shift.FRO = min( shift.FRO(:) );
-
-if nrb
-    %% shift.LAB + lambda is equal to the last accepted bid
-    shift.LAB = b.on .* bid_diff + b.off * big_num;
-    shift.LAB = min( shift.LAB(:) );
-    
-    %% shift.FRB + lambda is equal to the first rejected bid
-    shift.FRB = b.off .* bid_diff - b.on * big_num;
-    shift.FRB = max( shift.FRB(:) );
+if auction_type == 0 || auction_type == 5   %% don't bother scaling anything
+    X = struct( 'LAO', 1, ...
+                'FRO', 1, ...
+                'LAB', 1, ...
+                'FRB', 1);
 else
-    shift.LAB = big_num;
-    shift.FRB = shift.LAB;
+    X = compute_exchange_rates(offers, bids, o, b);
 end
 
 %% cleared offer/bid prices for different auction types
@@ -140,34 +125,34 @@ if auction_type == 0        %% discriminative
     co.prc = offers.prc;
     cb.prc = bids.prc;
 elseif auction_type == 1    %% LAO
-    co.prc = offers.lam + shift.LAO;
-    cb.prc = bids.lam   + shift.LAO;
+    co.prc = offers.lam * X.LAO;
+    cb.prc = bids.lam   * X.LAO;
 elseif auction_type == 2    %% FRO
-    co.prc = offers.lam + shift.FRO;
-    cb.prc = bids.lam   + shift.FRO;
+    co.prc = offers.lam * X.FRO;
+    cb.prc = bids.lam   * X.FRO;
 elseif auction_type == 3    %% LAB
-    co.prc = offers.lam + shift.LAB;
-    cb.prc = bids.lam   + shift.LAB;
+    co.prc = offers.lam * X.LAB;
+    cb.prc = bids.lam   * X.LAB;
 elseif auction_type == 4    %% FRB
-    co.prc = offers.lam + shift.FRB;
-    cb.prc = bids.lam   + shift.FRB;
+    co.prc = offers.lam * X.FRB;
+    cb.prc = bids.lam   * X.FRB;
 elseif auction_type == 5    %% 1st price
     co.prc = offers.lam;
     cb.prc = bids.lam;
 elseif auction_type == 6    %% 2nd price
-    if abs(shift.LAO) < zero_tol
-        co.prc = offers.lam + min(shift.FRO,shift.LAB);
-        cb.prc = bids.lam   + min(shift.FRO,shift.LAB);
+    if abs(1 - X.LAO) < zero_tol
+        co.prc = offers.lam * min(X.FRO,X.LAB);
+        cb.prc = bids.lam   * min(X.FRO,X.LAB);
     else
-        co.prc = offers.lam + max(shift.LAO,shift.FRB);
-        cb.prc = bids.lam   + max(shift.LAO,shift.FRB);
+        co.prc = offers.lam * max(X.LAO,X.FRB);
+        cb.prc = bids.lam   * max(X.LAO,X.FRB);
     end
 elseif auction_type == 7    %% split the difference
-    co.prc = offers.lam + (shift.LAO + shift.LAB) / 2;
-    cb.prc = bids.lam   + (shift.LAO + shift.LAB) / 2;
+    co.prc = offers.lam * (X.LAO + X.LAB) / 2;
+    cb.prc = bids.lam   * (X.LAO + X.LAB) / 2;
 elseif auction_type == 8    %% LAO seller, LAB buyer
-    co.prc = offers.lam + shift.LAO;
-    cb.prc = bids.lam   + shift.LAB;
+    co.prc = offers.lam * X.LAO;
+    cb.prc = bids.lam   * X.LAB;
 end
 
 %% guarantee that cleared offer prices are >= offers
@@ -176,7 +161,7 @@ if gtee_prc.offer
     co.prc = co.prc + (clip > zero_tol) .* clip;
 end
 
-%% guarantee that cleared bid prices are >= bids
+%% guarantee that cleared bid prices are <= bids
 if gtee_prc.bid
     clip = b.on .* (bids.prc - cb.prc);
     cb.prc = cb.prc + (clip < -zero_tol) .* clip;
@@ -203,6 +188,84 @@ if auction_type ~= 0
     end
     if ncb > 1
         cb.prc = diag(min(cb.prc')) * ones(nrb,ncb);
+    end
+end
+
+
+function X = compute_exchange_rates(offers, bids, o, b, delta)
+%COMPUTE_EXCHANGE_RATES Determine the scale factors for LAO, FRO, LAB, FRB
+%  Inputs:
+%   offers, bids (same as for auction)
+%   o, b  - structs with on, off fields, each same dim as qty field of offers
+%           or bids, 1 if corresponding block is accepted, 0 otherwise
+%   delta - optional prices smaller than this are not used to determine X
+%  Outputs:
+%   X     - struct with fields LAO, FRO, LAB, FRB containing scale factors
+%           to use for each type of auction
+
+if nargin < 5
+    delta = 1e-3;       %% prices smaller than this are not used to determine X
+end
+zero_tol = 1e-5;
+
+%% eliminate terms with lam < delta (X would not be accurate)
+olam = offers.lam;
+blam = bids.lam;
+olam(olam(:) < delta) = NaN;
+blam(blam(:) < delta) = NaN;
+
+%% eliminate rows for 0 qty offers/bids
+[nro, nco] = size(offers.qty);
+[nrb, ncb] = size(bids.qty);
+omask = ones(nro,nco);
+if nco == 1
+    temp = offers.qty;
+else
+    temp = sum(offers.qty')';
+end
+omask(temp == 0, :) = NaN;
+bmask = ones(nrb,ncb);
+if ncb == 1
+    temp = bids.qty;
+else
+    temp = sum(bids.qty')';
+end
+bmask(temp == 0, :) = NaN;
+
+%% by default, don't scale anything
+X.LAO = 1;
+X.FRO = 1;
+X.LAB = 1;
+X.FRB = 1;
+
+%% don't scale if we have any negative lambdas or all are too close to 0
+if all(all(offers.lam > -zero_tol))
+    %% ratios
+    Xo = omask .* offers.prc ./ olam;
+    Xb = bmask .* bids.prc   ./ blam;
+
+    %% exchange rate for LAO (X.LAO * lambda == LAO, for corresponding lambda)
+    X.LAO = o.on .* Xo;
+    X.LAO( o.off(:) ) = NaN;
+    X.LAO( X.LAO(:) > 1+zero_tol ) = NaN;   %% don't let gens @ Pmin set price
+    X.LAO = max( X.LAO(:) );
+
+    %% exchange rate for FRO (X.FRO * lambda == FRO, for corresponding lambda)
+    X.FRO = o.off .* Xo;
+    X.FRO( o.on(:) ) = NaN;
+    X.FRO = min( X.FRO(:) );
+
+    if nrb
+        %% exchange rate for LAB (X.LAB * lambda == LAB, for corresponding lambda)
+        X.LAB = b.on .* Xb;
+        X.LAB( b.off(:) ) = NaN;
+        X.LAB( X.LAB(:) < 1-zero_tol ) = NaN;   %% don't let set price
+        X.LAB = min( X.LAB(:) );
+        
+        %% exchange rate for FRB (X.FRB * lambda == FRB, for corresponding lambda)
+        X.FRB = b.off .* Xb;
+        X.FRB( b.on(:) ) = NaN;
+        X.FRB = max( X.FRB(:) );
     end
 end
 
