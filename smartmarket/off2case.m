@@ -1,41 +1,43 @@
 function [gen, gencost] = off2case(gen, gencost, offers, bids, lim)
 %OFF2CASE  Updates case variables gen & gencost from quantity & price offers.
-%   [gen, gencost] = off2case(gen, gencost, offers, bids, lim) updates
-%   gen & gencost variables based on the offers and bids supplied, where each
-%   is a struct (or bids can be an empty matrix) with field 'P' (active power
+%   [GEN, GENCOST] = OFF2CASE(GEN, GENCOST, OFFERS, BIDS, LIM) updates
+%   GEN & GENCOST variables based on the OFFERS and BIDS supplied, where each
+%   is a struct (or BIDS can be an empty matrix) with field 'P' (active power
 %   offer/bid) and optional field 'Q' (reactive power offer/bid), each of which
 %   is another struct with fields 'qty' and 'prc', m x n matrices of quantity
 %   and price offers/bids, respectively. There are m offers with n blocks each.
-%   For offers, m can be equal to the number of actual generators (not including
-%   dispatchable loads) or the total number of rows in the gen matrix (including
-%   dispatchable loads). For bids, m can be equal to the number of dispatchable
-%   loads or the total number of rows in the gen matrix. Non-zero offer (bid)
-%   quantities for gen matrix entries where Pmax <= 0 (Pmin >= 0) produce an
+%   For OFFERS, m can be equal to the number of actual generators (not including
+%   dispatchable loads) or the total number of rows in the GEN matrix (including
+%   dispatchable loads). For BIDS, m can be equal to the number of dispatchable
+%   loads or the total number of rows in the GEN matrix. Non-zero offer (bid)
+%   quantities for GEN matrix entries where Pmax <= 0 (Pmin >= 0) produce an
 %   error. Similarly for Q.
 %   
 %   E.g.
-%       offers.P.qty - m x n, active power quantity offers, m offers, n blocks
+%       OFFERS.P.qty - m x n, active power quantity offers, m offers, n blocks
 %               .prc - m x n, active power price offers
 %             .Q.qty - m x n, reactive power quantity offers
 %               .prc - m x n, reactive power price offers
 %
 %   These values are used to update PMIN, PMAX, QMIN, QMAX and GEN_STATUS
-%   columns of the gen matrix and all columns of the gencost matrix except
+%   columns of the GEN matrix and all columns of the GENCOST matrix except
 %   STARTUP and SHUTDOWN.
 %
-%   The last argument, lim is a struct with the following fields,
+%   The last argument, LIM is a struct with the following fields,
 %   all of which are optional:
-%       lim.P.min_bid
+%       LIM.P.min_bid
 %            .max_offer
 %          .Q.min_bid
 %            .max_offer
-%   Any price offers (bids) for real power above (below) lim.P.max_offer
-%   (lim.P.min_bid) will be treated as being withheld. Likewise for Q.
+%   Any price offers (bids) for real power above (below) LIM.P.max_offer
+%   (LIM.P.min_bid) will be treated as being withheld. Likewise for Q.
+%
+%   See also CASE2OFF.
 
 %   MATPOWER
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
-%   Copyright (c) 1996-2006 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2010 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %% define named indices into data matrices

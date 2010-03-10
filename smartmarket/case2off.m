@@ -1,12 +1,14 @@
 function [q, p] = case2off(gen, gencost)
 %CASE2OFF  Creates quantity & price offers from gen & gencost.
-%   [q, p] = case2off(gen, gencost) creates quantity and price offers
-%   from case variables gen & gencost.
+%   [Q, P] = CASE2OFF(GEN, GENCOST) creates quantity and price offers
+%   from case variables GEN & GENCOST.
+%
+%   See also OFF2CASE.
 
 %   MATPOWER
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
-%   Copyright (c) 1996-2006 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2010 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %% define named indices into data matrices

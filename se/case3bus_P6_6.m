@@ -1,7 +1,8 @@
 function [baseMVA, bus, gen, branch, areas, gencost] = case3bus_P6_6
-% function: case of 3 bus system in Problem 6.6 in book 'Computational
-% Methods for Electric Power Systems' by Mariesa Crow
-% created by Rui Bo on 2007/11/12
+%CASE3BUS_P6_6  Case of 3 bus system.
+%   From Problem 6.6 in book 'Computational
+%   Methods for Electric Power Systems' by Mariesa Crow
+%   created by Rui Bo on 2007/11/12
 
 %%-----  Power Flow Data  -----%%
 %% system MVA base

@@ -1,6 +1,8 @@
 function [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp
 %IDX_DISP   Defines constants for named column indices to dispatch matrix.
-%   [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp
+%   Example:
+%
+%   [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp;
 %
 %   The index, name and meaning of each column of the dispatch matrix is given
 %   below:

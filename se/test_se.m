@@ -1,6 +1,6 @@
 function test_se
-% function: test state estimation 
-% created by Rui Bo on 2007/11/12
+%TEST_SE  Test state estimation.
+%   created by Rui Bo on 2007/11/12
 
 %%------------------------------------------------------
 % using data in Problem 6.7 in book 'Computational

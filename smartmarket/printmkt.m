@@ -1,16 +1,18 @@
 function printmkt(r, t, dispatch, success, fd, mpopt)
 %PRINTMKT   Prints results of ISO computation.
-%   printmkt(results, t, dispatch, success, fd, mpopt)
-%   prints results of ISO computation to fd (a file descriptor which defaults
-%   to STDOUT). mpopt is a MATPOWER options vector (see 'help mpoption' for
-%   details). Uses default options if this parameter is not given. The objective
-%   function value is given in f, the duration of the dispatch period (in hours) in
-%   t, and the elapsed time in et.
+%   PRINTMKT(RESULTS, T, DISPATCH, SUCCESS, FD, MPOPT)
+%   Prints results of ISO computation to FD (a file descriptor which
+%   defaults to STDOUT). MPOPT is a MATPOWER options vector (see
+%   MPOPTION for details). Uses default options if this parameter is
+%   not given. The duration of the dispatch period (in hours) is given
+%   in T. DISPATCH and RESULTS are the values returned by SMARTMKT.
+%
+%   See also SMARTMKT.
 
 %   MATPOWER
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
-%   Copyright (c) 1996-2004 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2010 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %%----- initialization -----

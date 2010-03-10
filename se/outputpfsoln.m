@@ -1,5 +1,5 @@
 function outputpfsoln(baseMVA, bus, gen, branch, converged, et, type_solver, iterNum)
-% function: output power flow solution
+%OUTPUTPFSOLN  Output power flow solution.
 
 %% define named indices into bus, gen, branch matrices
 [PQ, PV, REF, NONE, BUS_I, BUS_TYPE, PD, QD, GS, BS, BUS_AREA, VM, ...

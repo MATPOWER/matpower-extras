@@ -1,8 +1,7 @@
 function [MVAbase, bus, gen, branch, success, et] = runse(casedata, mpopt, fname, solvedcase)
 %RUNSE  Runs a state estimator.
-%
-%   [baseMVA, bus, gen, branch, success, et] = ...
-%           runse(casedata, mpopt, fname, solvedcase)
+%   [BASEMVA, BUS, GEN, BRANCH, SUCCESS, ET] = ...
+%           RUNSE(CASEDATA, MPOPT, FNAME, SOLVEDCASE)
 %
 %   Runs a state estimator (after a Newton power flow). Under construction with
 %   parts based on code from James S. Thorp.
@@ -11,7 +10,7 @@ function [MVAbase, bus, gen, branch, success, et] = runse(casedata, mpopt, fname
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
 %   parts based on code by James S. Thorp, June 2004
-%   Copyright (c) 1996-2004 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2010 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %%-----  initialize  -----

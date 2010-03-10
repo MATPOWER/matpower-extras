@@ -1,6 +1,6 @@
 function [V, converged, iterNum, z, z_est, error_sqrsum] = doSE(baseMVA, bus, gen, branch, Ybus, Yf, Yt, V0, ref, pv, pq, measure, idx, sigma)
-%% function: do state estimation
-% created by Rui Bo on 2007/11/12
+%DOSE  Do state estimation.
+%   created by Rui Bo on 2007/11/12
 
 %% define named indices into bus, gen, branch matrices
 [PQ, PV, REF, NONE, BUS_I, BUS_TYPE, PD, QD, GS, BS, BUS_AREA, VM, ...
@@ -94,7 +94,7 @@ while (~converged & i < max_it)
     [dSbus_dVm, dSbus_dVa] = dSbus_dV(Ybus, V);
     [dSf_dVa, dSf_dVm, dSt_dVa, dSt_dVm, Sf, St] = dSbr_dV(branch, Yf, Yt, V);
 %     genbus_row = findBusRowByIdx(bus, gbus);
-    genbus_row = gbus;	%% rdz, this should be fine if using internal bus numbering
+    genbus_row = gbus;  %% rdz, this should be fine if using internal bus numbering
 
     %% get sub-matrix of H relating to line flow
     dPF_dVa = real(dSf_dVa); % from end

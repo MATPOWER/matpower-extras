@@ -1,7 +1,10 @@
 function V0 = getV0(bus, gen, type_initialguess, V0)
-% function: get initial Voltage profile for power flow calculation. Note:
-% the pv bus voltage will remain at the given value even for flat start
-% type_initialguess: 1-initial guess from case data; 2-flat start; 3-from input
+%GETV0  Get initial voltage profile for power flow calculation.
+%   Note: The pv bus voltage will remain at the given value even for
+%   flat start.
+%   type_initialguess: 1 - initial guess from case data
+%                      2 - flat start
+%                      3 - from input
 
 %% define named indices into bus, gen, branch matrices
 [PQ, PV, REF, NONE, BUS_I, BUS_TYPE, PD, QD, GS, BS, BUS_AREA, VM, ...

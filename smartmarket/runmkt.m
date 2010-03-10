@@ -1,19 +1,20 @@
 function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] = ...
                 runmkt(casedata, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
-%RUNMKT  Runs smart market for PowerWeb, computing a new generation
-%        schedule from a set of offers and bids.
+%RUNMKT  Runs smart market for PowerWeb.
 %
-%   [baseMVA, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] = ...
-%           runmkt(casedata, q, p, mkt, max_p, u0, t, mpopt, fname, solvedcase)
+%   Deprecated, see RUNMARKET.
 %
-%   Computes the new generation and price schedules based on the offers
-%   submitted, where offers are specified by q and p, mkt tells it what
-%   type of market to use, max_p is the price cap, u0 is a vector
+%   [BASEMVA, CQ, CP, BUS, GEN, GENCOST, BRANCH, F, DISPATCH, SUCCESS, ET] = ...
+%           RUNMKT(CASEDATA, Q, P, MKT, MAX_P, U0, T, MPOPT, FNAME, SOLVEDCASE)
+%
+%   Computes a new generation schedule from a set of offers and bids,
+%   where offers and bids are specified by Q and P, MKT tells it what
+%   type of market to use, MAX_P is the price cap, U0 is a vector
 %   containing the commitment status of each generator from the previous
-%   period (for computing startup/shutdown costs), t is the time duration
-%   of the dispatch period in hours, and mpopt is a MATPOWER options vector
-%   (see 'help mpoption' for details). Uses default options if mpopt is not
-%   given. The rows in q and p correspond to the rows in gen and gencost,
+%   period (for computing startup/shutdown costs), T is the time duration
+%   of the dispatch period in hours, and MPOPT is a MATPOWER options vector
+%   (see 'help mpoption' for details). Uses default options if MPOPT is not
+%   given. The rows in Q and P correspond to the rows in gen and gencost,
 %   and each column corresponds to another block in the marginal offer or
 %   bid. The market codes are defined as the sum of the
 %   following numbers:
@@ -34,21 +35,21 @@ function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] 
 %      7 - split the difference pricing (price set by last accepted offer & bid)
 %      8 - LAO sets seller price, LAB sets buyer price
 %
-%   If p or q are empty or not given, they are created from the generator
+%   If P or Q are empty or not given, they are created from the generator
 %   cost function. The default market code is 1150, where the marginal
-%   block (offer or bid) sets the price. The default max_p is 500, the
-%   default u0 is all ones (assume everything was running) and the default
-%   duration t is 1 hour. The results may optionally be printed to a file
-%   (appended if the file exists) whose name is given in fname (in addition
-%   to printing to STDOUT). Optionally returns the final values of baseMVA,
-%   cq, cp, bus, gen, gencost, branch, f, dispatch, success, and et. If a
-%   name is given in solvedcase, the solved case will be written to a case file
+%   block (offer or bid) sets the price. The default MAX_P is 500, the
+%   default U0 is all ones (assume everything was running) and the default
+%   duration T is 1 hour. The results may optionally be printed to a file
+%   (appended if the file exists) whose name is given in FNAME (in addition
+%   to printing to STDOUT). Optionally returns the final values of BASEMVA,
+%   CQ, CP, BUS, GEN, GENCOST, BRANCH, F, DISPATCH, SUCCESS, and ET. If a
+%   name is given in SOLVEDCASE, the solved case will be written to a case file
 %   in MATPOWER format with the specified name with a '.m' extension added.
 
 %   MATPOWER
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
-%   Copyright (c) 1996-2005 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2010 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %%-----  initialize  -----
@@ -90,15 +91,15 @@ L = find(  isload(mpc.gen) );   %% variable loads
 
 %% create offers, bids
 if isempty(q) || isempty(p)
-	offers.P.qty = [];
-	offers.P.prc = [];
-	bids.P.qty = [];
-	bids.P.prc = [];
+    offers.P.qty = [];
+    offers.P.prc = [];
+    bids.P.qty = [];
+    bids.P.prc = [];
 else
-	offers.P.qty = q(G, :);
-	offers.P.prc = p(G, :);
-	bids.P.qty = q(L, :);
-	bids.P.prc = p(L, :);
+    offers.P.qty = q(G, :);
+    offers.P.prc = p(G, :);
+    bids.P.qty = q(L, :);
+    bids.P.prc = p(L, :);
 end
 
 %% parse market code

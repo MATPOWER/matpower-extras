@@ -1,6 +1,6 @@
 function outputsesoln(idx, sigma, z, z_est, error_sqrsum)
-% function: output state estimation solution
-% created by Rui Bo on 2008/01/14
+%OUTPUTSESOLN  Output state estimation solution.
+%   created by Rui Bo on 2008/01/14
 
 fd = 1; % output to screen
 

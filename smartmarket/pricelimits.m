@@ -1,7 +1,8 @@
 function lim = pricelimits(lim, haveQ)
 %PRICELIMITS  Fills in a struct with default values for offer/bid limits.
+%   LIM = PRICELIMITS(LIM, HAVEQ)
 %   The final structure looks like:
-%       lim.P.min_bid           - bids below this are withheld
+%       LIM.P.min_bid           - bids below this are withheld
 %            .max_offer         - offers above this are withheld
 %            .min_cleared_bid   - cleared bid prices below this are clipped
 %            .max_cleared_offer - cleared offer prices above this are clipped

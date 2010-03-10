@@ -1,15 +1,15 @@
 function [co, cb] = auction(offers, bids, auction_type, limit_prc, gtee_prc)
 %AUCTION  Clear auction based on OPF results (qty's and lambdas).
-%   [co, cb] = auction(offers, bids, auction_type, limit_prc, gtee_prc)
-%   Clears a set of bids and offers based on the results of an OPF, where the
+%   [CO, CB] = AUCTION(OFFERS, BIDS, AUCTION_TYPE, LIMIT_PRC, GTEE_PRC)
+%   Clears a set of BIDS and OFFERS based on the results of an OPF, where the
 %   pricing is adjusted for network losses and binding constraints.
-%   The arguments offers and bids are structs with the following fields:
+%   The arguments OFFERS and BIDS are structs with the following fields:
 %       qty       - m x n, offer/bid quantities, m offers/bids, n blocks
 %       prc       - m x n, offer/bid prices
 %       lam       - m x n, corresponding lambdas
 %       total_qty - m x 1, total quantity cleared for each offer/bid
 %
-%   There are 8 types of auctions implemented, specified by auction_type.
+%   There are 8 types of auctions implemented, specified by AUCTION_TYPE.
 %
 %      0 - discriminative pricing (price equal to offer or bid)
 %      1 - last accepted offer auction
@@ -24,10 +24,10 @@ function [co, cb] = auction(offers, bids, auction_type, limit_prc, gtee_prc)
 %
 %   Whether or not cleared offer (bid) prices are guaranteed to be greater
 %   (less) than or equal to the corresponding offer (bid) price is specified by
-%   a flag gtee_prc.offer (gtee_prc.bid). The default is value true.
+%   a flag GTEE_PRC.offer (GTEE_PRC.bid). The default is value true.
 %   
 %   Offer/bid and cleared offer/bid min and max prices are specified in the
-%   limit_prc struct with the following fields:
+%   LIMIT_PRC struct with the following fields:
 %       max_offer
 %       min_bid
 %       max_cleared_offer
@@ -37,6 +37,8 @@ function [co, cb] = auction(offers, bids, auction_type, limit_prc, gtee_prc)
 %   (min_cleared_bid) are clipped to max_cleared offer (min_cleared_bid) if
 %   given. All of these limit prices are ignored if the field is missing
 %   or is empty.
+%
+%   See also RUNMARKET, SMARTMKT.
 
 %   MATPOWER
 %   $Id$

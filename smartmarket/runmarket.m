@@ -1,13 +1,12 @@
 function [r, co, cb, f, dispatch, success, et] = ...
                 runmarket(mpc, offers, bids, mkt, mpopt, fname, solvedcase)
 %RUNMARKET  Runs PowerWeb-style smart market.
-%
-%   [results, co, cb, f, dispatch, success, et] = ...
-%           runmarket(mpc, offers, bids, mkt, mpopt, fname, solvedcase)
+%   [RESULTS, CO, CB, F, DISPATCH, SUCCESS, ET] = ...
+%           RUNMARKET(MPC, OFFERS, BIDS, MKT, MPOPT, FNAME, SOLVEDCASE)
 %
 %   Computes the new generation and price schedules (cleared offers and bids)
-%   based on the offers and bids submitted. See 'help off2case' for a
-%   description of the offers and bids arguments. mkt is a struct with the
+%   based on the OFFERS and BIDS submitted. See OFF2CASE for a
+%   description of the OFFERS and BIDS arguments. MKT is a struct with the
 %   following fields:
 %       auction_type - market used for dispatch and pricing
 %       t            - time duration of the dispatch period in hours
@@ -15,7 +14,7 @@ function [r, co, cb, f, dispatch, success, et] = ...
 %       lim          - offer/bid/price limits (see 'help pricelimits')
 %       OPF          - 'AC' or 'DC', default is 'AC'
 %
-%   mpopt is an optional MATPOWER options vector (see 'help mpoption' for
+%   MPOPT is an optional MATPOWER options vector (see MPOPTION for
 %   details). The values for the auction_type field are defined as follows:
 %
 %      0 - discriminative pricing (price equal to offer or bid)
@@ -34,18 +33,20 @@ function [r, co, cb, f, dispatch, success, et] = ...
 %   default previous commitment status u0 is all ones (assume everything was
 %   running) and the default duration t is 1 hour. The results may
 %   optionally be printed to a file (appended if the file exists) whose name
-%   is given in fname (in addition to printing to STDOUT). Optionally
+%   is given in FNAME (in addition to printing to STDOUT). Optionally
 %   returns the final values of the solved case in results, the cleared
-%   offers and bids in co and cb, the objective function value f, the old
-%   style dispatch matrix, the convergence status of the OPF in success, and
-%   the elapsed time et. If a name is given in solvedcase, the solved case
+%   offers and bids in CO and CB, the objective function value F, the old
+%   style DISPATCH matrix, the convergence status of the OPF in SUCCESS, and
+%   the elapsed time ET. If a name is given in SOLVEDCASE, the solved case
 %   will be written to a case file in MATPOWER format with the specified
 %   name.
+%
+%   See also OFF2CASE.
 
 %   MATPOWER
 %   $Id$
 %   by Ray Zimmerman, PSERC Cornell
-%   Copyright (c) 1996-2005 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2010 by Power System Engineering Research Center (PSERC)
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %%-----  initialize  -----

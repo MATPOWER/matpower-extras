@@ -1,8 +1,8 @@
 function [co, cb, r, dispatch, success] = ...
             smartmkt(mpc, offers, bids, mkt, mpopt)
 %SMARTMKT  Runs the PowerWeb smart market.
-%   [co, cb, results, dispatch, success] = smartmkt(mpc, ...
-%       offers, bids, mkt, mpopt) runs the ISO smart market.
+%   [CO, CB, RESULTS, DISPATCH, SUCCESS] = SMARTMKT(MPC, ...
+%       OFFERS, BIDS, MKT, MPOPT) runs the ISO smart market.
 
 %   MATPOWER
 %   $Id$

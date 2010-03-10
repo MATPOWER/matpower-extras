@@ -1,16 +1,16 @@
 function [baseMVA, bus, gen, branch, success, et, z, z_est, error_sqrsum] = run_se(casename, measure, idx, sigma, type_initialguess, V0)
-%% function: run state estimation
-% [INPUT PARAMETERS]
-% measure: measurements
-% idx: measurement indices
-% sigma: measurement variances
-% [OUTPUT PARAMETERS]
-% z: Measurement Vector. In the order of PF, PT, PG, Va, QF, QT, QG, Vm (if
-% applicable), so it has ordered differently from original measurements
-% z_est: Estimated Vector. In the order of PF, PT, PG, Va, QF, QT, QG, Vm
-% (if applicable)
-% error_sqrsum: Weighted sum of error squares
-% created by Rui Bo on 2007/11/12
+%RUN_SE  Run state estimation.
+%   [INPUT PARAMETERS]
+%   measure: measurements
+%   idx: measurement indices
+%   sigma: measurement variances
+%   [OUTPUT PARAMETERS]
+%   z: Measurement Vector. In the order of PF, PT, PG, Va, QF, QT, QG, Vm (if
+%   applicable), so it has ordered differently from original measurements
+%   z_est: Estimated Vector. In the order of PF, PT, PG, Va, QF, QT, QG, Vm
+%   (if applicable)
+%   error_sqrsum: Weighted sum of error squares
+%   created by Rui Bo on 2007/11/12
 
 %% read data & convert to internal bus numbering
 [baseMVA, bus, gen, branch] = loadcase(casename);
