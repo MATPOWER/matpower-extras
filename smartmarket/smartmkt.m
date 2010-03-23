@@ -74,8 +74,13 @@ end
 %% compute quantities & prices
 ng = size(gen, 1);
 if success      %% OPF solved case fine
+    %% create map of external bus numbers to bus indices
+    i2e = bus(:, BUS_I);
+    e2i = sparse(max(i2e), 1);
+    e2i(i2e) = (1:size(bus, 1))';
+
     %% get nodal marginal prices from OPF
-    gbus    = gen(:, GEN_BUS);                  %% indices of buses w/gens
+    gbus    = e2i(gen(:, GEN_BUS));                 %% indices of buses w/gens
     npP     = max([ size(offers.P.qty, 2) size(bids.P.qty, 2) ]);
     lamP    = sparse(1:ng, 1:ng, bus(gbus, LAM_P), ng, ng) * ones(ng, npP); %% real power prices
     lamQ    = sparse(1:ng, 1:ng, bus(gbus, LAM_Q), ng, ng) * ones(ng, npP); %% reactive power prices
