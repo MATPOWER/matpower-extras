@@ -6,6 +6,16 @@ function test_se
 % using data in Problem 6.7 in book 'Computational
 % Methods for Electric Power Systems' by Mariesa Crow
 %%------------------------------------------------------
+%% which measurements are available
+idx.idx_zPF = [1;2];
+idx.idx_zPT = [3];
+idx.idx_zPG = [1;2;3];
+idx.idx_zVa = [];
+idx.idx_zQF = [];
+idx.idx_zQT = [];
+idx.idx_zQG = [];
+idx.idx_zVm = [2;3];
+
 %% specify measurements
 measure.PF = [0.12;0.10];
 measure.PT = [-0.04];
@@ -26,15 +36,12 @@ sigma.sigma_QT = [];
 sigma.sigma_QG = [];
 sigma.sigma_Vm = 0.01;
 
-%% which measurements are available
-idx.idx_zPF = [1;2];
-idx.idx_zPT = [3];
-idx.idx_zPG = [1;2;3];
-idx.idx_zVa = [];
-idx.idx_zQF = [];
-idx.idx_zQT = [];
-idx.idx_zQG = [];
-idx.idx_zVm = [2;3];
+%% check input data integrity
+nbus = 3;
+[success, measure, idx, sigma] = checkDataIntegrity(measure, idx, sigma, nbus);
+if ~success
+    error('State Estimation input data are not complete or sufficient!');
+end
 
 %% run state estimation
 casename = 'case3bus_P6_6.m';

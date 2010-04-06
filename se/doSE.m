@@ -130,6 +130,9 @@ while (~converged & i < max_it)
     %% compute update step
     J = H'*R_inv*H;
     F = H'*R_inv*(z-z_est); % evalute F(x)
+    if ~isobservable(H, pv, pq)
+        error('doSE: system is not observable');
+    end
     dx = (J \ F);
 
     %% check for convergence
@@ -151,5 +154,5 @@ end
 
 iterNum = i;
 
-%% get weighted sum squares of error
+%% get weighted sum of squared errors
 error_sqrsum = sum((z - z_est).^2./sigma_square);

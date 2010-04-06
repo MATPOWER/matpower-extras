@@ -52,4 +52,4 @@ for i = 1: len
     fprintf(fd, '\n      Vm        %3d      %10.4f     %10.4f', idx.idx_zVm(i), z(i+cnt), z_est(i+cnt));
 end
 
-fprintf(fd, '\n\n[Weighted sum of error squares]:\t%f\n', error_sqrsum);
+fprintf(fd, '\n\n[Weighted sum of squared errors]:\t%f\n', error_sqrsum);
