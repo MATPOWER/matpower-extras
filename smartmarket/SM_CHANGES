@@ -15,6 +15,10 @@ See http://www.pserc.cornell.edu/matpower/ for more info.
 Changes since MATPOWER 4.0b2
 ----------------------------
 
+4/19/10
+    - Changed licensing to GNU General Public license. See LICENSE and
+      COPYING files for details.
+
 3/23/09
     - Fixed bug in smartmkt() that caused it to die for cases with
       non-consecutive bus numbers. Introduced by changes made to

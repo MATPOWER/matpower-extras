@@ -4,6 +4,9 @@ function [baseMVA, bus, gen, branch, areas, gencost] = case3bus_P6_6
 %   Methods for Electric Power Systems' by Mariesa Crow
 %   created by Rui Bo on 2007/11/12
 
+%   MATPOWER
+%   $Id$
+
 %%-----  Power Flow Data  -----%%
 %% system MVA base
 baseMVA = 1000;
