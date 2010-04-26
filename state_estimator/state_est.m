@@ -29,8 +29,8 @@ function [V, converged, i] = state_est(branch, Ybus, Yf, Yt, Sbus, V0, ref, pv, 
 %   Additional permission under GNU GPL version 3 section 7
 %
 %   If you modify MATPOWER, or any covered work, to interface with
-%   other modules (such as M-files and MEX-files) available in a
-%   Matlab (or compatible) environment containing parts covered
+%   other modules (such as MATLAB code and MEX-files) available in a
+%   MATLAB(R) or comparable environment containing parts covered
 %   under other licensing terms, the licensors of MATPOWER grant
 %   you additional permission to convey the resulting work.
 
