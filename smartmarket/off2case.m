@@ -83,7 +83,8 @@ else
 end
 lim = pricelimits(lim, haveQ);
 if isempty(bids)
-    bids = struct( 'P', struct('qty', [], 'prc', []));
+	np = size(offers.P.qty, 2);
+    bids = struct( 'P', struct('qty', zeros(0,np), 'prc', zeros(0,np)));
 end
 if haveQ
     if ~isfield(bids, 'Q')

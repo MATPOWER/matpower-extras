@@ -129,6 +129,10 @@ if isempty(offers) || isempty(offers.P.qty)
     offers = struct( 'P', struct( 'qty', q(G, :), 'prc', p(G, :) ) );
     bids   = struct( 'P', struct( 'qty', q(L, :), 'prc', p(L, :) ) );
 end
+if isempty(bids)
+	np = size(offers.P.qty, 2);
+    bids = struct( 'P', struct('qty', zeros(0,np), 'prc', zeros(0,np)));
+end
 
 %% start the clock
 t0 = clock;
