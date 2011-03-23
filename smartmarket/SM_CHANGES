@@ -12,6 +12,14 @@ Copyright (c) 1996-2010 by Power System Engineering Research Center (PSERC)
 See http://www.pserc.cornell.edu/matpower/ for more info.
 
 
+Changes since MATPOWER 4.0
+--------------------------
+
+3/23/11
+    - Fixed bug in smartmkt.m that caused error when using offers and
+      bids with different numbers of blocks.
+
+
 Changes since MATPOWER 4.0b2
 ----------------------------
 

@@ -104,9 +104,11 @@ if success      %% OPF solved case fine
 
     %% get nodal marginal prices from OPF
     gbus    = e2i(gen(:, GEN_BUS));                 %% indices of buses w/gens
-    npP     = max([ size(offers.P.qty, 2) size(bids.P.qty, 2) ]);
-    lamP    = sparse(1:ng, 1:ng, bus(gbus, LAM_P), ng, ng) * ones(ng, npP); %% real power prices
-    lamQ    = sparse(1:ng, 1:ng, bus(gbus, LAM_Q), ng, ng) * ones(ng, npP); %% reactive power prices
+    nPo     = size(offers.P.qty, 2);
+    nPb     = size(bids.P.qty, 2);
+    nP      = max([ nPo nPb ]);
+    lamP    = sparse(1:ng, 1:ng, bus(gbus, LAM_P), ng, ng) * ones(ng, nP);  %% real power prices
+    lamQ    = sparse(1:ng, 1:ng, bus(gbus, LAM_Q), ng, ng) * ones(ng, nP);  %% reactive power prices
     
     %% compute fudge factor for lamP to include price of bundled reactive power
     pf   = zeros(length(L), 1);                 %% for loads Q = pf * P
@@ -116,33 +118,35 @@ if success      %% OPF solved case fine
 
     gtee_prc.offer = 1;         %% guarantee that cleared offers are >= offers
     Poffer = offers.P;
-    Poffer.lam = lamP(G,:);
+    Poffer.lam = lamP(G,1:nPo);
     Poffer.total_qty = gen(G, PG);
     
     Pbid = bids.P;
     Pbid.total_qty = -gen(L, PG);
     if haveQ
-        Pbid.lam = lamP(L,:);   %% use unbundled lambdas
+        Pbid.lam = lamP(L,1:nPb);   %% use unbundled lambdas
         gtee_prc.bid = 0;       %% allow cleared bids to be above bid price
     else
-        Pbid.lam = lamP(L,:) + sparse(1:nL, 1:nL, pf, nL, nL) * lamQ(L,:);  %% bundled lambdas
+        Pbid.lam = lamP(L,1:nPb) + sparse(1:nL, 1:nL, pf, nL, nL) * lamQ(L,1:nPb);  %% bundled lambdas
         gtee_prc.bid = 1;       %% guarantee that cleared bids are <= bids
     end
 
     [co.P, cb.P] = auction(Poffer, Pbid, mkt.auction_type, mkt.lim.P, gtee_prc);
 
     if haveQ
-        npQ = max([ size(offers.Q.qty, 2) size(bids.Q.qty, 2) ]);
+        nQo = size(offers.Q.qty, 2);
+        nQb = size(bids.Q.qty, 2);
+        nQ  = max([ nQo nQb ]);
         
         %% get nodal marginal prices from OPF
-        lamQ    = sparse(1:ng, 1:ng, bus(gbus, LAM_Q), ng, ng) * ones(ng, npQ); %% reactive power prices
+        lamQ    = sparse(1:ng, 1:ng, bus(gbus, LAM_Q), ng, ng) * ones(ng, nQ);  %% reactive power prices
 
         Qoffer = offers.Q;
-        Qoffer.lam = lamQ;      %% use unbundled lambdas
+        Qoffer.lam = lamQ(:,1:nQo);     %% use unbundled lambdas
         Qoffer.total_qty = (gen(:, QG) > 0) .* gen(:, QG);
         
         Qbid = bids.Q;
-        Qbid.lam = lamQ;        %% use unbundled lambdas
+        Qbid.lam = lamQ(:,1:nQb);       %% use unbundled lambdas
         Qbid.total_qty = (gen(:, QG) < 0) .* -gen(:, QG);
 
         %% too complicated to scale with mixed bids/offers
@@ -154,7 +158,7 @@ if success      %% OPF solved case fine
     price       = zeros(ng, 1);
     price(G)    = co.P.prc(:, 1);   %% need these for prices for
     price(L)    = cb.P.prc(:, 1);   %% gens that are shut down
-    if npP == 1
+    if nP == 1
         k = find( co.P.qty );
         price(G(k)) = co.P.prc(k, :);
         k = find( cb.P.qty );
