@@ -155,6 +155,7 @@ if success      %% OPF solved case fine
     end
 
     quantity    = gen(:, PG);
+    quantityQ   = gen(:, QG);
     price       = zeros(ng, 1);
     price(G)    = co.P.prc(:, 1);   %% need these for prices for
     price(L)    = cb.P.prc(:, 1);   %% gens that are shut down
@@ -171,6 +172,7 @@ if success      %% OPF solved case fine
     end
 else        %% did not converge even with imports
     quantity    = zeros(ng, 1);
+    quantityQ   = zeros(ng, 1);
     price       = mkt.lim.P.max_offer * ones(ng, 1);
     co.P.qty = zeros(size(offers.P.qty));
     co.P.prc = zeros(size(offers.P.prc));
@@ -186,12 +188,26 @@ end
 
 
 %% compute costs in $ (note, NOT $/hr)
-fcost   = mkt.t * totcost(mpc.gencost, zeros(ng, 1) );      %% fixed costs
-vcost   = mkt.t * totcost(mpc.gencost, quantity     ) - fcost;  %% variable costs
-scost   =   (~mkt.u0 & gen(:, GEN_STATUS) >  0) .* ...
-                mpc.gencost(:, STARTUP) + ...               %% startup costs
+if size(mpc.gencost, 1) == ng                   %% no reactive costs
+    pgcost = mpc.gencost;
+    fcost = mkt.t * totcost(pgcost, zeros(ng, 1));          %% fixed costs
+    vcost = mkt.t * totcost(pgcost, quantity    ) - fcost;  %% variable costs
+    scost =   (~mkt.u0 & gen(:, GEN_STATUS) >  0) .* ...
+                    pgcost(:, STARTUP) + ...                %% startup costs
+                ( mkt.u0 & gen(:, GEN_STATUS) <= 0) .* ...
+                    pgcost(:, SHUTDOWN);                    %% shutdown costs
+else    %% size(mpc.gencost, 1) == 2 * ng       %% reactive costs included
+    pgcost = mpc.gencost(1:ng, :);
+    qgcost = mpc.gencost(ng+(1:ng), :);
+    fcost = mkt.t * ( totcost(pgcost, zeros(ng, 1)) + ...
+                      totcost(qgcost, zeros(ng, 1)) );      %% fixed costs
+    vcost = mkt.t * ( totcost(pgcost, quantity) + ...
+                      totcost(qgcost, quantityQ) ) - fcost; %% variable costs
+    scost = (~mkt.u0 & gen(:, GEN_STATUS) >  0) .* ...
+                (pgcost(:, STARTUP) + qgcost(:, STARTUP)) + ... %% startup costs
             ( mkt.u0 & gen(:, GEN_STATUS) <= 0) .* ...
-                mpc.gencost(:, SHUTDOWN);                   %% shutdown costs
+                (pgcost(:, SHUTDOWN) + qgcost(:, SHUTDOWN));    %% shutdown costs
+end
 
 %% store in dispatch
 dispatch = zeros(ng, PENALTY);
