@@ -15,6 +15,12 @@ See http://www.pserc.cornell.edu/matpower/ for more info.
 Changes since MATPOWER 4.1
 --------------------------
 
+3/27/12
+    - Fixed bug in smartmkt.m where the gencost returned in the
+      results struct was not the original gencost, but rather the
+      one formed from the offers and bids. That one is now returned
+      in a genoffer field, with the original being returned in gencost.
+
 3/1/12
     - Fixed bug in smartmkt.m that caused an when including reactive
       power costs.

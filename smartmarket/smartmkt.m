@@ -88,6 +88,8 @@ mpc2 = mpc;
 mpc2.gen = gen;
 mpc2.gencost = genoffer;
 [r, success] = uopf(mpc2, mpopt);
+r.genoffer = r.gencost;     %% save the gencost used to run the OPF
+r.gencost  = mpc.gencost;   %% and restore the original gencost
 [bus, gen] = deal(r.bus, r.gen);
 if verbose && ~success
     fprintf('\nSMARTMARKET: non-convergent UOPF');
