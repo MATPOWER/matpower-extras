@@ -201,7 +201,7 @@ end
 %% clip cleared bid prices by limit_prc.min_cleared_bid
 if ~isempty(limit_prc.min_cleared_bid)
     cb.prc = cb.prc + (cb.prc < limit_prc.min_cleared_bid) .* ...
-        (limit_prc.min_cleared_bid - co.prc);
+        (limit_prc.min_cleared_bid - cb.prc);
 end
 
 %% make prices uniform after clipping (except for discrim auction)
