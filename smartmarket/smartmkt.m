@@ -175,7 +175,11 @@ if success      %% OPF solved case fine
 else        %% did not converge even with imports
     quantity    = zeros(ng, 1);
     quantityQ   = zeros(ng, 1);
-    price       = mkt.lim.P.max_offer * ones(ng, 1);
+    if isempty(mkt.lim.P.max_offer)
+        price   = NaN(ng, 1);
+    else
+        price   = mkt.lim.P.max_offer * ones(ng, 1);
+    end
     co.P.qty = zeros(size(offers.P.qty));
     co.P.prc = zeros(size(offers.P.prc));
     cb.P.qty = zeros(size(bids.P.qty));
