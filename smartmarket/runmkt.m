@@ -12,7 +12,7 @@ function [MVAbase, cq, cp, bus, gen, gencost, branch, f, dispatch, success, et] 
 %   type of market to use, MAX_P is the price cap, U0 is a vector
 %   containing the commitment status of each generator from the previous
 %   period (for computing startup/shutdown costs), T is the time duration
-%   of the dispatch period in hours, and MPOPT is a MATPOWER options vector
+%   of the dispatch period in hours, and MPOPT is a MATPOWER options struct
 %   (see 'help mpoption' for details). Uses default options if MPOPT is not
 %   given. The rows in Q and P correspond to the rows in gen and gencost,
 %   and each column corresponds to another block in the marginal offer or

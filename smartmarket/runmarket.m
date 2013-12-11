@@ -14,7 +14,7 @@ function [r, co, cb, f, dispatch, success, et] = ...
 %       lim          - offer/bid/price limits (see 'help pricelimits')
 %       OPF          - 'AC' or 'DC', default is 'AC'
 %
-%   MPOPT is an optional MATPOWER options vector (see MPOPTION for
+%   MPOPT is an optional MATPOWER options struct (see MPOPTION for
 %   details). The values for the auction_type field are defined as follows:
 %
 %      0 - discriminative pricing (price equal to offer or bid)

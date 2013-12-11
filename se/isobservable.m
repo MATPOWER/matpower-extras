@@ -33,7 +33,7 @@ function TorF = isobservable(H, pv, pq)
 %   you additional permission to convey the resulting work.
 
 %% options
-tol     = 1e-5; % mpopt(2);
+tol     = 1e-5; % mpopt.pf.tol;
 check_reason = 1;	% check reason for system being not observable
                     % 0: no check
                     % 1: check (NOTE: may be time consuming due to svd calculation)

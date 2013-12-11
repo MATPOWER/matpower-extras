@@ -44,9 +44,8 @@ if nargin < 10
 end
 
 %% options
-tol     = mpopt(2);
-max_it  = mpopt(3);
-verbose = mpopt(31);
+tol     = mpopt.pf.tol;
+max_it  = mpopt.pf.nr.max_it;
 
 %% initialize
 converged = 0;
@@ -134,14 +133,14 @@ normF = delz' * WInv * delz;
 chusqu = err' * WInv * err;  
      
 %% check tolerance
-if verbose > 1
+if mpopt.verbose > 1
     fprintf('\n it     norm( F )       step size');
     fprintf('\n----  --------------  --------------');
     fprintf('\n%3d    %10.3e      %10.3e', i, normF, 0);
 end
 if normF < tol
     converged = 1;
-    if verbose > 1
+    if mpopt.verbose > 1
         fprintf('\nConverged!\n');
     end
 end
@@ -220,17 +219,17 @@ while (~converged && ibd <= max_it_bad_data)
 
         %% check for convergence
         step = dx' * dx;
-        if verbose > 1
+        if mpopt.verbose > 1
             fprintf('\n%3d    %10.3e      %10.3e', i, normF, step);
         end
         if (step < tol) 
             converged = 1;
-            if verbose
+            if mpopt.verbose
                 fprintf('\nState estimator converged in %d iterations.\n', i);
             end
         end
     end
-    if verbose
+    if mpopt.verbose
         if ~converged
             fprintf('\nState estimator did not converge in %d iterations.\n', i);
         end
@@ -259,7 +258,7 @@ while (~converged && ibd <= max_it_bad_data)
     if length(rejected)
         baddata = 1;
         converged = 0;
-        if verbose
+        if mpopt.verbose
             fprintf('\nRejecting %d measurement(s) as bad data:\n', length(rejected));
             fprintf('\tindex\t      B\n');
             fprintf('\t-----\t-------------\n');
@@ -274,7 +273,7 @@ while (~converged && ibd <= max_it_bad_data)
 
     if (baddata == 0) 
         converged = 1;
-        if verbose
+        if mpopt.verbose
             fprintf('\nNo remaining bad data, after discarding data %d time(s).\n', ibd-1);
             fprintf('Largest value of B = %.2f\n', maxB);
         end

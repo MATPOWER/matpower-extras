@@ -39,9 +39,6 @@ if nargin < 5
     mpopt = mpoption;       %% use default options
 end
 
-%% options
-verbose = mpopt(31);
-
 %% initialize some stuff
 G = find( ~isload(mpc.gen) );       %% real generators
 L = find(  isload(mpc.gen) );       %% dispatchable loads
@@ -58,7 +55,7 @@ if haveQ && mkt.auction_type ~= 0 && mkt.auction_type ~= 5
 end
 
 %% set power flow formulation based on market
-mpopt = mpoption(mpopt, 'PF_DC', strcmp(mkt.OPF, 'DC'));
+mpopt = mpoption(mpopt, 'model', upper(mkt.OPF));
 
 %% define named indices into data matrices
 [PQ, PV, REF, NONE, BUS_I, BUS_TYPE, PD, QD, GS, BS, BUS_AREA, VM, ...
@@ -78,8 +75,8 @@ mkt.lim = pricelimits(mkt.lim, isfield(offers, 'Q') || isfield(bids, 'Q'));
 %% of cost function lies at exactly Pmin or Pmax
 if any(find(genoffer(:, MODEL) == PW_LINEAR))
     gg = find( ~isload(gen) );      %% skip dispatchable loads
-    gen(gg, PMIN) = gen(gg, PMIN) - 100 * mpopt(16) * ones(size(gg));
-    gen(gg, PMAX) = gen(gg, PMAX) + 100 * mpopt(16) * ones(size(gg));
+    gen(gg, PMIN) = gen(gg, PMIN) - 100 * mpopt.opf.violation * ones(size(gg));
+    gen(gg, PMAX) = gen(gg, PMAX) + 100 * mpopt.opf.violation * ones(size(gg));
 end
 
 %%-----  solve the optimization problem  -----
@@ -91,7 +88,7 @@ mpc2.gencost = genoffer;
 r.genoffer = r.gencost;     %% save the gencost used to run the OPF
 r.gencost  = mpc.gencost;   %% and restore the original gencost
 [bus, gen] = deal(r.bus, r.gen);
-if verbose && ~success
+if mpopt.verbose && ~success
     fprintf('\nSMARTMARKET: non-convergent UOPF');
 end
 

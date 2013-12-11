@@ -42,9 +42,9 @@ function [V, converged, iterNum, z, z_est, error_sqrsum] = doSE(baseMVA, bus, ge
     GEN_STATUS, PMAX, PMIN, MU_PMAX, MU_PMIN, MU_QMAX, MU_QMIN] = idx_gen;
 
 %% options
-tol     = 1e-5; % mpopt(2);
-max_it  = 100;  % mpopt(3);
-verbose = 0;    % mpopt(31);
+tol     = 1e-5; % mpopt.pf.tol;
+max_it  = 100;  % mpopt.pf.nr.max_it;
+verbose = 0;
 
 %% initialize
 j = sqrt(-1);

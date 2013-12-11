@@ -36,7 +36,7 @@ function [success, measure, idx, sigma] = checkDataIntegrity(measure, idx, sigma
 %   you additional permission to convey the resulting work.
 
 %% options
-verbose = 2;    % mpopt(31);
+verbose = 2;
 
 success     = 1;    % pass integrity check?
 nowarning   = 1;    % no warning found?

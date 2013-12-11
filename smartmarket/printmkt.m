@@ -2,7 +2,7 @@ function printmkt(r, t, dispatch, success, fd, mpopt)
 %PRINTMKT   Prints results of ISO computation.
 %   PRINTMKT(RESULTS, T, DISPATCH, SUCCESS, FD, MPOPT)
 %   Prints results of ISO computation to FD (a file descriptor which
-%   defaults to STDOUT). MPOPT is a MATPOWER options vector (see
+%   defaults to STDOUT). MPOPT is a MATPOWER options struct (see
 %   MPOPTION for details). Uses default options if this parameter is
 %   not given. The duration of the dispatch period (in hours) is given
 %   in T. DISPATCH and RESULTS are the values returned by SMARTMKT.
@@ -49,8 +49,7 @@ end
 gen = r.gen;
 
 %% options
-OUT_ALL         = mpopt(32);
-OUT_RAW         = mpopt(43);
+OUT_RAW         = 0;
 
 %% define named indices into data matrices
 [GEN_BUS, PG, QG, QMAX, QMIN, VG, MBASE, GEN_STATUS, PMAX, PMIN, ...
@@ -64,7 +63,7 @@ ng = size(gen, 1);
 %%----- print the stuff -----
 pay = dispatch(:, PRICE) .* dispatch(:, QUANTITY) * t;
 cost = dispatch(:, FCOST) + dispatch(:, VCOST) + dispatch(:, SCOST) + dispatch(:, PENALTY);
-if OUT_ALL
+if mpopt.out.all
     %% dispatch data
     fprintf(fd, '\n================================================================================');
     fprintf(fd, '\n|     Market Summary                                                           |');
