@@ -45,13 +45,14 @@ function [globalopt,comp,Apsd] = testGlobalOpt(mpc,mpopt)
 %   Example: Both the complementarity and positive semidefinite conditions
 %   are satisfied for the IEEE 14-bus system.
 %
-%           mpc = case14;
-%           mpc.branch(:,3) = max(mpc.branch(:,3), 1e-4);
+%           define_constants;
+%           mpc = loadcase('case14');
+%           mpc.branch(:,BR_R) = max(mpc.branch(:,BR_R), 1e-4);
 %           mpopt = mpoption('opf.ac.solver', 'MIPS', ...
 %               'opf.violation', 1e-10, 'mips.gradtol', 1e-10, ...
 %               'mips.comptol', 1e-10, 'mips.costtol', 1e-10);
-%           mpc = runopf(mpc,mpopt);
-%           [globalopt,comp,Apsd] = testGlobalOpt(mpc,mpopt)
+%           results = runopf(mpc, mpopt);
+%           [globalopt, comp, Apsd] = testGlobalOpt(results, mpopt)
 %
 % [1] D.K. Molzahn, B.C. Lesieutre, and C.L. DeMarco, "A Sufficient
 %     Condition for Global Optimality of Solutions to the Optimal Power
