@@ -39,12 +39,12 @@ function [insolvable,eta,mineigratio] = insolvablepf_limitQ(mpc,mpopt)
 %           the rank relaxation is not required for correctness of the
 %           insolvability condition).
 %
-% [1] D.K. Molzahn, V. Dawar, B.C. Lesieutre, and C.L. DeMarco, "Sufficient
-%     Conditions for Power Flow Insolvability Considering Reactive Power
-%     Limited Generators with Applications to Voltage Stability Margins,"
-%     Submitted to Bulk Power System Dynamics and Control - IX. 
-%     Optimization, Security, and Control of the Emerging Power Grid, 2013
-%     IREP Symposium, August 25-30, 2013.
+%   [1] D.K. Molzahn, V. Dawar, B.C. Lesieutre, and C.L. DeMarco, "Sufficient
+%       Conditions for Power Flow Insolvability Considering Reactive Power
+%       Limited Generators with Applications to Voltage Stability Margins,"
+%       in Bulk Power System Dynamics and Control - IX. Optimization,
+%       Security and Control of the Emerging Power Grid, 2013 IREP Symposium,
+%       25-30 August 2013.
 
 %   MATPOWER
 %   $Id$
@@ -93,7 +93,7 @@ if ~have_fcn('yalmip')
     error('insolvablepf_limitQ: The software package YALMIP is required to run insolvablepf_limitQ. See http://users.isy.liu.se/johanl/yalmip/');
 end
 
-% set YALMIP options struct in SDP_OPF (for details, see help sdpsettings) 
+% set YALMIP options struct in SDP_PF (for details, see help sdpsettings) 
 sdpopts = yalmip_options([], mpopt);
 
 % Change solver to YALMIP's branch-and-bound algorithm
@@ -131,7 +131,7 @@ if nbus > maxSystemSize
 end
 
 if ~ignore_angle_lim && (any(mpc.branch(:,ANGMIN) ~= -360) || any(mpc.branch(:,ANGMAX) ~= 360))
-    warning('insolvablepf_limitQ: Angle difference constraints are not implemented in SDP_OPF. Ignoring angle difference constraints.');
+    warning('insolvablepf_limitQ: Angle difference constraints are not implemented in SDP_PF. Ignoring angle difference constraints.');
 end
 
 % Some of the larger system (e.g., case2746wp) have generators 

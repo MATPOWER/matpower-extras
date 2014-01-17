@@ -30,10 +30,10 @@ function [maxcliques,E]=combineMaxCliques(maxcliques,E,maxNumberOfCliques,ndispl
 %           after combining maximal cliques. Values of E correspond to 
 %           indices of maxcliques.
 %
-%   [1] D.K. Molzahn, J. Holzer, B.C. Lesieutre, and C.L. DeMarco,
+%   [1] D.K. Molzahn, J.T. Holzer, B.C. Lesieutre, and C.L. DeMarco,
 %       "Implementation of a Large-Scale Optimal Power Flow Solver Based on
-%       Semidefinite Programming," Submitted to IEEE Transactions on Power
-%       Systems.
+%       Semidefinite Programming," IEEE Transactions on Power Systems,
+%       vol. 28, no. 4, pp. 3987-3998, November 2013.
 
 %   MATPOWER
 %   $Id$

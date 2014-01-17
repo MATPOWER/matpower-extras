@@ -1,7 +1,7 @@
 function [results,success,raw] = sdpopf_solver(om, mpopt)
-%SDP_OPF A semidefinite programming relaxtion of the OPF problem
+%SDPOPF_SOLVER A semidefinite programming relaxtion of the OPF problem
 %
-%   [RESULTS,SUCCESS,RAW] = SDP_OPF(OM,MPOPT)
+%   [RESULTS,SUCCESS,RAW] = SDPOPF_SOLVER(OM, MPOPT)
 %
 %   Inputs are an OPF model object and a MATPOWER options vector.
 %
@@ -84,16 +84,17 @@ zeroeval_tol        = mpopt.sdp_pf.zeroeval_tol;        %% Tolerance for conside
 mineigratio_tol     = mpopt.sdp_pf.mineigratio_tol;     %% Tolerance for considering the rank condition satisfied
 
 if upper(mpopt.opf.flow_lim(1)) ~= 'S' && upper(mpopt.opf.flow_lim(1)) ~= 'P'
-    error('sdpopf_solver: Only ''S'' and ''P'' options are currently implemented for MPOPT.opf.flow_lim when MPOPT.opf.ac.solver == ''SDPOPF''\n');
+    error('sdpopf_solver: Only ''S'' and ''P'' options are currently implemented for MPOPT.opf.flow_lim when MPOPT.opf.ac.solver == ''SDPOPF''');
 end
 
-% set YALMIP options struct in SDP_OPF (for details, see help sdpsettings) 
+% set YALMIP options struct in SDP_PF (for details, see help sdpsettings) 
 sdpopts = yalmip_options([], mpopt);
 
 if verbose > 0
-    fprintf('SDP_OPF Version 1.0, 26-November-2013  ');
+    v = sdp_pf_ver('all');
+    fprintf('SDPOPF Version %s, %s', v.Version, v.Date);
     if ~isempty(sdpopts.solver)
-        fprintf('Using %s.\n\n',upper(sdpopts.solver));
+        fprintf('  --  Using %s.\n\n',upper(sdpopts.solver));
     else
         fprintf('\n\n');
     end
@@ -118,7 +119,7 @@ tic;
 mpc = get_mpc(om);
 
 if toggle_dcline(mpc, 'status')
-    error('sdpopf_solver: DC lines are not implemented in SDP_OPF');
+    error('sdpopf_solver: DC lines are not implemented in SDP_PF');
 end
 
 nbus = size(mpc.bus,1);
@@ -127,15 +128,15 @@ nbranch = size(mpc.branch,1);
 bustype = mpc.bus(:,BUS_TYPE);
 
 if any(mpc.gencost(:,NCOST) > 3 & mpc.gencost(:,MODEL) == POLYNOMIAL)
-    error('sdpopf_solver: SDP_OPF is limited to quadratic cost functions.');
+    error('sdpopf_solver: SDPOPF is limited to quadratic cost functions.');
 end
 
 if size(mpc.gencost,1) > ngen && verbose >= 1 % reactive power costs are specified
-    warning('sdpopf_solver: Reactive power costs are not implemented in SDP_OPF. Ignoring reactive power costs.');
+    warning('sdpopf_solver: Reactive power costs are not implemented in SDPOPF. Ignoring reactive power costs.');
 end
 
 if ~ignore_angle_lim && (any(mpc.branch(:,ANGMIN) ~= -360) || any(mpc.branch(:,ANGMAX) ~= 360))
-    warning('sdpopf_solver: Angle difference constraints are not implemented in SDP_OPF. Ignoring angle difference constraints.');
+    warning('sdpopf_solver: Angle difference constraints are not implemented in SDPOPF. Ignoring angle difference constraints.');
 end
 
 % Enforce a minimum resistance for all branches
@@ -163,7 +164,7 @@ for i=1:nbus
 end
 
 % if any(mpc.gencost(:,MODEL) == PW_LINEAR)
-%     error('sdpopf_solver: Piecewise linear generator costs are not implemented in SDP_OPF.');
+%     error('sdpopf_solver: Piecewise linear generator costs are not implemented in SDPOPF.');
 % end
 
 % The code does not handle the case where a bus has both piecewise-linear
@@ -171,7 +172,7 @@ end
 for i=1:nbus
     genidx = find(mpc.gen(:,GEN_BUS) == mpc.bus(i,BUS_I));
     if ~all(mpc.gencost(genidx,MODEL) == PW_LINEAR) && ~all(mpc.gencost(genidx,MODEL) == POLYNOMIAL)
-        error('sdpopf_solver: Bus %i has generators with both piecewise-linear and quadratic generators, which is not supported in this version of SDP_OPF.',i);
+        error('sdpopf_solver: Bus %i has generators with both piecewise-linear and quadratic generators, which is not supported in this version of SDPOPF.',i);
     end
 end
 
@@ -252,7 +253,7 @@ for genidx=1:ngen
             c1(genidx) = mpc.gencost(genidx,COST) * Sbase^1;
             c0(genidx) = mpc.gencost(genidx,COST+1) * Sbase^0;
         else
-            error('sdpopf_solver: Only piecewise-linear and quadratic cost functions are implemented in SDP_OPF');
+            error('sdpopf_solver: Only piecewise-linear and quadratic cost functions are implemented in SDPOPF');
         end
     end
 end

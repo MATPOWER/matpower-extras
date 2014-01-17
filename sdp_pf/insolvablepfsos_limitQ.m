@@ -27,12 +27,12 @@ function insolvable = insolvablepfsos_limitQ(mpc,mpopt)
 %           0 means that the insolvability condition is indeterminant (a
 %           solution may or may not exist).
 %
-% [1] D.K. Molzahn, V. Dawar, B.C. Lesieutre, and C.L. DeMarco, "Sufficient
-%     Conditions for Power Flow Insolvability Considering Reactive Power
-%     Limited Generators with Applications to Voltage Stability Margins,"
-%     Submitted to Bulk Power System Dynamics and Control - IX. 
-%     Optimization, Security, and Control of the Emerging Power Grid, 2013
-%     IREP Symposium, August 25-30, 2013.   
+%   [1] D.K. Molzahn, V. Dawar, B.C. Lesieutre, and C.L. DeMarco, "Sufficient
+%       Conditions for Power Flow Insolvability Considering Reactive Power
+%       Limited Generators with Applications to Voltage Stability Margins,"
+%       in Bulk Power System Dynamics and Control - IX. Optimization,
+%       Security and Control of the Emerging Power Grid, 2013 IREP Symposium,
+%       25-30 August 2013.
 
 %   MATPOWER
 %   $Id$
@@ -78,7 +78,7 @@ if ~have_fcn('yalmip')
     error('insolvablepfsos_limitQ: The software package YALMIP is required to run insolvablepfsos_limitQ. See http://users.isy.liu.se/johanl/yalmip/');
 end
 
-% set YALMIP options struct in SDP_OPF (for details, see help sdpsettings) 
+% set YALMIP options struct in SDP_PF (for details, see help sdpsettings) 
 sdpopts = yalmip_options([], mpopt);
 
 %% Load data

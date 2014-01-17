@@ -56,7 +56,7 @@ else
     verbose = 0;
 end
 
-t0 = 'SDP_OPF : ';
+t0 = 'SDPOPF : ';
 mpopt = mpoption('opf.violation', 1e-6);
 mpopt = mpoption(mpopt, 'out.all', 0, 'verbose', verbose, ...
     'opf.ac.solver', 'SDPOPF', 'sdp_pf.eps_r', 0);

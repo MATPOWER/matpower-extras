@@ -6,7 +6,7 @@ function [cost] = combineCost(maxcliques,maxcliquesidx)
 %   number of scalar variables and linking constraints that will be 
 %   required after combining the maximal cliques specified in
 %   maxcliquesidx. This is the clique combination heuristic described in
-%   (PUBLICATION). Negative costs indicate that the heuristic predicts
+%   [1]. Negative costs indicate that the heuristic predicts
 %   decreased computational costs after combining the specified maximal
 %   cliques.
 %
@@ -18,7 +18,12 @@ function [cost] = combineCost(maxcliques,maxcliquesidx)
 %
 %   Outputs:
 %       COST : Scalar indicating the cost, as defined by the heuristic in
-%       (PUBLICATION) of combining the specified maximal cliques.
+%       [1] of combining the specified maximal cliques.
+%
+%   [1] D.K. Molzahn, J.T. Holzer, B.C. Lesieutre, and C.L. DeMarco,
+%       "Implementation of a Large-Scale Optimal Power Flow Solver Based on
+%       Semidefinite Programming," IEEE Transactions on Power Systems,
+%       vol. 28, no. 4, pp. 3987-3998, November 2013.
 
 %   MATPOWER
 %   $Id$

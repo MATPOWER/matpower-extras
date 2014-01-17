@@ -40,9 +40,10 @@ function [insolvable,Vslack_min,sigma,eta,mineigratio] = insolvablepf(mpc,mpopt)
 %   Note that this function uses a matrix completion decomposition and is
 %   therefore suitable for large systems. 
 %
-% [1] D.K. Molzahn, B.C. Lesieutre, and C.L. DeMarco, "A Sufficient Condition 
-%     for Power Flow Insolvability with Applications to Voltage Stability 
-%     Margins," Submitted to IEEE Transactions on Power Systems, 2012.
+% [1] D.K. Molzahn, B.C. Lesieutre, and C.L. DeMarco, "A Sufficient Condition
+%     for Power Flow Insolvability with Applications to Voltage Stability
+%     Margins," IEEE Transactions on Power Systems, vol. 28, no. 3,
+%     pp. 2592-2601, August 2013.
 %
 % [2] D.K. Molzahn, B.C. Lesieutre, and C.L. DeMarco, "A Sufficient Condition 
 %     for Power Flow Insolvability with Applications to Voltage Stability 
@@ -104,7 +105,7 @@ if ~have_fcn('yalmip')
     error('insolvablepf: The software package YALMIP is required to run insolvablepf. See http://users.isy.liu.se/johanl/yalmip/');
 end
 
-% set YALMIP options struct in SDP_OPF (for details, see help sdpsettings) 
+% set YALMIP options struct in SDP_PF (for details, see help sdpsettings) 
 sdpopts = yalmip_options([], mpopt);
 
 %% Handle generator reactive power limits
@@ -154,7 +155,7 @@ ngen = size(mpc.gen,1);
 nbranch = size(mpc.branch,1);
 
 if ~ignore_angle_lim && (any(mpc.branch(:,ANGMIN) ~= -360) || any(mpc.branch(:,ANGMAX) ~= 360))
-    warning('insolvablepf: Angle difference constraints are not implemented in SDP_OPF. Ignoring angle difference constraints.');
+    warning('insolvablepf: Angle difference constraints are not implemented in SDP_PF. Ignoring angle difference constraints.');
 end
 
 % Some of the larger system (e.g., case2746wp) have generators 
