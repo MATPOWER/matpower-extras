@@ -97,6 +97,8 @@ end
 sdpopts = yalmip_options([], mpopt);
 
 % Change solver to YALMIP's branch-and-bound algorithm
+sdpopts = sdpsettings(sdpopts,'solver','bnb','bnb.solver',sdpopts.solver);
+
 if strcmp(sdpopts.solver, 'sedumi') || strcmp(sdpopts.solver,'sdpt3')
     sdpopts = sdpsettings(sdpopts,'solver','bnb');
 end
