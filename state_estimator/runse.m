@@ -181,7 +181,12 @@ if fname
     if fd == -1
         error(msg);
     else
-        printpf(baseMVA, bus, gen, branch, [], success, et, fd, mpopt);
+        if mpopt.out.all == 0
+            printpf(baseMVA, bus, gen, branch, [], success, et, fd, ...
+                mpoption(mpopt, 'out.all', -1));
+        else
+            printpf(baseMVA, bus, gen, branch, [], success, et, fd, mpopt);
+        end
         fclose(fd);
     end
 end
