@@ -130,7 +130,7 @@ if isempty(offers) || isempty(offers.P.qty)
     bids   = struct( 'P', struct( 'qty', q(L, :), 'prc', p(L, :) ) );
 end
 if isempty(bids)
-	np = size(offers.P.qty, 2);
+    np = size(offers.P.qty, 2);
     bids = struct( 'P', struct('qty', zeros(0,np), 'prc', zeros(0,np)));
 end
 
