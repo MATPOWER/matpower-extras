@@ -16,9 +16,10 @@ function [Fv, Pv, Qv, Vv] = checklimits(mpc, ac, quiet)
 %                       At this point, the code *is* the documentation.
 
 %   MATPOWER
+%   Copyright (c) 2014-2015 by Power System Engineering Research Center (PSERC)
+%   by Ray Zimmerman, PSERC Cornell
+%
 %   $Id$
-%   by Ray Zimmerman
-%   Copyright (c) 2014 by Ray Zimmerman
 %
 %   This file is part of MATPOWER.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).

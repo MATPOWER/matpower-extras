@@ -41,9 +41,10 @@ function [sdpvec]=mat2vec(sdpmat, Wref_dd, Wref_qq, Wref_dq, matidx_dd, matidx_q
 %           decomposed matrix. The fourth column is the value of the entry.
 
 %   MATPOWER
-%   $Id$
+%   Copyright (c) 2013-2015 by Power System Engineering Research Center (PSERC)
 %   by Daniel Molzahn, PSERC U of Wisc, Madison
-%   Copyright (c) 2013-2014 by Power System Engineering Research Center (PSERC)
+%
+%   $Id$
 %
 %   This file is part of MATPOWER.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
