@@ -13,7 +13,7 @@ function [V, converged, i] = state_est(branch, Ybus, Yf, Yt, Sbus, V0, ref, pv, 
 %
 %   This file is part of MATPOWER.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://matpower.org/ for more info.
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 [F_BUS, T_BUS, BR_R, BR_X, BR_B, RATE_A, RATE_B, RATE_C, ...
     TAP, SHIFT, BR_STATUS, PF, QF, PT, QT, MU_SF, MU_ST, ...

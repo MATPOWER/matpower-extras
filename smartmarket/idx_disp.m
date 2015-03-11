@@ -23,7 +23,7 @@ function [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY] = idx_disp
 %
 %   This file is part of MATPOWER.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://matpower.org/ for more info.
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %% define the indices
 QUANTITY        = 1;    %% quantity produced by generator in MW

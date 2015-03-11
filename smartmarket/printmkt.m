@@ -17,7 +17,7 @@ function printmkt(r, t, dispatch, success, fd, mpopt)
 %
 %   This file is part of MATPOWER.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://matpower.org/ for more info.
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %%----- initialization -----
 %% default arguments

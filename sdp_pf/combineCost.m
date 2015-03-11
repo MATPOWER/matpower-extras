@@ -33,7 +33,7 @@ function [cost] = combineCost(maxcliques,maxcliquesidx)
 %
 %   This file is part of MATPOWER.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://matpower.org/ for more info.
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 maxcliques1 = maxcliques{maxcliquesidx(1)};
 maxcliques2 = maxcliques{maxcliquesidx(2)};

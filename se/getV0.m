@@ -14,7 +14,7 @@ function V0 = getV0(bus, gen, type_initialguess, V0)
 %
 %   This file is part of MATPOWER.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://matpower.org/ for more info.
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 %% define named indices into bus, gen, branch matrices
 [PQ, PV, REF, NONE, BUS_I, BUS_TYPE, PD, QD, GS, BS, BUS_AREA, VM, ...

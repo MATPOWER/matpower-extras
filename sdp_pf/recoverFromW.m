@@ -41,7 +41,7 @@ function [quantity] = recoverFromW(sdpmat, Wref_dd, Wref_qq, Wref_dq, matidx_dd,
 %
 %   This file is part of MATPOWER.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://matpower.org/ for more info.
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
 
 [Ykvec] = mat2vec(sdpmat, Wref_dd, Wref_qq, Wref_dq, matidx_dd, matidx_qq, matidx_dq);
 
