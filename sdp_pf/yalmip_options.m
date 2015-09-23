@@ -91,7 +91,15 @@ else
 end
 
 %% -----  set default options for YALMIP  -----
-opt = sdpsettings;
+if have_fcn('matlab', 'vnum') >= 8.006 && have_fcn('cplex', 'vnum') <= 12.006002
+    s = warning('QUERY', 'MATLAB:lang:badlyScopedReturnValue');
+    warning('OFF', 'MATLAB:lang:badlyScopedReturnValue');
+    opt = sdpsettings;
+    warning(s.state, 'MATLAB:lang:badlyScopedReturnValue');
+else
+    opt = sdpsettings;
+end
+
 opt.verbose = verbose >= 1;
 
 % Store defaults for SeDuMi and SDPT3. Use a default sdpsettings object for

@@ -285,6 +285,9 @@ end
 
 % Preserve warning settings
 S = warning;
+if have_fcn('matlab', 'vnum') >= 8.006 && have_fcn('cplex', 'vnum') <= 12.006002
+    warning('OFF', 'MATLAB:lang:badlyScopedReturnValue');
+end
 
 sol = solvesos(constraints,[],sosopts,pvec);
 
