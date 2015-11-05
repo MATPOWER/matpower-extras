@@ -112,7 +112,7 @@ else                                %% AC formulation
     end
     
     %% update data matrices with solution
-    [bus, gen, branch] = pfsoln(baseMVA, bus, gen, branch, Ybus, Yf, Yt, V, ref, pv, pq);
+    [bus, gen, branch] = pfsoln(baseMVA, bus, gen, branch, Ybus, Yf, Yt, V, ref, pv, pq, mpopt);
 end
 et = etime(clock, t0);
 
@@ -138,7 +138,7 @@ on = find(gen(:, GEN_STATUS) > 0);      %% which generators are on?
 gbus = gen(on, GEN_BUS);                %% what buses are they at?
 gen(on, PG) = real(Sbus(gbus)) * baseMVA + bus(gbus, PD);   %% inj P + local Pd
 %% ... line flows, reference bus injections, etc.
-[bus, gen, branch] = pfsoln(baseMVA, bus, gen, branch, Ybus, Yf, Yt, V, ref, pv, pq);
+[bus, gen, branch] = pfsoln(baseMVA, bus, gen, branch, Ybus, Yf, Yt, V, ref, pv, pq, mpopt);
 
 %% plot differences from load flow solution
 Pfe=branch(:,PF);
