@@ -44,7 +44,7 @@ nl = size(branch, 1);       %% number of lines
 
 %% check that bus numbers are equal to indices to bus (one set of bus numbers)
 if any(bus(:, BUS_I) ~= (1:nb)')
-    error('makeIncidence: buses must appear in order by bus number')
+    error('makeIncidence: buses must be numbered consecutively in bus matrix; use ext2int() to convert to internal ordering')
 end
 
 %% build connection matrices
