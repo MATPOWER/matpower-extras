@@ -362,7 +362,7 @@ end
 
 % Preserve warning settings
 S = warning;
-if have_fcn('matlab', 'vnum') >= 8.006 && have_fcn('cplex', 'vnum') <= 12.006002
+if have_fcn('matlab', 'vnum') >= 8.006 && have_fcn('cplex', 'vnum') <= 12.006003
     warning('OFF', 'MATLAB:lang:badlyScopedReturnValue');
 end
 

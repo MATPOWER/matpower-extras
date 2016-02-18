@@ -91,7 +91,7 @@ else
 end
 
 %% -----  set default options for YALMIP  -----
-if have_fcn('matlab', 'vnum') >= 8.006 && have_fcn('cplex', 'vnum') <= 12.006002
+if have_fcn('matlab', 'vnum') >= 8.006 && have_fcn('cplex', 'vnum') <= 12.006003
     s = warning('QUERY', 'MATLAB:lang:badlyScopedReturnValue');
     warning('OFF', 'MATLAB:lang:badlyScopedReturnValue');
     opt = sdpsettings;
