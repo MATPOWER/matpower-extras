@@ -42,7 +42,7 @@ function [handle] = plot_mpc(mpc, varargin)
 %   citation of the above paper would be appreciated.
 %
 %   Contact:
-%     Paul Cuffe, University College Dublin, September 2009
+%     Paul Cuffe, University College Dublin, March 2016
 %     paul.cuffe@ucd.ie
 
 %   MATPOWER
