@@ -1,5 +1,5 @@
 function [nVAR, nEQ, nINEQ, C, c, A, a, B, b, S] = qcqp_opf(casedata,model)
-%qcqp_opf   Builds a quadratically-constrained quadratic program.
+%QCQP_OPF   Builds a quadratically-constrained quadratic program.
 %   [nVAR, nEQ, nINEQ, C, c, A, a, B, b] = QCQP_OPF(CASEDATA,MODEL)
 %
 %   Inputs (all are optional):
@@ -72,18 +72,22 @@ function [nVAR, nEQ, nINEQ, C, c, A, a, B, b, S] = qcqp_opf(casedata,model)
 %   3) A{1}, ..., A{nEQ}, B{1}, ..., and B{nINEQ} are complex matrices;
 %   4) for k = 1,...,nINEQ, the inequality x' * B{k} * x <= b(k) is defined
 %   by real(x' * B{k} * x) <= real(b(k)) and imag(x' * B{k} * x) <=
-%   imag(b(k)).
+%   imag(b(k));
+%   5) x corresponds to the complex voltages at each bus.
 %
 %   If MODEL == 1, then
 %   1) x is complex vector;
 %   2) a and b are real vectors;
 %   3) C, A{1}, ..., A{nEQ}, B{1}, ..., and B{nINEQ} are Hermitian
-%   matrices.
+%   matrices;
+%   4) x corresponds to the complex voltages at each bus.
 %
 %   If MODEL == 2, then
 %   1) x, a, and b are real vectors;
 %   2) C, A{1}, ..., A{nEQ}, B{1}, ..., and B{nINEQ} are real symmetric
-%   matrices.
+%   matrices;
+%   3) x corresponds to the real parts of the complex voltages at each bus 
+%   followed by the imaginary parts of the complex voltages at each bus.
 %
 %   When publishing results based on this code, please cite:
 %
@@ -144,7 +148,7 @@ nLFbound = length(LFbound); % number of lines with flow bounds
 %% build cost matrix 
 % linear function of active power
 nbus = size(mpc.bus,1); % number of buses
-nVAR = nbus; % number of complex variables 
+nVAR = nbus; % number of variables 
 costs = zeros(nbus,1);
 costs(mpc.gen(:,GEN_BUS)) = mpc.gencost(:,COST+1);
 P = sparse(diag(costs)*Ybus);
@@ -153,7 +157,7 @@ c = sum(costs.*mpc.bus(:,PD)) + sum(mpc.gencost(:,COST+2));
 
 %% build equality matrix and vector
 % power balance equations
-nEQ = nPQbus; % number of complex equality constraints
+nEQ = nPQbus; % number of constraints
 A = cell(nEQ,1); % initializing cell array
 a = zeros(nEQ,1); % initializing vector
 for k = 1:nPQbus
@@ -317,5 +321,28 @@ end
 % results = runopf(mpc,mpoption('opf.ac.solver','MIPS','opf.flow_lim',...
 %           'I','out.suppress_detail','1'));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-end
 
+%% Testing qcqp_opf program with cvx and sedumi
+% % upload data
+% [nVAR, nEQ, nINEQ, C, c, A, a, B, b, S] = qcqp_opf(casedata,1);
+% 
+% % compute convex relaxation of ACOPF using upload
+% cvx_begin sdp
+%     cvx_precision best
+%     cvx_solver sedumi
+%     variable Z(nVAR,nVAR) hermitian
+%     
+%     minimize( vec(C)'*vec(Z) + c ) % objective function
+%     
+%     for k = 1:nEQ
+%         vec(A{k})'*vec(Z) == a(k); % equality constraints
+%     end
+%      
+%     for k = 1:nINEQ
+%         vec(B{k})'*vec(Z) <= b(k); % inequality constraints
+%     end
+%     
+%     Z >= 0;
+% cvx_end
+
+end
