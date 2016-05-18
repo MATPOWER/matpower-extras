@@ -16,10 +16,8 @@ function [BoundBus]=DefBoundary(mpc,ExBus)
 %   buses.
 
 %   MATPOWER
-%   Copyright (c) 2014-2015 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2014-2016 by Power System Engineering Research Center (PSERC)
 %   by Yujia Zhu, PSERC ASU
-%
-%   $Id$
 %
 %   This file is part of MATPOWER.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
