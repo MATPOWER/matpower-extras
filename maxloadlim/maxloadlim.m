@@ -26,6 +26,14 @@ function results = maxloadlim(mpc,dir_mll,varargin)
 %   See also PREPARE_MAXLOADLIM, POSTPROC_MAXLOADLIM, PRINT_MAXLOADLIM, 
 %   RUNOPF.
 
+%   MATPOWER
+%   Copyright (c) 2015-2016 by Power System Engineering Research Center (PSERC)
+%   by Camille Hamon
+%
+%   This file is part of MATPOWER.
+%   Covered by the 3-clause BSD License (see LICENSE file for details).
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
+
 define_constants;
 
 %% Checking the options, if any
@@ -61,5 +69,4 @@ results = postproc_maxloadlim(results,dir_mll);
 %% Printing
 if options.verbose
     print_maxloadlim(mpc,results);
-end
 end

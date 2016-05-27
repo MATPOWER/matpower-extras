@@ -14,6 +14,14 @@ function mpc_vl = prepare_maxloadlim(mpc,dir_mll,varargin)
 %     bus voltage limits are not enforced. This option allows for defining
 %     a set of buses at which the voltage limits are enforced.
 
+%   MATPOWER
+%   Copyright (c) 2015-2016 by Power System Engineering Research Center (PSERC)
+%   by Camille Hamon
+%
+%   This file is part of MATPOWER.
+%   Covered by the 3-clause BSD License (see LICENSE file for details).
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
+
 define_constants;
 n_gen = size(mpc.gen,1);
 
@@ -163,4 +171,3 @@ end
 mpc_vl = add_userfcn(mpc_vl, 'ext2int', @userfcn_direction_mll_ext2int);
 % Build the constraint for enforcing the direction of load increase
 mpc_vl = add_userfcn(mpc_vl, 'formulation', @userfcn_direction_mll_formulation);
-end

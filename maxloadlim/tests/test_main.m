@@ -1,3 +1,13 @@
+%TESTS_MAIN
+
+%   MATPOWER
+%   Copyright (c) 2015-2016 by Power System Engineering Research Center (PSERC)
+%   by Camille Hamon
+%
+%   This file is part of MATPOWER.
+%   Covered by the 3-clause BSD License (see LICENSE file for details).
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
+
 addpath('../');
 % Run specific tests as well?
 run_specific = 0;

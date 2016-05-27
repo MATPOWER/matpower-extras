@@ -7,6 +7,14 @@ function results = postproc_maxloadlim(results,dir_mll)
 %   found in the direction of load increase defined by DIR_MLL. It returns
 %   the updated struct RESULTS.
 
+%   MATPOWER
+%   Copyright (c) 2015-2016 by Power System Engineering Research Center (PSERC)
+%   by Camille Hamon
+%
+%   This file is part of MATPOWER.
+%   Covered by the 3-clause BSD License (see LICENSE file for details).
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
+
 define_constants;
 
 % Transforming the dispatchable gen back to loads
@@ -61,4 +69,3 @@ gen_a = shadow_price_Vm(results.gen(:,GEN_BUS))~= 0;
 gen_b = shadow_price_Qg ~= 0;
 results.bif.gen_a = gen_a;
 results.bif.gen_b = gen_b;
-end

@@ -2,6 +2,14 @@ function print_maxloadlim(mpc,results)
 % PRINT_MAXLOADLIM(MPC,RESULTS) prints the results in RESULTS of the 
 % maximum loadability problems defined from the base case MPC.
 
+%   MATPOWER
+%   Copyright (c) 2015-2016 by Power System Engineering Research Center (PSERC)
+%   by Camille Hamon
+%
+%   This file is part of MATPOWER.
+%   Covered by the 3-clause BSD License (see LICENSE file for details).
+%   See http://www.pserc.cornell.edu/matpower/ for more info.
+
 define_constants;
 
 % Print some global information about the parameters and results of the
@@ -46,6 +54,4 @@ for i = 1:size(results.gen,1)
         fprintf('    LIB');
     end
     fprintf('\n');
-end
-
 end
