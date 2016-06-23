@@ -145,13 +145,16 @@ nLFbound = length(LFbound); % number of lines with flow bounds
 
 %% build cost matrix 
 % linear function of active power
+if sum( mpc.gencost(:,MODEL) ~= 2*ones(size(mpc.gen,1),1) )
+    error('mpc.gencost: the objective must be a polynomial and cannot contain piecewise linear terms');
+end
 nbus = size(mpc.bus,1); % number of buses
 nVAR = nbus; % number of variables 
 costs = zeros(nbus,1);
-costs(mpc.gen(:,GEN_BUS)) = mpc.gencost(:,COST+1);
+costs(mpc.gen(:,GEN_BUS)) = mpc.gencost(:,end-1); % extracting linear cost coefficients that multiply active power in optimal power flow objective function
 P = sparse(diag(costs)*Ybus);
 C = (P'+P)/2;
-c = sum(costs.*mpc.bus(:,PD)) + sum(mpc.gencost(:,COST+2));
+c = sum(costs.*mpc.bus(:,PD)) + sum(mpc.gencost(:,end)); % extracting constant costs in optimal power flow objective function
 
 %% build equality matrix and vector
 % power balance equations
@@ -163,9 +166,9 @@ for k = 1:nPQbus
     % The next two lines encode 
     % V(num)*I(num)' = I' e_num e_num' V = ...
     % V' ( Ybus' e_num e_num' ) V = - Pdem(num) - 1i*Qdem(num)
-    % where e_num is the vector of size nVAR that contains only one nonzero 
-    % element in position num equal to 1. Matrix Ybus' e_num e_num' is 
-    % equal to Ybus' where all columns except column k are set to zero.
+    % where e_num is the column vector of size nVAR that contains only one 
+    % nonzero element in position num equal to 1. Matrix Ybus' e_num e_num'
+    % is equal to Ybus' where all columns except column k are set to zero.
     A{k} = sparse(1:nVAR, num, Ybus(num,:)', nVAR, nVAR);
     a(k) = -mpc.bus(num,PD) - 1i*mpc.bus(num,QD); 
 end
@@ -207,8 +210,8 @@ for k = 1:nPVbus
     num = PVbus(k); % bus number
     % The next six lines encode
     % Smin(num) - Sdem(num) <= V(num)*I(num)' <= Smax(num) - Sdem(num)
-    % where Smin and Smax are complex lower and upper bounds on complex
-    % power generation, and where Sdem is the complex power demand.
+    % where Smin and Smax are lower and upper bounds on complex power 
+    % generation, and where Sdem is the complex power demand.
     B{count+2*k-1} = sparse(1:nVAR, num,  Ybus(num,:)', nVAR, nVAR);
     B{count+2*k}   = sparse(1:nVAR, num, -Ybus(num,:)', nVAR, nVAR);
     mult_gen = find(mpc.gen(:,GEN_BUS) == num);
@@ -319,28 +322,3 @@ end
 % results = runopf(mpc,mpoption('opf.ac.solver','MIPS','opf.flow_lim',...
 %           'I','out.suppress_detail','1'));
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-%% Testing qcqp_opf program with cvx and sedumi
-% % upload data
-% [nVAR, nEQ, nINEQ, C, c, A, a, B, b, S] = qcqp_opf(casedata,1);
-% 
-% % compute convex relaxation of ACOPF using upload
-% cvx_begin sdp
-%     cvx_precision best
-%     cvx_solver sedumi
-%     variable Z(nVAR,nVAR) hermitian
-%     
-%     minimize( vec(C)'*vec(Z) + c ) % objective function
-%     
-%     for k = 1:nEQ
-%         vec(A{k})'*vec(Z) == a(k); % equality constraints
-%     end
-%      
-%     for k = 1:nINEQ
-%         vec(B{k})'*vec(Z) <= b(k); % inequality constraints
-%     end
-%     
-%     Z >= 0;
-% cvx_end
-
-end
