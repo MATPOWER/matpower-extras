@@ -14,22 +14,22 @@ function [nVAR, nEQ, nINEQ, C, c, A, a, B, b, S] = qcqp_opf(casedata,model)
 %       nVAR : number of variables
 %       nEQ : number of equality constraints
 %       nINEQ : number of inequality constraints
-%       C : square matrix of size nVAR defining the coefficients in the 
+%       C : square matrix of size nVAR defining the coefficients in the
 %       cost function
-%       c : real number defining the constant term in the cost function 
-%       A : cell array of square matrices, each of size nVAR, defining the 
-%       coefficients in the equality constraints 
+%       c : real number defining the constant term in the cost function
+%       A : cell array of square matrices, each of size nVAR, defining the
+%       coefficients in the equality constraints
 %       a : column vector of size nEQ defining the constant terms in the
 %       equality constraints
-%       B : cell array of square matrices, each of size nVAR, defining the 
+%       B : cell array of square matrices, each of size nVAR, defining the
 %       coefficients in the inequality constraints
-%       b : column vector of size nINEQ defining the constant terms in the 
+%       b : column vector of size nINEQ defining the constant terms in the
 %       inequality constraints
 %       S : two row matrix which contains the sparsity pattern of the
 %       quadratically-constrained quadratic program, that is to say the set
-%       of indexes i and j between 1 and nVAR such that either x_i x_j, 
-%       x_i x_j', or x_i' x_j has a nonzero coefficient in the objective or 
-%       constraint functions. (The apostrophe stands for complex 
+%       of indexes i and j between 1 and nVAR such that either x_i x_j,
+%       x_i x_j', or x_i' x_j has a nonzero coefficient in the objective or
+%       constraint functions. (The apostrophe stands for complex
 %       conjugate).
 %
 %   Examples:
@@ -40,27 +40,27 @@ function [nVAR, nEQ, nINEQ, C, c, A, a, B, b, S] = qcqp_opf(casedata,model)
 %       [nVAR, nEQ, nINEQ, C, c, A, a, B, b, S] = qcqp_opf(case9241pegase);
 %
 %   The optimal power flow problem can be viewed as an instance of
-%   quadratically-constrained quadratic programming. In order for this to 
-%   be true, we consider the objective function of the optimal power flow 
+%   quadratically-constrained quadratic programming. In order for this to
+%   be true, we consider the objective function of the optimal power flow
 %   problem to be a linear function of active power. Higher degree terms
 %   are discarded from the objective function. Moreover, current line flow
-%   constraints are enforced instead of apparent line flow constraints in 
-%   order to have quadratic constraints only. The optimal power flow 
-%   problem remains non-convex and non-deterministic polynomial-time hard 
-%   despite the slightly simplified framework we consider.
+%   constraints are enforced instead of apparent line flow constraints in
+%   order to have quadratic constraints only. The optimal power flow
+%   problem remains non-convex despite the slightly simplified framework
+%   we consider.
 %
-%   The output of this code defines the problem that consists in solving 
+%   The output of this code defines the problem that consists in solving
 %   for a column vector variable x of size nVAR with the aim to
 %
-%   minimize  
+%   minimize
 %
 %   x' * C * x   +   c
 %
-%   subject to nEQ equality constraints: 
+%   subject to nEQ equality constraints:
 %
 %   x' * A{k} * x = a(k) ,   k = 1,...,nEQ,
 %
-%   and subject to nINEQ inequality constraints 
+%   and subject to nINEQ inequality constraints
 %
 %   x' * B{k} * x <= b(k) ,   k = 1,...,nINEQ,
 %
@@ -86,7 +86,7 @@ function [nVAR, nEQ, nINEQ, C, c, A, a, B, b, S] = qcqp_opf(casedata,model)
 %   1) x, a, and b are real vectors;
 %   2) C, A{1}, ..., A{nEQ}, B{1}, ..., and B{nINEQ} are real symmetric
 %   matrices;
-%   3) x corresponds to the real parts of the complex voltages at each bus 
+%   3) x corresponds to the real parts of the complex voltages at each bus
 %   followed by the imaginary parts of the complex voltages at each bus.
 %
 %   When publishing results based on this code, please cite:
@@ -143,13 +143,13 @@ nPVbus = length(PVbus); % number of PV buses
 LFbound = find(mpc.branch(:,RATE_A)>0); % numbers of branches with flow bounds
 nLFbound = length(LFbound); % number of lines with flow bounds
 
-%% build cost matrix 
+%% build cost matrix
 % linear function of active power
 if sum( mpc.gencost(:,MODEL) ~= 2*ones(size(mpc.gen,1),1) )
     error('mpc.gencost: the objective must be a polynomial and cannot contain piecewise linear terms');
 end
 nbus = size(mpc.bus,1); % number of buses
-nVAR = nbus; % number of variables 
+nVAR = nbus; % number of variables
 costs = zeros(nbus,1);
 costs(mpc.gen(:,GEN_BUS)) = mpc.gencost(:,end-1); % extracting linear cost coefficients that multiply active power in optimal power flow objective function
 P = sparse(diag(costs)*Ybus);
@@ -163,14 +163,14 @@ A = cell(nEQ,1); % initializing cell array
 a = zeros(nEQ,1); % initializing vector
 for k = 1:nPQbus
     num = PQbus(k); % bus number
-    % The next two lines encode 
+    % The next two lines encode
     % V(num)*I(num)' = I' e_num e_num' V = ...
     % V' ( Ybus' e_num e_num' ) V = - Pdem(num) - 1i*Qdem(num)
-    % where e_num is the column vector of size nVAR that contains only one 
+    % where e_num is the column vector of size nVAR that contains only one
     % nonzero element in position num equal to 1. Matrix Ybus' e_num e_num'
     % is equal to Ybus' where all columns except column k are set to zero.
     A{k} = sparse(1:nVAR, num, Ybus(num,:)', nVAR, nVAR);
-    a(k) = -mpc.bus(num,PD) - 1i*mpc.bus(num,QD); 
+    a(k) = -mpc.bus(num,PD) - 1i*mpc.bus(num,QD);
 end
 
 %% build inequality matrix and vector
@@ -183,7 +183,7 @@ b = zeros(nINEQ,1);
 for k = 1:nbus
     % The next three lines encode
     % Vmin(k)^2 <= |V(k)|^2 <= Vmax(k)^2
-    B{2*k-1} = sparse(k,k,1,nbus,nbus); 
+    B{2*k-1} = sparse(k,k,1,nbus,nbus);
     B{2*k}   = sparse(k,k,-1,nbus,nbus);
     b(2*k-1:2*k) = [ mpc.bus(k,VMAX).^2 ; -mpc.bus(k,VMIN).^2 ] ;
 end
@@ -198,7 +198,7 @@ for k = 1:nLFbound
     % |If(num)|^2 = V' * ( yf'*yf ) * V <= Imax(num)^2
     % |It(num)|^2 = V' * ( yt'*yt ) * V <= Imax(num)^2
     % Per unit scaling is used for better conditioning.
-    B{count+2*k-1} = sparse(yf'*yf); 
+    B{count+2*k-1} = sparse(yf'*yf);
     B{count+2*k}   = sparse(yt'*yt);
     b(count+(2*k-1:2*k)) = [ (mpc.branch(num,RATE_A)/mpc.baseMVA).^2 ; ...
                              (mpc.branch(num,RATE_A)/mpc.baseMVA).^2 ];
@@ -210,7 +210,7 @@ for k = 1:nPVbus
     num = PVbus(k); % bus number
     % The next six lines encode
     % Smin(num) - Sdem(num) <= V(num)*I(num)' <= Smax(num) - Sdem(num)
-    % where Smin and Smax are lower and upper bounds on complex power 
+    % where Smin and Smax are lower and upper bounds on complex power
     % generation, and where Sdem is the complex power demand.
     B{count+2*k-1} = sparse(1:nVAR, num,  Ybus(num,:)', nVAR, nVAR);
     B{count+2*k}   = sparse(1:nVAR, num, -Ybus(num,:)', nVAR, nVAR);
@@ -271,10 +271,10 @@ if model == 2
     for k = 1:nEQ/2
         RA{2*k-1} = (A{k}+A{k}')/2;
         RA{2*k-1} = [real(RA{2*k-1}) -imag(RA{2*k-1}); ...
-                     imag(RA{2*k-1})  real(RA{2*k-1})];        
+                     imag(RA{2*k-1})  real(RA{2*k-1})];
         RA{2*k}   = (A{k}-A{k}')/(2*1i);
         RA{2*k}   = [real(RA{2*k}) -imag(RA{2*k}); ...
-                     imag(RA{2*k})  real(RA{2*k})];        
+                     imag(RA{2*k})  real(RA{2*k})];
         ra(2*k-1) = real(a(k));
         ra(2*k)   = imag(a(k));
     end
@@ -293,10 +293,10 @@ if model == 2
     for k = (2*nbus+2*nLFbound+1):(2*nbus+2*nLFbound+2*nPVbus)
         RB{count+2*k-1} = (B{k}+B{k}')/2;
         RB{count+2*k-1} = [real(RB{count+2*k-1}) -imag(RB{count+2*k-1}); ...
-                           imag(RB{count+2*k-1})  real(RB{count+2*k-1})];  
+                           imag(RB{count+2*k-1})  real(RB{count+2*k-1})];
         RB{count+2*k}   = (B{k}-B{k}')/(2*1i);
         RB{count+2*k}   = [real(RB{count+2*k}) -imag(RB{count+2*k}); ...
-                           imag(RB{count+2*k})  real(RB{count+2*k})];          
+                           imag(RB{count+2*k})  real(RB{count+2*k})];
         rb(count+2*k-1) = real(b(k));
         rb(count+2*k)   = imag(b(k));
     end
