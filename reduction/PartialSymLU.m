@@ -98,16 +98,22 @@ while RowIndex<=length(BoundBus)+Stop
             for i = 1:Counter
                 SelfRef=LinkArray(i);
                 if SelfRef<=Stop
+                    if CIndxEQ==0
+                        StFlag=0;
+                    end
                     [CIndxEQ,ERPEQ,MinNod,Switch,ChainFlag] = EQRODAssignment(ERPU,CIndxU,CIndxEQ,ERPEQ,MinNod,Switch,SelfRef,RowIndex,Chain,MinNod1);
+                    if StFlag==0&&any(CIndxEQ)
+                        StFlag=1;
+                    end
                     if MinNod>RowIndex&&MinNod~=MinNod0||(MinNod1~=MinNod&&ChainFlag~=1)
                         if MinNod1~=MinNod0
-                            if RowIndex>Stop+1&&MinNod1~=MinNod&&Chain(MinNod1)==0
+                            if StFlag~=1&&MinNod1~=MinNod&&Chain(MinNod1)==0
                                 Link(SelfRef1)=0;
                                 % If the chain breaks, record where and which
                                 % row to be reconected
                                 Chain(MinNod1)=Link(MinNod1);
                             end
-                        elseif RowIndex>Stop+1&&MinNod1~=MinNod&&ChainFlag==0
+                        elseif StFlag~=1&&MinNod1~=MinNod&&ChainFlag==0
                             Link(SelfRef1)=0;
                             
                         end
