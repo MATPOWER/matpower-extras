@@ -3,7 +3,7 @@ function outputsesoln(idx, sigma, z, z_est, error_sqrsum)
 %   created by Rui Bo on 2008/01/14
 
 %   MATPOWER
-%   Copyright (c) 2009-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2009-2016, Power Systems Engineering Research Center (PSERC)
 %   by Rui Bo
 %
 %   This file is part of MATPOWER.

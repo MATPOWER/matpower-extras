@@ -10,7 +10,7 @@ function qcqp_opf_test(casedata)
 %   NOTE: Requires CVX and SeDuMi.
 
 %   MATPOWER
-%   Copyright (c) 2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2016, Power Systems Engineering Research Center (PSERC)
 %   by Cedric Josz, Jean Maeght, Stephane Fliscounakis, and Patrick Panciatici
 %
 %   This file is part of MATPOWER.

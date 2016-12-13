@@ -20,7 +20,7 @@ function [CIndx,ERP,DataB]=BuildYMat(NFROM,NTO,BraNum,LineB,BCIRC,BusNum,NUMB,Se
 %   DataB: 1*n array, includes admittance values in the admittance matrix
 
 %   MATPOWER
-%   Copyright (c) 2014-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2014-2016, Power Systems Engineering Research Center (PSERC)
 %   by Yujia Zhu, PSERC ASU
 %
 %   This file is part of MATPOWER.

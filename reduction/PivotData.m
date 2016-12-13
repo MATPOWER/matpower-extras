@@ -23,7 +23,7 @@ function [DataB,ERP,CIndx,PivOrd,PivInd] = PivotData(DataB,ERP,CIndx,ExBus,NUMB,
 %   PivInd: 1*n array, includes bus ordering after pivotting
 
 %   MATPOWER
-%   Copyright (c) 2014-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2014-2016, Power Systems Engineering Research Center (PSERC)
 %   by Yujia Zhu, PSERC ASU
 %
 %   This file is part of MATPOWER.

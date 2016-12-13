@@ -35,7 +35,7 @@ function [mpcreduced,Link,BCIRCr]=MPReduction(mpc,ExBusOrig,Pf_flag)
 % installed.
 
 %   MATPOWER
-%   Copyright (c) 2014-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2014-2016, Power Systems Engineering Research Center (PSERC)
 %   by Yujia Zhu, PSERC ASU
 %
 %   This file is part of MATPOWER.

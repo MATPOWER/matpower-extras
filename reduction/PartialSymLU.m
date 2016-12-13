@@ -37,7 +37,7 @@ function [ERPU,CIndxU,ERPEQ,CIndxEQ] = PartialSymLU(CIndx,ERP,dim,Stop,BoundBus)
 %       can only span the boundary buses).
 
 %   MATPOWER
-%   Copyright (c) 2014-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2014-2016, Power Systems Engineering Research Center (PSERC)
 %   by Yujia Zhu, PSERC ASU
 %
 %   This file is part of MATPOWER.

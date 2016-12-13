@@ -52,7 +52,7 @@ function [insolvable,Vslack_min,sigma,eta,mineigratio] = insolvablepf(mpc,mpopt)
 %     Available: http://arxiv.org/abs/1204.6285.
 
 %   MATPOWER
-%   Copyright (c) 2013-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2013-2016, Power Systems Engineering Research Center (PSERC)
 %   by Daniel Molzahn, PSERC U of Wisc, Madison
 %   and Ray Zimmerman, PSERC Cornell
 %

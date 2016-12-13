@@ -19,7 +19,7 @@ function [mpc,ExBus]=PreProcessData(mpc,ExBus)
 % ExBus: 1*n array, updated list of external buses
 
 %   MATPOWER
-%   Copyright (c) 2014-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2014-2016, Power Systems Engineering Research Center (PSERC)
 %   by Yujia Zhu, PSERC ASU
 %
 %   This file is part of MATPOWER.

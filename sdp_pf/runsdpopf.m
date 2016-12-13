@@ -48,7 +48,7 @@ function varargout = runsdpopf(casedata, mpopt, fname, solvedcase)
 %   See also RUNOPF.
 
 %   MATPOWER
-%   Copyright (c) 1996-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2016, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %   and Daniel Molzahn, PSERC U of Wisc, Madison
 %

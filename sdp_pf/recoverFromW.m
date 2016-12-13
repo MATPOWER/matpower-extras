@@ -34,7 +34,7 @@ function [quantity] = recoverFromW(sdpmat, Wref_dd, Wref_qq, Wref_dq, matidx_dd,
 %           the 2*nbus by 2*nbus W matrix using the decomposed matrices.
 
 %   MATPOWER
-%   Copyright (c) 2013-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2013-2016, Power Systems Engineering Research Center (PSERC)
 %   by Daniel Molzahn, PSERC U of Wisc, Madison
 %
 %   This file is part of MATPOWER.

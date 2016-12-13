@@ -2,7 +2,7 @@ function t_insolvablepfsos(quiet)
 %T_INSOLVABLEPF  Test for power flow insolvability condition
 
 %   MATPOWER
-%   Copyright (c) 2013-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2013-2016, Power Systems Engineering Research Center (PSERC)
 %   by Daniel Molzahn, PSERC U of Wisc, Madison
 %   and Ray Zimmerman, PSERC Cornell
 %

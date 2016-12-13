@@ -46,7 +46,7 @@ function [handle] = plot_mpc(mpc, varargin)
 %     paul.cuffe@ucd.ie
 
 %   MATPOWER
-%   Copyright (c) 2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2016, Power Systems Engineering Research Center (PSERC)
 %   by Paul Cuffe
 %
 %   This file is part of MATPOWER.

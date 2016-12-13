@@ -15,7 +15,7 @@ function mpc_vl = prepare_maxloadlim(mpc,dir_mll,varargin)
 %     a set of buses at which the voltage limits are enforced.
 
 %   MATPOWER
-%   Copyright (c) 2015-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2015-2016, Power Systems Engineering Research Center (PSERC)
 %   by Camille Hamon
 %
 %   This file is part of MATPOWER.

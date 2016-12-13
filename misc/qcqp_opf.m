@@ -105,7 +105,7 @@ function [nVAR, nEQ, nINEQ, C, c, A, a, B, b, S] = qcqp_opf(casedata,model)
 %   March 4th, 2016
 
 %   MATPOWER
-%   Copyright (c) 2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2016, Power Systems Engineering Research Center (PSERC)
 %   by Cedric Josz, Jean Maeght, Stephane Fliscounakis, and Patrick Panciatici
 %
 %   This file is part of MATPOWER.

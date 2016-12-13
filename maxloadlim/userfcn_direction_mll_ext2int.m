@@ -1,7 +1,7 @@
 function mpc = userfcn_direction_mll_ext2int(mpc,args)
 
 %   MATPOWER
-%   Copyright (c) 2015-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2015-2016, Power Systems Engineering Research Center (PSERC)
 %   by Camille Hamon
 %
 %   This file is part of MATPOWER.

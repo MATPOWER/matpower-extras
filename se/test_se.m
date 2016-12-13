@@ -3,7 +3,7 @@ function test_se
 %   created by Rui Bo on 2007/11/12
 
 %   MATPOWER
-%   Copyright (c) 2009-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2009-2016, Power Systems Engineering Research Center (PSERC)
 %   by Rui Bo
 %
 %   This file is part of MATPOWER.

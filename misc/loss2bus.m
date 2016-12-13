@@ -8,7 +8,7 @@ function bus_loss = loss2bus(mpc)
 %   accumulated to the bus at the downstream end of the branch.
 
 %   MATPOWER
-%   Copyright (c) 2014-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2014-2016, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MATPOWER.

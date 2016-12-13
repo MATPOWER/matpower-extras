@@ -2,7 +2,7 @@ function t_opf_sdpopf(quiet)
 %T_OPF_SDPOPF  Tests for SDP-based AC optimal power flow.
 
 %   MATPOWER
-%   Copyright (c) 2013-2016 by Power System Engineering Research Center (PSERC)
+%   Copyright (c) 2013-2016, Power Systems Engineering Research Center (PSERC)
 %   by Daniel Molzahn, PSERC U of Wisc, Madison
 %   and Ray Zimmerman, PSERC Cornell
 %
