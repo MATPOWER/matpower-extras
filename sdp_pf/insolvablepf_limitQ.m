@@ -257,6 +257,9 @@ S = warning;
 
 % Run sdp solver
 sdpinfo = solvesdp(constraints, -eta, sdpopts);
+if sdpinfo.problem == 2 || sdpinfo.problem == -2 || sdpinfo.problem == -3
+    error(yalmiperror(sdpinfo.problem));
+end
 warning(S);
 
 if verbose >= 2

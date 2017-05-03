@@ -984,7 +984,7 @@ S = warning;
 % Run sdp solver
 sdpinfo = solvesdp(constraints, -cost, sdpopts); % Negative cost to convert maximization to minimization problem
 
-if sdpinfo.problem == 2 || sdpinfo.problem == -3
+if sdpinfo.problem == 2 || sdpinfo.problem == -2 || sdpinfo.problem == -3
     error(yalmiperror(sdpinfo.problem));
 end
 warning(S);
