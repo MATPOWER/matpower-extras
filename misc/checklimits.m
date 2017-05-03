@@ -27,10 +27,10 @@ define_constants;
 tol = 0.001;
 
 %% input args
-if nargin < 2
-    ac = [];
-    if nargin < 3
-        quiet = 0;
+if nargin < 3
+    quiet = 0;
+    if nargin < 2
+        ac = [];
     end
 end
 
