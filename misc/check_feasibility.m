@@ -47,7 +47,7 @@ ny = getN(om, 'var', 'y');  %% number of piece-wise linear costs
 [A, l, u] = linear_constraints(om);
 
 %% bounds on optimization vars
-[x, xmin, xmax] = getv(om);
+[x, xmin, xmax] = params_var(om);
 
 %% build admittance matrices
 [Ybus, Yf, Yt] = makeYbus(mpc.baseMVA, mpc.bus, mpc.branch);
