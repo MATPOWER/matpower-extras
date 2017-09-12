@@ -44,7 +44,7 @@ nl = size(mpc.branch, 1);   %% number of branches
 ny = getN(om, 'var', 'y');  %% number of piece-wise linear costs
 
 %% linear constraints
-[A, l, u] = linear_constraints(om);
+[A, l, u] = params_lin_constraint(om);
 
 %% bounds on optimization vars
 [x, xmin, xmax] = params_var(om);
