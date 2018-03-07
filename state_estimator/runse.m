@@ -55,7 +55,7 @@ on = find(gen(:, GEN_STATUS) > 0);      %% which generators are on?
 gbus = gen(on, GEN_BUS);                %% what buses are they at?
 
 %%-----  run the power flow  -----
-t0 = clock;
+t0 = tic;
 if dc                               %% DC formulation
     %% initial state
     Va0 = bus(:, VA) * (pi/180);
@@ -112,7 +112,7 @@ else                                %% AC formulation
     %% update data matrices with solution
     [bus, gen, branch] = pfsoln(baseMVA, bus, gen, branch, Ybus, Yf, Yt, V, ref, pv, pq, mpopt);
 end
-et = etime(clock, t0);
+et = toc(t0);
 
 %%--------------------  begin state estimator code  --------------------
 %% save some values from load flow solution

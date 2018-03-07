@@ -114,13 +114,13 @@ if isempty(bids)
 end
 
 %% start the clock
-t0 = clock;
+t0 = tic;
 
 %% run the market
 [co, cb, r, dispatch, success] = smartmkt(mpc, offers, bids, mkt, mpopt);
 
 %% compute elapsed time
-et = etime(clock, t0);
+et = toc(t0);
 
 %% print results
 if fname
