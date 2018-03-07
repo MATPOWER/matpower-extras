@@ -6,6 +6,6 @@
 [subrepo]
 	remote = git@github.com:MATPOWER/mx-se
 	branch = master
-	commit = c7a91af2ebb8bc6929a74470cc32a2c61b7a4813
-	parent = 7acf7055c88d8a04649b6019e863f35dd0a8c870
+	commit = d5c90301c71eafc5a4ec0896017b683b92fcb57e
+	parent = 29ccf91a6ea6f05e4a1e6f15afda0fcdd7c9dc0e
 	cmdver = 0.3.1

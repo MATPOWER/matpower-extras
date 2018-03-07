@@ -48,7 +48,7 @@ else
 end
 
 %% run state estimation
-t0 = clock;
+t0 = tic;
 [V, success, iterNum, z, z_est, error_sqrsum] = ...
     doSE(baseMVA, bus, gen, branch, Ybus, Yf, Yt, V0, ref, pv, pq, measure, idx, sigma);
 
@@ -66,7 +66,7 @@ end
 %% update data matrices with solution, ie, V
 % [bus, gen, branch] = updatepfsoln(baseMVA, bus, gen, branch, Ybus, V, ref, pv, pq);
 [bus, gen, branch] = pfsoln(baseMVA, bus, gen, branch, Ybus, Yf, Yt, V, ref, pv, pq);
-et = etime(clock, t0);
+et = toc(t0);
 
 %%-----  output results  -----
 %% convert back to original bus numbering & print results
