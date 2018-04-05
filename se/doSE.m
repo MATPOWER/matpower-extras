@@ -100,7 +100,7 @@ while (~converged & i < max_it)
     ];
 
     %% --- get H matrix ---
-    [dSbus_dVm, dSbus_dVa] = dSbus_dV(Ybus, V);
+    [dSbus_dVa, dSbus_dVm] = dSbus_dV(Ybus, V);
     [dSf_dVa, dSf_dVm, dSt_dVa, dSt_dVm, Sf, St] = dSbr_dV(branch, Yf, Yt, V);
 %     genbus_row = findBusRowByIdx(bus, gbus);
     genbus_row = gbus;  %% rdz, this should be fine if using internal bus numbering
