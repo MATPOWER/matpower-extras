@@ -9,7 +9,7 @@ function [BL2, BL1, BL0] = makeBloss(mpc)
 %       mpc = loadcase('case30');
 %       results = rundcopf(mpc);
 %       Pg = results.gen(:, PG);
-%       [BL2, BL1, BL0] = makeBloss2(mpc);
+%       [BL2, BL1, BL0] = makeBloss(mpc);
 %       loss = (0.5 * Pg' * BL2 * Pg + BL1' * Pg + BL0 )
 %
 %       Pf = results.branch(:, PF) / mpc.baseMVA;
