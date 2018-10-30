@@ -7,5 +7,5 @@
 	remote = git@github.com:MATPOWER/mx-reduction
 	branch = master
 	commit = 96a45aa956351d70016032196376ffed18f56d79
-	parent = 414c060d3d711214c2c33ab1ebdcc5ddd574649d
+	parent = b7ac94ea9b0a9ba199a27b62f5c672b8596c2d52
 	cmdver = 0.3.1
