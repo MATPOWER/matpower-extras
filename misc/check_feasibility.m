@@ -6,7 +6,7 @@ function [v, f, hn, gn, Al, Au, xl, xu] = check_feasibility(mpc, mpopt)
 %   Not thoroughly tested.
 
 %   MATPOWER
-%   Copyright (c) 2010-2016, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2010-2018, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MATPOWER.
@@ -32,22 +32,22 @@ end
 [mpc, mpopt] = opf_args(mpc, mpopt);
 mpc = ext2int(mpc);
 om = opf_setup(mpc, mpopt);
-om = build_cost_params(om);
+om = om.build_cost_params();
 
 %% unpack data
-mpc = get_mpc(om);
-[vv, ll, nn] = get_idx(om);
+mpc = om.get_mpc();
+vv = om.get_idx();
 
 %% problem dimensions
 nb = size(mpc.bus, 1);      %% number of buses
 nl = size(mpc.branch, 1);   %% number of branches
-ny = getN(om, 'var', 'y');  %% number of piece-wise linear costs
+ny = om.getN('var', 'y');   %% number of piece-wise linear costs
 
 %% linear constraints
-[A, l, u] = params_lin_constraint(om);
+[A, l, u] = om.params_lin_constraint();
 
 %% bounds on optimization vars
-[x, xmin, xmax] = params_var(om);
+[x, xmin, xmax] = om.params_var();
 
 %% build admittance matrices
 [Ybus, Yf, Yt] = makeYbus(mpc.baseMVA, mpc.bus, mpc.branch);
@@ -63,7 +63,7 @@ end
 il = find(mpc.branch(:, RATE_A) ~= 0 & mpc.branch(:, RATE_A) < 1e10);
 nl2 = length(il);           %% number of constrained lines
 
-%%-----  run opf  -----
+%% evaluate OPF constraints
 f_fcn = @(x)opf_costfcn(x, om);
 gh_fcn = @(x)opf_consfcn(x, om, Ybus, Yf(il,:), Yt(il,:), mpopt, il);
 hess_fcn = @(x, lambda, cost_mult)opf_hessfcn(x, lambda, cost_mult, om, Ybus, Yf(il,:), Yt(il,:), mpopt, il);
