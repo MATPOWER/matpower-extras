@@ -1,6 +1,6 @@
-function test_mll_main(verbose)
-% This function defines the list of tests to be run. The tests are run
-% by using T_RUN_TESTS in MATPOWER.
+function success = test_mll_main(verbose, exit_on_fail)
+%TEST_MLL_MAIN This function defines the list of tests to be run.
+% The tests are run by using T_RUN_TESTS in MATPOWER.
 
 %   MATPOWER
 %   Copyright (c) 2015-2016, Power Systems Engineering Research Center (PSERC)

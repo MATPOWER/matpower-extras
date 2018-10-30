@@ -1,6 +1,6 @@
 # mx-maxloadlim
 
-Matlab code to find loadability limits in power systems. It is based
+MATLAB/Octave code to find loadability limits in power systems. It is based
 on MATPOWER. In particular, it uses dispatchable loads to maximize
 the loadability limits.
 

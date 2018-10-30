@@ -1,4 +1,4 @@
-function mpc = userfcn_direction_mll_ext2int(mpc,args)
+function mpc = userfcn_direction_mll_ext2int(mpc, mpopt, args)
 
 %   MATPOWER
 %   Copyright (c) 2015-2016, Power Systems Engineering Research Center (PSERC)
