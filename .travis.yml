@@ -11,12 +11,20 @@ install:
 - sudo apt-add-repository -y ppa:octave/stable
 - sudo apt-get update -qq
 - sudo apt-get install -qq octave liboctave-dev
-- sudo apt-get install -qq ca-certificates make pkg-config git make rsync
+- sudo apt-get install -qq ca-certificates make pkg-config git make
 - sudo apt-get install -qq libopenblas-dev coinor-libipopt-dev
 
 script:
 - git clone https://github.com/MATPOWER/matpower.git $TRAVIS_BUILD_DIR/build/matpower
-- rsync -av --progress $TRAVIS_BUILD_DIR $TRAVIS_BUILD_DIR/build/matpower/extras --exclude build
+
+- mkdir -p $TRAVIS_BUILD_DIR/build/matpower/extras
+- cp -a $TRAVIS_BUILD_DIR/maxloadlim $TRAVIS_BUILD_DIR/build/matpower/extras
+- cp -a $TRAVIS_BUILD_DIR/misc $TRAVIS_BUILD_DIR/build/matpower/extras
+- cp -a $TRAVIS_BUILD_DIR/reduction $TRAVIS_BUILD_DIR/build/matpower/extras
+- cp -a $TRAVIS_BUILD_DIR/sdp_pf $TRAVIS_BUILD_DIR/build/matpower/extras
+- cp -a $TRAVIS_BUILD_DIR/se $TRAVIS_BUILD_DIR/build/matpower/extras
+- cp -a $TRAVIS_BUILD_DIR/smartmarket $TRAVIS_BUILD_DIR/build/matpower/extras
+- cp -a $TRAVIS_BUILD_DIR/state_estimator $TRAVIS_BUILD_DIR/build/matpower/extras
 
 - git clone https://github.com/yalmip/YALMIP.git $TRAVIS_BUILD_DIR/build/yalmip
 - git clone https://github.com/sqlp/sdpt3.git $TRAVIS_BUILD_DIR/build/sdpt3
