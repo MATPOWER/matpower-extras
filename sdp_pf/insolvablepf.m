@@ -570,7 +570,10 @@ sdpinfo = solvesdp(constraints, -cost, sdpopts); % Negative cost to convert maxi
 if sdpinfo.problem == 2 || sdpinfo.problem == -2 || sdpinfo.problem == -3
     error(yalmiperror(sdpinfo.problem));
 end
-warning(S);
+if ~have_fcn('octave') || have_fcn('octave', 'vnum') >= 4.001
+    %% (avoid bug in Octave 4.0.x, where warning state is left corrupted)
+    warning(S);
+end
 
 if verbose >= 2
     fprintf('Solver exit message: %s\n',sdpinfo.info);

@@ -290,7 +290,10 @@ end
 
 sol = solvesos(constraints,[],sosopts,pvec);
 
-warning(S);
+if ~have_fcn('octave') || have_fcn('octave', 'vnum') >= 4.001
+    %% (avoid bug in Octave 4.0.x, where warning state is left corrupted)
+    warning(S);
+end
 
 if verbose >= 2
     fprintf('Solver exit message: %s\n',sol.info);
