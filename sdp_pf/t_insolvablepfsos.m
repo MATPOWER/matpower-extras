@@ -37,6 +37,16 @@ end
 
 t0 = 'INSOLVABLEPF : ';
 
+if have_fcn('octave')
+    if have_fcn('octave', 'vnum') >= 4
+        file_in_path_warn_id = 'Octave:data-file-in-path';
+    else
+        file_in_path_warn_id = 'Octave:load-file-in-path';
+    end
+    s1 = warning('query', file_in_path_warn_id);
+    warning('off', file_in_path_warn_id);
+end
+
 %% test an insolvable case
 load soln9mod_opf;     %% defines bus_soln, gen_soln, branch_soln, Vslack_min_soln, sigma_soln, etacomp_soln
 
@@ -71,5 +81,9 @@ res.branch = branch_soln;
 t = [t0 '(solvable case) :'];
 insolvable = insolvablepfsos(res,mpopt);
 t_ok(~insolvable, [t ' solvable']);
+
+if have_fcn('octave')
+    warning(s1.state, file_in_path_warn_id);
+end
 
 t_end;

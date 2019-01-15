@@ -35,6 +35,16 @@ else
     verbose = 0;
 end
 
+if have_fcn('octave')
+    if have_fcn('octave', 'vnum') >= 4
+        file_in_path_warn_id = 'Octave:data-file-in-path';
+    else
+        file_in_path_warn_id = 'Octave:load-file-in-path';
+    end
+    s1 = warning('query', file_in_path_warn_id);
+    warning('off', file_in_path_warn_id);
+end
+
 t0 = 'INSOLVABLEPF_LIMITQ : ';
 
 %% test an insolvable case
@@ -73,5 +83,9 @@ t = [t0 '(solvable case) :'];
 [insolvable,eta,mineigratio] = insolvablepf_limitQ(res,mpopt);
 t_ok(~insolvable, [t ' solvable']);
 t_is(eta, eta_limitQsolvable_soln , 3, [t ' eta']);
+
+if have_fcn('octave')
+    warning(s1.state, file_in_path_warn_id);
+end
 
 t_end;

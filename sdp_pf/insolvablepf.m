@@ -64,6 +64,13 @@ if nargin < 2
     mpopt = mpoption;
 end
 
+%% define undocumented MATLAB function ismembc() if not available (e.g. Octave)
+if exist('ismembc')
+    ismembc_ = @ismembc;
+else
+    ismembc_ = @ismembc_octave;
+end
+
 mpc = loadcase(mpc);
 mpc = ext2int(mpc);
 
@@ -261,7 +268,7 @@ if maxNumberOfCliques ~= 1 && nbus > 3
         maxcliquei = maxclique{i};
         for k=i+1:nmaxclique
 
-            cliqueCost(i,k) = sum(ismembc(maxcliquei,maxclique{k}));
+            cliqueCost(i,k) = sum(ismembc_(maxcliquei,maxclique{k}));
 
             % Slower alternative that doesn't use undocumented MATLAB function
             % cliqueCost(i,k) = length(intersect(maxcliquei,maxclique{k}));

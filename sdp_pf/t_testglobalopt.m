@@ -35,6 +35,16 @@ else
     verbose = 0;
 end
 
+if have_fcn('octave')
+    if have_fcn('octave', 'vnum') >= 4
+        file_in_path_warn_id = 'Octave:data-file-in-path';
+    else
+        file_in_path_warn_id = 'Octave:load-file-in-path';
+    end
+    s1 = warning('query', file_in_path_warn_id);
+    warning('off', file_in_path_warn_id);
+end
+
 t0 = 'TESTGLOALOPT : ';
 
 %% get saved solution with apparent power limits
@@ -70,5 +80,9 @@ t = [t0 '(P line lim) : '];
 t_ok(globalopt, [t 'global optimum verification']);
 t_is(comp, comp_soln, 3, [t 'complimentarity conditions']);
 t_ok(Apsd, [t 'A is positive semidefinite']);
+
+if have_fcn('octave')
+    warning(s1.state, file_in_path_warn_id);
+end
 
 t_end;

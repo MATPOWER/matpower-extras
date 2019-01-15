@@ -33,9 +33,16 @@ function [cost] = combineCost(maxcliques,maxcliquesidx)
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
 %   See http://www.pserc.cornell.edu/matpower/ for more info.
 
+%% define undocumented MATLAB function ismembc() if not available (e.g. Octave)
+if exist('ismembc')
+    ismembc_ = @ismembc;
+else
+    ismembc_ = @ismembc_octave;
+end
+
 maxcliques1 = maxcliques{maxcliquesidx(1)};
 maxcliques2 = maxcliques{maxcliquesidx(2)};
-nintersect = sum(ismembc(maxcliques1, maxcliques2));
+nintersect = sum(ismembc_(maxcliques1, maxcliques2));
 
 elimmaxcliques(1) = length(maxcliques1);
 elimmaxcliques(2) = length(maxcliques2);

@@ -179,6 +179,7 @@ end
 % Polynomials for Qlimits
 for i=1:length(refpv)
     [z,cz] = polynomial(V,deg,0);
+    zeta{i} = z;    %% RDZ: required by Octave (4.0.3) to initialize properly
     zeta{i}(1) = z;
     czeta{i}{1} = cz;
 
@@ -199,6 +200,7 @@ for i=1:length(refpv)
 %     [s3,c3] = polynomial(V,sosdeg,0);
 %     [s4,c4] = polynomial(V,sosdeg,0);
 %     [s5,c5] = polynomial(V,sosdeg,0);
+    sigma{i} = s1;  %% RDZ: required by Octave (4.0.3) to initialize properly
     sigma{i}(1) = s1;
     csigma{i}{1} = c1;
     sigma{i}(2) = s2;

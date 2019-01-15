@@ -35,6 +35,16 @@ else
     verbose = 0;
 end
 
+if have_fcn('octave')
+    if have_fcn('octave', 'vnum') >= 4
+        file_in_path_warn_id = 'Octave:data-file-in-path';
+    else
+        file_in_path_warn_id = 'Octave:load-file-in-path';
+    end
+    s1 = warning('query', file_in_path_warn_id);
+    warning('off', file_in_path_warn_id);
+end
+
 t0 = 'SDPOPF : ';
 mpopt = mpoption('opf.violation', 1e-6);
 mpopt = mpoption(mpopt, 'out.all', 0, 'verbose', verbose, ...
@@ -62,7 +72,7 @@ t = t0;
 t_ok(success, [t 'success']);
 t_is(f, f_soln, 3, [t 'f']);
 t_is(   bus(:,ib_data   ),    bus_soln(:,ib_data   ), 10, [t 'bus data']);
-t_is(   bus(:,ib_voltage),    bus_soln(:,ib_voltage),  3, [t 'bus voltage']);
+t_is(   bus(:,ib_voltage),    bus_soln(:,ib_voltage),  2.7, [t 'bus voltage']);
 t_is(   bus(:,ib_lam    ),    bus_soln(:,ib_lam    ),  3, [t 'bus lambda']);
 t_is(   bus(:,ib_mu     ),    bus_soln(:,ib_mu     ),  1, [t 'bus mu']);
 t_is(   gen(:,ig_data   ),    gen_soln(:,ig_data   ), 10, [t 'gen data']);
@@ -81,7 +91,7 @@ mpc.gencost(3, NCOST) = 2;
 t_ok(success, [t 'success']);
 t_is(f, f_soln, 3, [t 'f']);
 t_is(   bus(:,ib_data   ),    bus_soln(:,ib_data   ), 10, [t 'bus data']);
-t_is(   bus(:,ib_voltage),    bus_soln(:,ib_voltage),  3, [t 'bus voltage']);
+t_is(   bus(:,ib_voltage),    bus_soln(:,ib_voltage),  2.7, [t 'bus voltage']);
 t_is(   bus(:,ib_lam    ),    bus_soln(:,ib_lam    ),  3, [t 'bus lambda']);
 t_is(   bus(:,ib_mu     ),    bus_soln(:,ib_mu     ),  1, [t 'bus mu']);
 t_is(   gen(:,ig_data   ),    gen_soln(:,ig_data   ), 10, [t 'gen data']);
@@ -101,14 +111,18 @@ mpopt1 = mpoption(mpopt, 'opf.flow_lim', 'P');
 t_ok(success, [t 'success']);
 t_is(f, f_soln, 3, [t 'f']);
 t_is(   bus(:,ib_data   ),    bus_soln(:,ib_data   ), 10, [t 'bus data']);
-t_is(   bus(:,ib_voltage),    bus_soln(:,ib_voltage),  3, [t 'bus voltage']);
+t_is(   bus(:,ib_voltage),    bus_soln(:,ib_voltage),  2.7, [t 'bus voltage']);
 t_is(   bus(:,ib_lam    ),    bus_soln(:,ib_lam    ),  3, [t 'bus lambda']);
 t_is(   bus(:,ib_mu     ),    bus_soln(:,ib_mu     ),  1, [t 'bus mu']);
 t_is(   gen(:,ig_data   ),    gen_soln(:,ig_data   ), 10, [t 'gen data']);
-t_is(   gen(:,ig_disp   ),    gen_soln(:,ig_disp   ),  2, [t 'gen dispatch']);
+t_is(   gen(:,ig_disp   ),    gen_soln(:,ig_disp   ),  1.3, [t 'gen dispatch']);
 t_is(   gen(:,ig_mu     ),    gen_soln(:,ig_mu     ),  3, [t 'gen mu']);
 t_is(branch(:,ibr_data  ), branch_soln(:,ibr_data  ), 10, [t 'branch data']);
-t_is(branch(:,ibr_flow  ), branch_soln(:,ibr_flow  ),  2, [t 'branch flow']);
+t_is(branch(:,ibr_flow  ), branch_soln(:,ibr_flow  ),  1.3, [t 'branch flow']);
 t_is(branch(:,ibr_mu    ), branch_soln(:,ibr_mu    ),  2, [t 'branch mu']);
+
+if have_fcn('octave')
+    warning(s1.state, file_in_path_warn_id);
+end
 
 t_end;

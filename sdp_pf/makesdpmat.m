@@ -60,7 +60,11 @@ mpc = loadcase(mpc);
 nbus = size(mpc.bus,1);
 Y = makeYbus(mpc);
 
-emat = speye(nbus);
+if have_fcn('octave')
+    emat = full(speye(nbus));
+else
+    emat = speye(nbus);
+end
 e = @(k) emat(:,k); % kth standard basis vector
 Yk_small = @(k) e(k)*e(k).'*Y;
 
