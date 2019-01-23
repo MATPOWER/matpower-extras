@@ -1,5 +1,5 @@
 function success = test_sdp_pf(verbose, exit_on_fail)
-%TEST_SDP_PF  Run all MATPOWER tests.
+%TEST_SDP_PF  Run all SDP_PF tests.
 %   TEST_SDP_PF
 %   TEST_SDP_PF(VERBOSE)
 %   TEST_SDP_PF(VERBOSE, EXIT_ON_FAIL)
@@ -13,7 +13,7 @@ function success = test_sdp_pf(verbose, exit_on_fail)
 %   See also T_RUN_TESTS.
 
 %   MATPOWER
-%   Copyright (c) 2004-2018, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2004-2019, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MATPOWER.
