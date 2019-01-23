@@ -27,8 +27,6 @@ env:
   global:
     - IPOPT_VER=3.11.9
     - MATPOWER_PATH=$TRAVIS_BUILD_DIR/matpower
-    - SYNGRID_PATH=$TRAVIS_BUILD_DIR/lib:$TRAVIS_BUILD_DIR/lib/t
-    - SEARCH_PATH=$SYNGRID_PATH:$MATPOWER_PATH
 
 script:
 # build and install IPOPT MEX file
@@ -45,6 +43,6 @@ script:
 - octave-cli --no-gui --eval "addpath('$TRAVIS_BUILD_DIR/lib'); savepath"
 - octave-cli --no-gui --eval "addpath('$TRAVIS_BUILD_DIR/lib/t'); savepath"
 - octave-cli --no-gui --eval mpver
-- octave-cli --no-gui --eval "test_syngrid(0,1)"
+- octave-cli --no-gui --eval "test_syngrid(1,1)"
 # print IPOPT version number
 # - octave-cli --no-gui --eval "feval('qps_ipopt', [],[1; 1],[1 1],[2],[2],[1; 1],[1; 1],[1; 1],struct('verbose', 2));"

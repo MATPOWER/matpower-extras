@@ -10,9 +10,9 @@ code written by Dr. Zhifang Wang and her group, including Seyyed Hamid Elyas
 and Hamidreza Sadeghian at Virginia Commonwealth University, and further
 developed as part of the ["Synthetic Data for Power Grid R & D" project][3]
 under the [ARPA-E Grid Data][3b] program in conjunction with Ray Zimmerman
-from Cornell University. SynGrid builds upon previous work [[1][11], [2][7]] by Wang,
-Scaglione, and Thomas as well as more the more recent works listed in the
-"Publications" section below.
+from Cornell University. SynGrid builds upon previous work [[1][11], [2][7]]
+by Wang, Scaglione, and Thomas as well as more the more recent works listed
+in the "Publications" section below.
 
 
 System Requirements

@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:MATPOWER/mx-syngrid
 	branch = master
-	commit = ad31413f87263568305d0d3a2084dd99ff338622
-	parent = 9b778c0eac17ee2e183119606b797bbe3a0a2cc5
+	commit = 53325243a2553a874dc44965773f58f5acf3bb1c
+	parent = 6a8061335c25572ab0aa4064f96169350b3331e7
 	method = merge
 	cmdver = 0.4.0

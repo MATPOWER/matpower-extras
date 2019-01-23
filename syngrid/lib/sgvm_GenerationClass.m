@@ -102,7 +102,7 @@ classdef sgvm_GenerationClass < handle
                         continue
                     end
                     % for each individuals perform permutation niter times
-                    tmp = obj._evolve_children(obj.inds{k}, niter, type, gen, opt);
+                    tmp = obj.evolve_children(obj.inds{k}, niter, type, gen, opt);
                     chldr{k} = tmp;
                 end
             else
@@ -112,7 +112,7 @@ classdef sgvm_GenerationClass < handle
                   continue
                 end
                 % for each individuals perform permutation niter times
-                tmp = obj._evolve_children(tmpinds{k}, niter, type, gen, opt);
+                tmp = obj.evolve_children(tmpinds{k}, niter, type, gen, opt);
                 chldr{k} = tmp;
               end
             end
@@ -299,7 +299,7 @@ classdef sgvm_GenerationClass < handle
         end
 
         %% ------  private methods  -----------
-        function chldr = _evolve_children(obj, parent, niter, type, gen, opt)
+        function chldr = evolve_children(obj, parent, niter, type, gen, opt)
             % for each individual perform permutation
             % niter times
 
