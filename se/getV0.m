@@ -28,7 +28,7 @@ gbus = gen(on, GEN_BUS);                %% what buses are they at?
 if type_initialguess == 1 % using previous value in case data
     % NOTE: angle is in degree in case data, but in radians in pf solver,
     % so conversion from degree to radians is needed here
-    V0  = bus(:, VM) .* exp(sqrt(-1) * pi/180 * bus(:, VA)); 
+    V0  = bus(:, VM) .* exp(1j * pi/180 * bus(:, VA)); 
 elseif type_initialguess == 2 % using flat start
     V0 = ones(size(bus, 1), 1);
 elseif type_initialguess == 3 % using given initial voltage

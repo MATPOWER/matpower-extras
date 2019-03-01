@@ -25,7 +25,6 @@ max_it  = 100;  % mpopt.pf.nr.max_it;
 verbose = 0;
 
 %% initialize
-j = sqrt(-1);
 converged = 0;
 i = 0;
 V = V0;
@@ -86,7 +85,7 @@ while (~converged & i < max_it)
     %% compute net injection at generator buses
     gbus = gen(:, GEN_BUS);
     Sgbus = V(gbus) .* conj(Ybus(gbus, :) * V);
-    Sgen = Sgbus * baseMVA + (bus(gbus, PD) + j*bus(gbus, QD));   %% inj S + local Sd
+    Sgen = Sgbus * baseMVA + (bus(gbus, PD) + 1j*bus(gbus, QD));    %% inj S + local Sd
     Sgen = Sgen/baseMVA;
     z_est = [ % NOTE: all are p.u. values
         real(Sfe(idx_zPF));
@@ -156,7 +155,7 @@ while (~converged & i < max_it)
     %% update voltage
     Va(nonref) = Va(nonref) + dx(1:size(nonref, 1));
     Vm(nonref) = Vm(nonref) + dx(size(nonref, 1)+1:2*size(nonref, 1));
-    V = Vm .* exp(j * Va); % NOTE: angle is in radians in pf solver, but in degree in case data
+    V = Vm .* exp(1j * Va); % NOTE: angle is in radians in pf solver, but in degree in case data
     Vm = abs(V);            %% update Vm and Va again in case
     Va = angle(V);          %% we wrapped around with a negative Vm
 end
