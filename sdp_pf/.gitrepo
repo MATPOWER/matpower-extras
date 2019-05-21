@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:MATPOWER/mx-sdp_pf
 	branch = master
-	commit = 1b656ea88926c69c9c8693ac1e0ba05e8fa64012
-	parent = 34eddb07f2949e4dee485aaf6beed17075b58b03
+	commit = de9872b3348022dcd3a60de67451e8887b5f7777
+	parent = f9077ba597d4641e619c7e29f402a3208c7ee547
 	cmdver = 0.4.0
 	method = merge

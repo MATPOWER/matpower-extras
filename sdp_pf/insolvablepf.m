@@ -49,7 +49,7 @@ function [insolvable,Vslack_min,sigma,eta,mineigratio] = insolvablepf(mpc,mpopt)
 %     for Power Flow Insolvability with Applications to Voltage Stability 
 %     Margins," University of Wisconsin-Madison Department of Electrical
 %     and Computer Engineering, Tech. Rep. ECE-12-01, 2012, [Online]. 
-%     Available: http://arxiv.org/abs/1204.6285.
+%     Available: https://arxiv.org/abs/1204.6285.
 
 %   MATPOWER
 %   Copyright (c) 2013-2016, Power Systems Engineering Research Center (PSERC)
@@ -88,7 +88,7 @@ if enforce_Qlimits > 0
 end
 
 if ~have_fcn('yalmip')
-    error('insolvablepf: The software package YALMIP is required to run insolvablepf. See http://users.isy.liu.se/johanl/yalmip/');
+    error('insolvablepf: The software package YALMIP is required to run insolvablepf. See https://yalmip.github.io');
 end
 
 % set YALMIP options struct in SDP_PF (for details, see help sdpsettings) 

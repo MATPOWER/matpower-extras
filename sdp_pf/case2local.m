@@ -10,7 +10,7 @@ function mpc = case2local
 %       Solutions of Optimal power Flow," Tech. Report. ERGO-11-017,
 %       University of Edinburgh School of Mathematics, Edinburgh Research
 %       Group in Optimization, 2011. [Online]. Available:
-%       http://www.maths.ed.ac.uk/ERGO/pubs/ERGO-11-017.html
+%       https://www.maths.ed.ac.uk/ERGO/pubs/ERGO-11-017.html
 
 t = 17.625;
 

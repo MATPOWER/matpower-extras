@@ -54,7 +54,7 @@ ignore_angle_lim    = mpopt.opf.ignore_angle_lim;
 verbose             = mpopt.verbose;
 
 if ~have_fcn('yalmip')
-    error('insolvablepfsos_limitQ: The software package YALMIP is required to run insolvablepfsos_limitQ. See http://users.isy.liu.se/johanl/yalmip/');
+    error('insolvablepfsos_limitQ: The software package YALMIP is required to run insolvablepfsos_limitQ. See https://yalmip.github.io');
 end
 
 % set YALMIP options struct in SDP_PF (for details, see help sdpsettings) 

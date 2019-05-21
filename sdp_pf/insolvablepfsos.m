@@ -54,7 +54,7 @@ if enforce_Qlimits > 0
 end
 
 if ~have_fcn('yalmip')
-    error('insolvablepfsos: The software package YALMIP is required to run insolvablepfsos. See http://users.isy.liu.se/johanl/yalmip/');
+    error('insolvablepfsos: The software package YALMIP is required to run insolvablepfsos. See https://yalmip.github.io');
 end
 
 % set YALMIP options struct in SDP_PF (for details, see help sdpsettings) 

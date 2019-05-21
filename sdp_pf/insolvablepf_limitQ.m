@@ -69,7 +69,7 @@ maxSystemSize = 57;
 fixPVbusInjection = 0; % If equal to 1, don't allow changes in active power injections at PV buses.
 
 if ~have_fcn('yalmip')
-    error('insolvablepf_limitQ: The software package YALMIP is required to run insolvablepf_limitQ. See http://users.isy.liu.se/johanl/yalmip/');
+    error('insolvablepf_limitQ: The software package YALMIP is required to run insolvablepf_limitQ. See https://yalmip.github.io');
 end
 
 % set YALMIP options struct in SDP_PF (for details, see help sdpsettings) 
