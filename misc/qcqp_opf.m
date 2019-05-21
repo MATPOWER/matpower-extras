@@ -93,7 +93,7 @@ function [nVAR, nEQ, nINEQ, C, c, A, a, B, b, S] = qcqp_opf(casedata,model)
 %
 %     C. Josz, S. Fliscounakis, J. Maeght, and P. Panciatici, "AC Power Flow
 %     Data in MATPOWER and QCQP Format: iTesla, RTE Snapshots, and PEGASE"
-%     http://arxiv.org/abs/1603.01533
+%     https://arxiv.org/abs/1603.01533
 %
 %   Contacts:
 %     Cédric Josz, Stéphane Fliscounakis, Jean Maeght, Patrick Panciatici
