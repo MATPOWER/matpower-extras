@@ -35,7 +35,7 @@ function [handle] = plot_mpc(mpc, varargin)
 %
 %     P. Cuffe; A. Keane, "Visualizing the Electrical Structure of Power
 %     Systems," in IEEE Systems Journal, vol.PP, no.99, pp.1-12.
-%     DOI: 10.1109/JSYST.2015.2427994
+%     doi: 10.1109/JSYST.2015.2427994
 %     https://doi.org/10.1109/JSYST.2015.2427994
 %
 %   Figures produced using this script can be published freely, however a
