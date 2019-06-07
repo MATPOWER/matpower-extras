@@ -11,9 +11,9 @@ function [MVAbase, bus, gen, branch, success, et] = runse(casedata, mpopt, fname
 %   by Ray Zimmerman, PSERC Cornell
 %   parts based on code by James S. Thorp, June 2004
 %
-%   This file is part of MATPOWER.
+%   This file is part of MATPOWER Extras.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/matpower-extras for more info.
 
 %%-----  initialize  -----
 %% define named indices into bus, gen, branch matrices

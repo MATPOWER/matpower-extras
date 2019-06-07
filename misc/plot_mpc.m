@@ -49,9 +49,9 @@ function [handle] = plot_mpc(mpc, varargin)
 %   Copyright (c) 2016, Power Systems Engineering Research Center (PSERC)
 %   by Paul Cuffe
 %
-%   This file is part of MATPOWER.
+%   This file is part of MATPOWER Extras.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/matpower-extras for more info.
 
 
 MaxBusLabels=[]; %Maximum number of bus labels to plot - need to limit this to stop clutter

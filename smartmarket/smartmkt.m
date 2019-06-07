@@ -8,9 +8,9 @@ function [co, cb, r, dispatch, success] = ...
 %   Copyright (c) 1996-2016, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
-%   This file is part of MATPOWER.
+%   This file is part of MATPOWER Extras.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/matpower-extras for more info.
 
 %%-----  initialization  -----
 %% default arguments

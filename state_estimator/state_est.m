@@ -9,9 +9,9 @@ function [V, converged, i] = state_est(branch, Ybus, Yf, Yt, Sbus, V0, ref, pv, 
 %   by Ray Zimmerman, PSERC Cornell
 %   based on code by James S. Thorp, June 2004
 %
-%   This file is part of MATPOWER.
+%   This file is part of MATPOWER Extras.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/matpower-extras for more info.
 
 [F_BUS, T_BUS, BR_R, BR_X, BR_B, RATE_A, RATE_B, RATE_C, ...
     TAP, SHIFT, BR_STATUS, PF, QF, PT, QT, MU_SF, MU_ST, ...

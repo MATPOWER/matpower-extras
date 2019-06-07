@@ -16,9 +16,9 @@ function success = test_smartmarket(verbose, exit_on_fail)
 %   Copyright (c) 2004-2019, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
-%   This file is part of MATPOWER.
+%   This file is part of MATPOWER Extras.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/matpower-extras for more info.
 
 if nargin < 2
     exit_on_fail = 0;
