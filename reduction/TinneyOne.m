@@ -25,9 +25,9 @@ function [PivOrd,PivInd] = TinneyOne(ERP,PivInd,PivOrd,ExBus)
 %   Copyright (c) 2014-2016, Power Systems Engineering Research Center (PSERC)
 %   by Yujia Zhu, PSERC ASU
 %
-%   This file is part of MATPOWER.
+%   This file is part of MATPOWER/mx-reduction.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/mx-reduction/ for more info.
 
 %% Extract the external bus part
 ExLen = length(ExBus);
