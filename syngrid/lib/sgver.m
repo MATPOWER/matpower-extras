@@ -9,16 +9,16 @@ function rv = sgver(varargin)
 %   See also MPVER.
 
 %   SynGrid
-%   Copyright (c) 2018, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2018-2019, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of SynGrid.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
 
 v = struct( 'Name',     'SynGrid', ... 
-            'Version',  '1.0', ...
+            'Version',  '1.0.1', ...
             'Release',  '', ...
-            'Date',     '18-Dec-2018' );
+            'Date',     '20-Jun-2019' );
 if nargout > 0
     if nargin > 0
         rv = v;

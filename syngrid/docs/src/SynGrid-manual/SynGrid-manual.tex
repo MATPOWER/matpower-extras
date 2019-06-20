@@ -139,12 +139,12 @@
 
 %\hyphenation{matpower}
 
-\newcommand{\mpver}[0]{6.0}
+\newcommand{\mpver}[0]{7.0}
 %\newcommand{\matlab}[0]{{Matlab}}
 %\newcommand{\matlab}[0]{{\sc Matlab}\textsuperscript{\tiny \textregistered}}
 \newcommand{\matlab}[0]{{\sc Matlab}}
 \newcommand{\matpower}[0]{{\sc Matpower}}
-\newcommand{\matpowerurl}[0]{http://www.pserc.cornell.edu/matpower/}
+\newcommand{\matpowerurl}[0]{https://matpower.org}
 \newcommand{\matpowerlink}[0]{\href{\matpowerurl}{\matpower{}}}
 \newcommand{\matpowerextras}[0]{{\matpower{} Extras}}
 \newcommand{\matpowerextrasurl}[0]{https://github.com/MATPOWER/matpower-extras}
@@ -157,10 +157,10 @@
 \newcommand{\mipsurl}[0]{https://github.com/MATPOWER/mips}
 \newcommand{\mipslink}[0]{\href{\mipsurl}{\mips{}}}
 \newcommand{\mipsname}[0]{{{\bf M}{\sc atpower} \textbf{I}nterior \textbf{P}oint \textbf{S}olver}}
-\newcommand{\mipsver}[0]{1.2.2}
+\newcommand{\mipsver}[0]{1.3.1}
 
 \newcommand{\syngrid}[0]{{SynGrid}}
-\newcommand{\syngridver}[0]{1.0}
+\newcommand{\syngridver}[0]{1.0.1}
 \newcommand{\syngridurl}[0]{https://github.com/MATPOWER/mx-syngrid}
 \newcommand{\syngridlink}[0]{\href{\syngridurl}{\syngrid{}}}
 \newcommand{\syngridpath}[1]{\textsf{\textsl{{\relsize{-1.0}\textless{}\mbox{SYNGRID}\textgreater{}}}}\code{{#1}}}
@@ -178,14 +178,14 @@
 \newcommand{\simoutputdirpath}[1]{\textsf{\textsl{{\relsize{-1.0}\textless{}\mbox{OUTPUTDIR}\textgreater{}}}}\code{/}\textsf{\textsl{{\relsize{-1.0}\textless{}\mbox{SIMNAME}\textgreater{}}}}\code{{/outputs{#1}}}}
 \newcommand{\simworkdirpath}[1]{\textsf{\textsl{{\relsize{-1.0}\textless{}\mbox{WORKDIR}\textgreater{}}}}\code{/}\textsf{\textsl{{\relsize{-1.0}\textless{}\mbox{SIMNAME}\textgreater{}}}}\code{{/work{#1}}}}
 
-\newcommand{\syngridmanurl}[0]{http://www.pserc.cornell.edu/matpower/docs/SynGrid-manual-\syngridver.pdf}
+\newcommand{\syngridmanurl}[0]{https://matpower.org/docs/SynGrid-manual-\syngridver.pdf}
 \newcommand{\syngridman}[0]{\href{\syngridmanurl}{\syngrid{} User's Manual}}
 \newcommand{\currentsyngridmanurl}[0]{\syngridurl/blob/master/docs/SynGrid-manual.pdf}
 
 \newcommand{\most}[0]{{MOST}}
 \newcommand{\mostname}[0]{{{\bf M}{\sc atpower} \textbf{O}ptimal \textbf{S}cheduling \textbf{T}ool}}
 \newcommand{\mosturl}[0]{https://github.com/MATPOWER/most}
-\newcommand{\mostver}[0]{1.0}
+\newcommand{\mostver}[0]{1.0.2}
 \newcommand{\md}[0]{{\most{} Data struct}}
 \newcommand{\powerweb}[0]{{\sc PowerWeb}}
 \newcommand{\pserc}[0]{{\sc PSerc}}
@@ -200,7 +200,7 @@
 \newcommand{\ot}[0]{{Optimization Toolbox}}
 \newcommand{\pardiso}[0]{{PARDISO}}
 \newcommand{\sdppf}[0]{\texttt{SDP\_PF}}
-\newcommand{\sdppfver}[0]{1.0}
+\newcommand{\sdppfver}[0]{1.0.1}
 \newcommand{\sdpopf}[0]{SDPOPF}
 \newcommand{\lcb}[0]{\char '173}
 \newcommand{\rcb}[0]{\char '175}
@@ -220,13 +220,13 @@
 \newcommand{\areas}[0]{\code{areas}}
 \newcommand{\mpc}[0]{\code{mpc}}
 \newcommand{\results}[0]{\code{results}}
-\newcommand{\mumurl}[0]{http://www.pserc.cornell.edu/matpower/docs/MATPOWER-manual-\mpver.pdf}
+\newcommand{\mumurl}[0]{https://matpower.org/docs/MATPOWER-manual-\mpver.pdf}
 \newcommand{\mum}[0]{\href{\mumurl}{\matpower{} User's Manual}}
-\newcommand{\mipsmanurl}[0]{http://www.pserc.cornell.edu/matpower/docs/MIPS-manual-\mipsver.pdf}
-\newcommand{\mostmanurl}[0]{http://www.pserc.cornell.edu/matpower/docs/MOST-manual-\mostver.pdf}
-\newcommand{\currentmumurl}[0]{http://www.pserc.cornell.edu/matpower/MATPOWER-manual.pdf}
+\newcommand{\mipsmanurl}[0]{https://matpower.org/docs/MIPS-manual-\mipsver.pdf}
+\newcommand{\mostmanurl}[0]{https://matpower.org/docs/MOST-manual-\mostver.pdf}
+\newcommand{\currentmumurl}[0]{https://matpower.org/docs/MATPOWER-manual.pdf}
 \newcommand{\currentmipsmanurl}[0]{\mipsurl/blob/master/MIPS-manual.pdf}
-\newcommand{\currentmostmanurl}[0]{http://www.pserc.cornell.edu/matpower/MOST-manual.pdf}
+\newcommand{\currentmostmanurl}[0]{https://matpower.org/docs/MOST-manual.pdf}
 \newcommand{\mipsman}[0]{\href{\mipsmanurl}{\mips{} User's Manual}}
 \newcommand{\mostman}[0]{\href{\mostmanurl}{\most{} User's Manual}}
 \newcommand{\dg}[0]{\sp\dagger}                         % hermitian conjugate
@@ -239,6 +239,7 @@
 \newcommand{\R}{\mathbb{R}}          % requires \usepackage{amsfonts|bbold}
 \newcommand{\der}[2]{\frac{\partial{#1}}{\partial{#2}}} % partial derivative
 \newcommand{\paragraphtt}[1]{\paragraph{\texttt{\textbf{#1}}}}
+\newcommand{\doi}[1]{doi:~\href{https://doi.org/#1}{#1}}
 
 \DeclareMathOperator*{\argmax}{arg\,max} %argmax operator
 \DeclareMathOperator*{\argmin}{arg\,min} %argmin operator
@@ -261,7 +262,10 @@
 \title{\syngrid{} \syngridver{}\\
 User's Manual}
 \author{Zhifang Wang \and Hamidreza Sadeghian \and Seyyed Hamid Elyas \and Ray~D.~Zimmerman \and Eran Schweitzer \and Anna Scaglione}
-\date{December 18, 2018} % comment this line to display the current date
+%%% BEFORE PUBLISHING A NEW VERSION:
+%%%   Update the publication year for \bibitem{matpower} and
+%%%   \bibitem{matpower_manual} to the year of the latest release
+\date{June 20, 2019} % comment this line to display the current date
 %\date{December 14, 2011\thanks{Second revision. First revision was December 13, 2011}} % comment this line to display the current date
 
 %%% BEGIN DOCUMENT
@@ -271,7 +275,7 @@ User's Manual}
 \vfill
 \begin{center}
 {\scriptsize
-\copyright~2018~individual contributors (see AUTHORS file for details)\\
+\copyright~2018, 2019~individual contributors (see AUTHORS file for details)\\
 All Rights Reserved}
 \end{center}
 
@@ -288,7 +292,7 @@ All Rights Reserved}
 
 \subsection{Background}
 
-\syngrid{} is a package of \matlab{} language M-files\footnote{Also compatible with GNU Octave~\cite{octave}.} for automatically creating synthetic power grid models for use with \matpower{}. The \syngrid{} project page can be found at:
+\syngrid{} is a package of \matlab{} language M-files\footnote{Also compatible with GNU Octave~\cite{octave}.} for automatically creating synthetic power grid models for use with \matpower{}~\cite{zimmerman2011,matpower,matpower_manual}. The \syngrid{} project page can be found at:
 
 \bigskip
 
@@ -340,19 +344,46 @@ POSSIBILITY OF SUCH DAMAGE.
 \clearpage
 \subsection{Citing \syngrid{}}
 
-While not required by the terms of the license, we do request that publications derived from the use of \syngrid{} explicitly acknowledge that fact by citing one or more of references~\cite{syngrid_nestedSW}, \cite{syngrid_bustype} and \cite{schweitzer2018mathematical}, namely:
+We request that publications derived from the use of \syngrid{} explicitly
+acknowledge that fact by citing one or more of the following
+references~\cite{syngrid_nestedSW, syngrid_bustype, schweitzer2018mathematical}:
 
 \begin{quote}
 \footnotesize
 Z.~Wang, R.~J.~Thomas, and A.~Scaglione, ``Generating Statistically Correct Random Topologies for Testing Smart Grid Communication and Control Networks'', \emph{Smart Grid, IEEE Transactions on}, vol.~1, no.~1, pp.~28--39, June~2010. \\
-DOI~\href{https://doi.org/10.1109/TSG.2010.2044814}{10.1109/TSG.2010.2044814}
+\doi{10.1109/TSG.2010.2044814}
 
 S.~H.~Elyas, Z.~Wang, ``Improved Synthetic Power Grid Modeling with Correlated Bus Type Assignments'', \emph{Power Systems, IEEE Transactions on}, vol.~32, no.~5, pp.~3391--3402, Sept.~2017. \\
-DOI~\href{https://doi.org/10.1109/TPWRS.2016.2634318}{10.1109/TPWRS.2016.2634318}
+\doi{10.1109/TPWRS.2016.2634318}
 
-E. Schweitzer, A. Scaglione, ``A Mathematical Programing Solution for Automatic Generation of Synthetic Power Flow Cases,''  \emph{Power Systems, IEEE Transactions on}, 2018. \\
-DOI~\href{https://doi.org/10.1109/TPWRS.2018.2863266}{10.1109/TPWRS.2018.2863266}
+E.~Schweitzer, A.~Scaglione, ``A Mathematical Programing Solution for Automatic Generation of Synthetic Power Flow Cases,''  \emph{Power Systems, IEEE Transactions on}, 2018. \\
+\doi{10.1109/TPWRS.2018.2863266}
 \end{quote}
+
+The \syngrid{} User's Manual should also be cited explicitly in work that
+refers to or is derived from its content. The citation and DOI can be
+version-specific or general, as appropriate. For version 1.0.1, use:
+
+\begin{quote}
+\footnotesize
+Z.~Wang, H.~Sadeghian, S.~H. Elyas, R.~D. Zimmerman, E.~Schweitzer,
+A.~Scaglione. \syngrid{} User's Manual, Verision 1.0.1. 2019. [Online]. Available: \url{https://matpower.org/docs/SynGrid-manual-1.0.1.pdf}\\
+\doi{10.5281/zenodo.3251099}
+\end{quote}
+For a version non-specific citation, use the following citation and DOI,
+with \emph{\textless{}YEAR\textgreater{}} replaced by the year of the most recent release:
+
+\begin{quote}
+\footnotesize
+Z.~Wang, H.~Sadeghian, S.~H. Elyas, R.~D. Zimmerman, E.~Schweitzer,
+A.~Scaglione. \syngrid{} User's Manual. \emph{\textless{}YEAR\textgreater{}}.
+[Online]. Available: \url{https://matpower.org/docs/SynGrid-manual.pdf}\\
+\doi{10.5281/zenodo.3238679}
+\end{quote}
+A list of versions of the User's Manual with release dates and
+version-specific DOI's can be found via the general DOI at
+\url{https://doi.org/10.5281/zenodo.3238679}.
+
 
 \subsection{\syngrid{} Development}
 \label{sec:development}
@@ -1329,10 +1360,22 @@ The full release history can be found in \code{CHANGES.md} or \href{https://gith
 \subsection{Version 1.0 -- released December 18, 2018}
 \label{app:v10}
 
-The \href{http://www.pserc.cornell.edu/matpower/docs/SynGrid-manual-1.0.pdf}{\syngrid{} 1.0 User's Manual} is available online.\footnote{\url{http://www.pserc.cornell.edu/matpower/docs/SynGrid-manual-1.0.pdf}}
+The \href{https://matpower.org/docs/SynGrid-manual-1.0.pdf}{\syngrid{} 1.0 User's Manual} is available online.\footnote{\url{https://matpower.org/docs/SynGrid-manual-1.0.pdf}}
 
 \begin{itemize}
 \item Initial release.
+\end{itemize}
+
+\subsection{Version 1.0.1 -- released June 20, 2019}
+\label{app:v10}
+
+The \href{https://matpower.org/docs/SynGrid-manual-1.0.1.pdf}{\syngrid{} 1.0.1 User's Manual} is available online.\footnote{\url{https://matpower.org/docs/SynGrid-manual-1.0.1.pdf}}
+
+\subsubsection*{Changes}
+\begin{itemize}
+\item Move local functions to private methods for Octave 4.2 compatibility.
+\item Add \code{CITATION} file.
+\item Other miscellaneous documentation updates, e.g. \matpower{} website links updated to \url{https://matpower.org}.
 \end{itemize}
 
 
@@ -1372,28 +1415,41 @@ The \href{http://www.pserc.cornell.edu/matpower/docs/SynGrid-manual-1.0.pdf}{\sy
 %\addcontentsline{toc}{section}{References}
 \begin{thebibliography}{99}
 
+\bibitem{zimmerman2011}
+R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez, and R.~J. Thomas, ``\matpower{}: Steady-State Operations, Planning and Analysis Tools for Power Systems Research and Education,'' \emph{Power Systems, IEEE Transactions on}, vol.~26, no.~1, pp.~12--19, Feb.~2011. \doi{10.1109/TPWRS.2010.2051168}
+
+\bibitem{matpower}
+R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez (2019). \matpower{}\\~
+[Software]. Available: \url{https://matpower.org}\\
+\doi{10.5281/zenodo.3236535}
+
+\bibitem{matpower_manual}
+R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez. \matpower{} User's Manual. 2019.\\~
+[Online]. Available: \url{https://matpower.org/docs/MATPOWER-manual.pdf}\\
+\doi{10.5281/zenodo.3236519}
+
 \bibitem{wang2008}
 Z.~Wang, R.~J.~Thomas and A.~Scaglione, ``Generating Random Topology Power Grids,'' \emph{Proceedings of the 41st Annual Hawaii International Conference on System Sciences (HICSS 2008)}, Waikoloa, HI, 2008, pp.~1--9.
-\url{https://doi.org/10.1109/HICSS.2008.182}
+\doi{10.1109/HICSS.2008.182}
 
 \bibitem{syngrid_nestedSW}
 Z.~Wang, A.~Scaglione and R.~J.~Thomas, ``Generating Statistically Correct Random Topologies for Testing Smart Grid Communication and Control Networks,'' \emph{Smart Grid, IEEE Transactions on}, vol.~1, no.~1, pp.~28--39, June~2010.
-\url{https://doi.org/10.1109/TSG.2010.2044814}
+\doi{10.1109/TSG.2010.2044814}
 
 \bibitem{wang2015}
 Z.~Wang and R.~J.~Thomas, ``On Bus Type Assignments in Random Topology Power Grid Models,'' \emph{2015 48th Hawaii International Conference on System Sciences}, Kauai, HI, 2015, pp.~2671--2679.
-\url{https://doi.org/10.1109/HICSS.2015.322}
+\doi{10.1109/HICSS.2015.322}
 
 \bibitem{syngrid_scaling}
 Z.~Wang, S.~H.~Elyas, ``On the Scaling Property of Power Grids,'' \emph{Proceedings of the 50st Annual Hawaii International Conference on System Sciences (HICSS 2017)}, Waikoloa, HI, 2017, pp.~3148--3155.
-\url{https://doi.org/10.24251/HICSS.2017.381}
+\doi{10.24251/HICSS.2017.381}
 
 \bibitem{syngrid_bustype}
 S.~H.~Elyas, Z.~Wang, ``Improved Synthetic Power Grid Modeling with Correlated Bus Type Assignments,'' \emph{Power Systems, IEEE Transactions on}, vol.~32, no.~5, pp.~3391--3402, Sept.~2017.
-\url{https://doi.org/10.1109/TPWRS.2016.2634318}
+\doi{10.1109/TPWRS.2016.2634318}
 
 \bibitem{schweitzer2018mathematical}
-E. Schweitzer, A. Scaglione, ``A Mathematical Programing Solution for Automatic Generation of Synthetic Power Flow Cases,''  \emph{Power Systems, IEEE Transactions on}, 2018. \url{https://doi.org/10.1109/TPWRS.2018.2863266}
+E. Schweitzer, A. Scaglione, ``A Mathematical Programing Solution for Automatic Generation of Synthetic Power Flow Cases,''  \emph{Power Systems, IEEE Transactions on}, 2018. \doi{10.1109/TPWRS.2018.2863266}
 
 \bibitem{syngrid_gen}
 S.~H.~Elyas, Z.~Wang, R.~J.~Thomas,``On the Statistical Settings of Generation Capacities and Dispatch in a Synthetic Grid Modeling,'' \emph{10th Bulk Power Systems Dynamics and Control Symposium (IREP'2017)}, Espinho, Portugal, Aug 27--Sep 1, 2017.
@@ -1405,9 +1461,11 @@ S.~H.~Elyas, Z.~Wang, R.~J.~Thomas,
 \bibitem{syngrid_transmissionline}
 H.~Sadeghian, S.~H.~Elyas, Z.~Wang, ``A Novel Algorithm for Statistical Assignment of Transmission Capacities in Synthetic Grid Modeling,''
 \emph{2018 IEEE PES General Meeting}, Portland, OR, Aug 5--9, 2018.
+\doi{10.1109/PESGM.2018.8585532}
 
 \bibitem{syngrid_stat}
 Z.~Wang, M.~H.~Athari, S.~H.~Elyas, ``Statistically Analyzing Power System Network,'' \emph{2018 IEEE PES General Meeting}, Portland, OR, Aug 5--9, 2018.
+\doi{10.1109/PESGM.2018.8586110}
 
 \bibitem{octave}
 John~W.~Eaton, David~Bateman, S{\o}ren~Hauberg, Rik~Wehbring (2015). \emph{GNU Octave version 4.0.0 manual: a high-level interactive language for numerical computations.} Available: \url{https://www.gnu.org/software/octave/doc/interpreter/}.
@@ -1416,18 +1474,13 @@ John~W.~Eaton, David~Bateman, S{\o}ren~Hauberg, Rik~Wehbring (2015). \emph{GNU O
 The BSD 3-Clause License. [Online]. Available: \url{https://opensource.org/licenses/BSD-3-Clause}.
 
 \bibitem{syngrid_manual}
-Z.~Wang, H.~Sadeghian, S.~H. Elyas, and R.~D. Zimmerman, ``\syngridman{},'' 2018.
-  [Online]. Available: \url{\syngridmanurl}
-
-\bibitem{matpower}
-R.~D. Zimmerman and C.~Murillo-S{\'a}nchez. \matpower{} User's Manual,
-  [Online]. Available: \url{\matpowerurl}
-
-\bibitem{zimmerman2011}
-R.~D. Zimmerman, C.~E. Murillo-S{\'a}nchez, and R.~J. Thomas, ``\matpower{}: Steady-State Operations, Planning and Analysis Tools for Power Systems Research and Education,'' \emph{Power Systems, IEEE Transactions on}, vol.~26, no.~1, pp.~12--19, Feb.~2011. \url{https://doi.org/10.1109/TPWRS.2010.2051168}
+Z.~Wang, H.~Sadeghian, S.~H. Elyas, R.~D. Zimmerman, E.~Schweitzer,
+A.~Scaglione. \syngridman{}. 2019.
+[Online]. Available: \url{https://matpower.org/docs/SynGrid-manual.pdf}\\
+\doi{10.5281/zenodo.3238679}
 
 \bibitem{birchfield2018Power}
-A.~B. Birchfield, T. Xu, and T.~J. Overbye, ``Power Flow Convergence and Reactive Power Planning in the Creation of Large Synthetic Grids,''  \emph{Power Systems, IEEE Transactions on}, vol.~33, no.~6, pp.~6667--6674, Nov.~2018.\\ \url{https://doi.org/10.1109/TPWRS.2018.2813525}
+A.~B. Birchfield, T. Xu, and T.~J. Overbye, ``Power Flow Convergence and Reactive Power Planning in the Creation of Large Synthetic Grids,''  \emph{Power Systems, IEEE Transactions on}, vol.~33, no.~6, pp.~6667--6674, Nov.~2018.\\ \doi{10.1109/TPWRS.2018.2813525}
 
 \bibitem{adameconomic}
 T. Xu, A.~B. Birchfield, K.~M. Gegner, K.~S. Shetye, and T.~J. Overbye, ``Application of large-scale synthetic power system models for energy economic studies,''  \emph{In Proceedings of the 50th Hawaii International Conference on System Sciences}. 2017.

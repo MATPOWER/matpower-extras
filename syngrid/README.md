@@ -118,28 +118,28 @@ Publications
     Power Grids,"][11] *Proceedings of the 41st Annual Hawaii International
     Conference on System Sciences (HICSS 2008)*, Waikoloa, HI, 2008,
     pp. 1-9.  
-    DOI: [10.1109/HICSS.2008.182][11]
+    doi: [10.1109/HICSS.2008.182][11]
 
 2.  Z. Wang, A. Scaglione and R. J. Thomas, ["Generating Statistically
     Correct Random Topologies for Testing Smart Grid Communication and
     Control Networks,"][7] *Smart Grid, IEEE Transactions on*, vol. 1,
     no. 1, pp. 28-39, June 2010.  
-    DOI: [10.1109/TSG.2010.2044814][7]
+    doi: [10.1109/TSG.2010.2044814][7]
 
 3.  Z. Wang and R. J. Thomas, ["On Bus Type Assignments in Random Topology
     Power Grid Models,"][12] *2015 48th Hawaii International Conference on
     System Sciences*, Kauai, HI, 2015, pp. 2671-2679.  
-    DOI: [10.1109/HICSS.2015.322][12]
+    doi: [10.1109/HICSS.2015.322][12]
 
 4.  Z. Wang, S. H. Elyas, ["On the Scaling Property of Power Grids,"][13]
     *Proceedings of the 50st Annual Hawaii International Conference on
     System Sciences (HICSS 2017)*, Waikoloa, HI, 2017, pp. 3148-3155.  
-    DOI: [10.24251/HICSS.2017.381][13]
+    doi: [10.24251/HICSS.2017.381][13]
 
 5.  S. H. Elyas and Z. Wang, ["Improved Synthetic Power Grid Modeling
     With Correlated Bus Type Assignments,"][8] *Power Systems, IEEE
     Transactions on*, vol. 32, no. 5, pp. 3391-3402, Sept. 2017.  
-    DOI: [10.1109/TPWRS.2016.2634318][8].
+    doi: [10.1109/TPWRS.2016.2634318][8].
 
 6.  S. H. Elyas, Z. Wang, R. J. Thomas, ["On the Statistical Settings of
     Generation Capacities and Dispatch in a Synthetic Grid Modeling,"][14]
@@ -148,37 +148,62 @@ Publications
 
 7.  H.~Sadeghian, S. H.~Elyas, Z.~Wang, ["A Novel Algorithm for Statistical
     Assignment of Transmission Capacities in Synthetic Grid Modeling,"][15]
-    *2018 IEEE PES General Meeting*, Portland, OR, Aug 5-9, 2018.
+    *2018 IEEE PES General Meeting*, Portland, OR, Aug 5-9, 2018.  
+    doi: [10.1109/PESGM.2018.8585532][15]
 
 8.  Z. Wang, M. H. Athari, S. H. Elyas, ["Statistically Analyzing Power
     System Network,"][16] *2018 IEEE PES General Meeting*, Portland, OR,
-    Aug 5-9, 2018.
+    Aug 5-9, 2018.  
+    doi: [10.1109/PESGM.2018.8586110][16]
 
 9.  E. Schweitzer, A. Scaglione, ["A Mathematical Programing Solution
     for Automatic Generation of Synthetic Power Flow Cases,"][17] *Power
     Systems, IEEE Transactions on*, 2018.  
-    DOI: [10.1109/TPWRS.2018.2863266][17]
+    doi: [10.1109/TPWRS.2018.2863266][17]
 
 
-Citing SynGrid
---------------
+[Citing SynGrid][18]
+--------------------
 
 We request that publications derived from the use of SynGrid explicitly
-acknowledge that fact by citing one or more of references [\[2\]][7],
-[\[5\]][8] and [\[9\]][17] above, namely:
+acknowledge that fact by citing one or more of the following references:
 
 >   Z. Wang, A. Scaglione and R. J. Thomas, "Generating Statistically
     Correct Random Topologies for Testing Smart Grid Communication and
     Control Networks," *Smart Grid, IEEE Transactions on*, vol. 1,
     no. 1, pp. 28-39, June 2010.  
+    doi: [10.1109/TSG.2010.2044814][7]
 
 >   S. H. Elyas and Z. Wang, "Improved Synthetic Power Grid Modeling
     With Correlated Bus Type Assignments," *Power Systems, IEEE
     Transactions on*, vol. 32, no. 5, pp. 3391-3402, Sept. 2017.  
+    doi: [10.1109/TPWRS.2016.2634318][8]
 
 >   E. Schweitzer, A. Scaglione, "A Mathematical Programing Solution
     for Automatic Generation of Synthetic Power Flow Cases," *Power
     Systems, IEEE Transactions on*, 2018.  
+    doi: [10.1109/TPWRS.2018.2863266][17]
+
+The [SynGrid User's Manual][6] should also be cited explicitly in work that
+refers to or is derived from its content. The citation and DOI can be
+version-specific or general, as appropriate. For version 1.0.1, use:
+
+>   Z. Wang, H. Sadeghian, S. H. Elyas, R. D. Zimmerman, E. Schweitzer,
+    A. Scaglione. *SynGrid User's Manual, Version 1.0.1*. 2019. [Online].
+    Available: https://matpower.org/docs/SynGrid-manual-1.0.1.pdf  
+    doi: [10.5281/zenodo.3251099](https://doi.org/10.5281/zenodo.3251099)
+
+For a version non-specific citation, use the following citation and DOI,
+with *\<YEAR\>* replaced by the year of the most recent release:
+
+>   Z. Wang, H. Sadeghian, S. H. Elyas, R. D. Zimmerman, E. Schweitzer,
+    A. Scaglione. *SynGrid User's Manual*. *\<YEAR\>*. [Online].
+    Available: https://matpower.org/docs/SynGrid-manual.pdf  
+    doi: [10.5281/zenodo.3238679][19]
+
+A list of versions of the User's Manual with release dates and
+version-specific DOI's can be found via the general DOI at
+https://doi.org/10.5281/zenodo.3238679.
 
 
 Contributing
@@ -194,12 +219,12 @@ SynGrid is distributed under the [3-clause BSD license][10].
 
 ----
 [1]: https://github.com/MATPOWER/mx-syngrid
-[2]: http://www.pserc.cornell.edu/matpower/
+[2]: https://matpower.org
 [3]: https://arpa-e.energy.gov/?q=slick-sheet-project/synthetic-data-power-grid-rd
 [3b]: https://arpa-e.energy.gov/?q=arpa-e-programs/grid-data
 [4]: https://github.com/MATPOWER/matpower
 [5]: https://github.com/MATPOWER/matpower-extras
-[6]: https://github.com/MATPOWER/mx-syngrid/blob/master/docs/SynGrid-manual.pdf
+[6]: docs/SynGrid-manual.pdf
 [7]: https://doi.org/10.1109/TSG.2010.2044814
 [8]: https://doi.org/10.1109/TPWRS.2016.2634318
 [9]: https://github.com/MATPOWER/matpower/blob/master/CONTRIBUTING.md
@@ -208,6 +233,8 @@ SynGrid is distributed under the [3-clause BSD license][10].
 [12]: https://doi.org/10.1109/HICSS.2015.322
 [13]: https://doi.org/10.24251/HICSS.2017.381
 [14]: https://arxiv.org/abs/1706.09294
-[15]: .
-[16]: .
+[15]: https://doi.org/10.1109/PESGM.2018.8585532
+[16]: https://doi.org/10.1109/PESGM.2018.8586110
 [17]: https://doi.org/10.1109/TPWRS.2018.2863266
+[18]: CITING
+[19]: https://doi.org/10.5281/zenodo.3238679
