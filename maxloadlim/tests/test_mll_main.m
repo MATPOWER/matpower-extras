@@ -17,9 +17,9 @@ function success = test_mll_main(verbose, exit_on_fail)
 %   by Camille Hamon
 %   and Ray Zimmerman, PSERC Cornell
 %
-%   This file is part of MATPOWER.
+%   This file is part of MATPOWER/mx-maxloadlim.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/mx-maxloadlim/ for more info.
 
 if nargin < 2
     exit_on_fail = 0;
