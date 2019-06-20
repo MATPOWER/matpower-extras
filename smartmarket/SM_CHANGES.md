@@ -2,8 +2,11 @@ Change history for [SMARTMARKET][1]
 ===================================
 
 
-since last release
-------------------
+Version 7.0 - *Jun 20, 2019*
+----------------------------
+
+#### 6/20/19
+  - Release 7.0
 
 #### 1/11/19
   - Add `test_smartmarket.m` test suite.
