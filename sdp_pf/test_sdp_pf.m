@@ -16,9 +16,9 @@ function success = test_sdp_pf(verbose, exit_on_fail)
 %   Copyright (c) 2004-2019, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
-%   This file is part of MATPOWER.
+%   This file is part of MATPOWER/mx-sdp_pf.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/mx-sdp_pf/ for more info.
 
 if nargin < 2
     exit_on_fail = 0;
@@ -33,9 +33,9 @@ if have_fcn('mosek') || have_fcn('sdpt3') || have_fcn('sedumi')
     tests{end+1} = 't_opf_sdpopf';
     tests{end+1} = 't_insolvablepf';
     tests{end+1} = 't_insolvablepf_limitQ';
+    tests{end+1} = 't_insolvablepfsos';
+    tests{end+1} = 't_insolvablepfsos_limitQ';
 end
-tests{end+1} = 't_insolvablepfsos';
-tests{end+1} = 't_insolvablepfsos_limitQ';
 tests{end+1} = 't_testglobalopt';
 
 %% run the tests
