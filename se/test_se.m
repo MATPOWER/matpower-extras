@@ -6,9 +6,9 @@ function test_se
 %   Copyright (c) 2009-2016, Power Systems Engineering Research Center (PSERC)
 %   by Rui Bo
 %
-%   This file is part of MATPOWER.
+%   This file is part of MATPOWER/mx-se.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/mx-se/ for more info.
 
 %%------------------------------------------------------
 % using data in Problem 6.7 in book 'Computational

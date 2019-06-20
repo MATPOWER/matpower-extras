@@ -10,9 +10,9 @@ function V0 = getV0(bus, gen, type_initialguess, V0)
 %   Copyright (c) 2009-2016, Power Systems Engineering Research Center (PSERC)
 %   by Rui Bo
 %
-%   This file is part of MATPOWER.
+%   This file is part of MATPOWER/mx-se.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
-%   See http://www.pserc.cornell.edu/matpower/ for more info.
+%   See https://github.com/MATPOWER/mx-se/ for more info.
 
 %% define named indices into bus, gen, branch matrices
 [PQ, PV, REF, NONE, BUS_I, BUS_TYPE, PD, QD, GS, BS, BUS_AREA, VM, ...
