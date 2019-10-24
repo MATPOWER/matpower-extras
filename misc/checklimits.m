@@ -11,12 +11,10 @@ function [Fv, Pv, Qv, Vv] = checklimits(mpc, ac, quiet)
 %             1 = check AC limits (includes |V|, Qg lims, MVA flows)
 %       QUIET : 1 doesn't print anything, 0 prints results
 %
-%   Work-in-progress:   Currently only flow and real power generation limit
-%                       checks are implemented.
-%                       At this point, the code *is* the documentation.
+%   Work-in-progress:   At this point, the code *is* the documentation.
 
 %   MATPOWER
-%   Copyright (c) 2014-2016, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2014-2019, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MATPOWER Extras.
