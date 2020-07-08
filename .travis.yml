@@ -50,8 +50,8 @@ script:
 - octave-cli --no-gui --eval ver
 
 # build IPOPT MEX file
-- curl -SL https://www.coin-or.org/download/source/Ipopt/Ipopt-${IPOPT_VER}.tgz | tar -xzC $OPT_PKG_BUILD_DIR
-- mv $OPT_PKG_BUILD_DIR/Ipopt-${IPOPT_VER}/Ipopt/contrib/MatlabInterface $OPT_PKG_BUILD_DIR/ipopt
+- curl -SL https://github.com/coin-or/Ipopt/archive/releases/${IPOPT_VER}.tar.gz | tar -xzC $OPT_PKG_BUILD_DIR
+- mv $OPT_PKG_BUILD_DIR/Ipopt-releases-${IPOPT_VER}/Ipopt/contrib/MatlabInterface $OPT_PKG_BUILD_DIR/ipopt
 - mv $TRAVIS_BUILD_DIR/.travis/Makefile $OPT_PKG_BUILD_DIR/ipopt/src
 - make -C $OPT_PKG_BUILD_DIR/ipopt/src
 - mv $OPT_PKG_BUILD_DIR/ipopt/src/*.mex $OPT_PKG_BUILD_DIR/ipopt/
