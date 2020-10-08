@@ -9,7 +9,7 @@ function rv = sdp_pf_ver(varargin)
 %   See also MPVER.
 
 %   MATPOWER
-%   Copyright (c) 2014-2019, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2014-2020, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MATPOWER/mx-sdp_pf.
@@ -17,9 +17,9 @@ function rv = sdp_pf_ver(varargin)
 %   See https://github.com/MATPOWER/mx-sdp_pf/ for more info.
 
 v = struct( 'Name',     'SDP_PF', ... 
-            'Version',  '1.0.1', ...
+            'Version',  '1.0.2', ...
             'Release',  '', ...
-            'Date',     '20-Jun-2019' );
+            'Date',     '08-Oct-2020' );
 if nargout > 0
     if nargin > 0
         rv = v;

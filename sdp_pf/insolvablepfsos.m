@@ -53,7 +53,7 @@ if enforce_Qlimits > 0
     enforce_Qlimits = 1;
 end
 
-if ~have_fcn('yalmip')
+if ~have_feature('yalmip')
     error('insolvablepfsos: The software package YALMIP is required to run insolvablepfsos. See https://yalmip.github.io');
 end
 
@@ -283,14 +283,14 @@ end
 
 % Preserve warning settings
 S = warning;
-if have_fcn('matlab', 'vnum') >= 8.006 && have_fcn('cplex') && ...
-        have_fcn('cplex', 'vnum') <= 12.006003
+if have_feature('matlab', 'vnum') >= 8.006 && have_feature('cplex') && ...
+        have_feature('cplex', 'vnum') <= 12.006003
     warning('OFF', 'MATLAB:lang:badlyScopedReturnValue');
 end
 
 sol = solvesos(constraints,[],sosopts,pvec);
 
-if ~have_fcn('octave') || have_fcn('octave', 'vnum') >= 4.001
+if ~have_feature('octave') || have_feature('octave', 'vnum') >= 4.001
     %% (avoid bug in Octave 4.0.x, where warning state is left corrupted)
     warning(S);
 end

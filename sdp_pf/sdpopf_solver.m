@@ -994,7 +994,7 @@ sdpinfo = solvesdp(constraints, -cost, sdpopts); % Negative cost to convert maxi
 if sdpinfo.problem == 2 || sdpinfo.problem == -2 || sdpinfo.problem == -3
     error(yalmiperror(sdpinfo.problem));
 end
-if ~have_fcn('octave') || have_fcn('octave', 'vnum') >= 4.001
+if ~have_feature('octave') || have_feature('octave', 'vnum') >= 4.001
     %% (avoid bug in Octave 4.0.x, where warning state is left corrupted)
     warning(S);
 end
@@ -1151,7 +1151,7 @@ for r = 1:length(recover_voltage_loop)
         try
             warning off
             [LLevec,LLeval] = eigs(L.'*L,1,'SM');
-            if ~have_fcn('octave') || have_fcn('octave', 'vnum') >= 4.001
+            if ~have_feature('octave') || have_feature('octave', 'vnum') >= 4.001
                 %% (avoid bug in Octave 4.0.x, where warning state is left corrupted)
                 warning(S);
             end
@@ -1159,7 +1159,7 @@ for r = 1:length(recover_voltage_loop)
             [LLevec,LLeval] = eig(full(L).'*full(L));
             LLeval = LLeval(1);
             LLevec = LLevec(:,1);
-            if ~have_fcn('octave') || have_fcn('octave', 'vnum') >= 4.001
+            if ~have_feature('octave') || have_feature('octave', 'vnum') >= 4.001
                 %% (avoid bug in Octave 4.0.x, where warning state is left corrupted)
                 warning(S);
             end

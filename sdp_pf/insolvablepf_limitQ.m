@@ -68,7 +68,7 @@ ndisplay            = mpopt.sdp_pf.ndisplay;    %% Determine display frequency o
 maxSystemSize = 57;
 fixPVbusInjection = 0; % If equal to 1, don't allow changes in active power injections at PV buses.
 
-if ~have_fcn('yalmip')
+if ~have_feature('yalmip')
     error('insolvablepf_limitQ: The software package YALMIP is required to run insolvablepf_limitQ. See https://yalmip.github.io');
 end
 
@@ -260,7 +260,7 @@ sdpinfo = solvesdp(constraints, -eta, sdpopts);
 if sdpinfo.problem == 2 || sdpinfo.problem == -2 || sdpinfo.problem == -3
     error(yalmiperror(sdpinfo.problem));
 end
-if ~have_fcn('octave') || have_fcn('octave', 'vnum') >= 4.001
+if ~have_feature('octave') || have_feature('octave', 'vnum') >= 4.001
     %% (avoid bug in Octave 4.0.x, where warning state is left corrupted)
     warning(S);
 end

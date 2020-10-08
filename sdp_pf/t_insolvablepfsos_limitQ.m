@@ -35,8 +35,8 @@ else
     verbose = 0;
 end
 
-if have_fcn('octave')
-    if have_fcn('octave', 'vnum') >= 4
+if have_feature('octave')
+    if have_feature('octave', 'vnum') >= 4
         file_in_path_warn_id = 'Octave:data-file-in-path';
     else
         file_in_path_warn_id = 'Octave:load-file-in-path';
@@ -82,7 +82,7 @@ t = [t0 '(solvable case) :'];
 insolvable = insolvablepfsos_limitQ(res,mpopt);
 t_ok(~insolvable, [t ' solvable']);
 
-if have_fcn('octave')
+if have_feature('octave')
     warning(s1.state, file_in_path_warn_id);
 end
 

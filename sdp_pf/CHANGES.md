@@ -2,10 +2,21 @@ Change history for [SDP-PF][1]
 ==============================
 
 
+Version 1.0.2 - *Oct 8, 2020*
+-----------------------------
+
+#### 10/8/20
+  - Released 1.0.1. (with MATPOWER 7.0)
+
+#### 9/23/20
+  - Use `have_feature()` everywhere in place of deprecated `have_fcn()`.
+
+
 Version 1.0.1 - *Jun 20, 2019*
 ------------------------------
 
 #### 1/23/19
+  - Released 1.0.1. (with MATPOWER 7.0)
   - Add Octave compatibility.
   - Add Travis-CI integration.
 

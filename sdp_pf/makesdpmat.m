@@ -60,7 +60,7 @@ mpc = loadcase(mpc);
 nbus = size(mpc.bus,1);
 Y = makeYbus(mpc);
 
-if have_fcn('octave')
+if have_feature('octave')
     emat = full(speye(nbus));
 else
     emat = speye(nbus);

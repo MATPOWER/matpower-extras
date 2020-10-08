@@ -29,7 +29,7 @@ end
 
 tests = {};
 
-if have_fcn('mosek') || have_fcn('sdpt3') || have_fcn('sedumi')
+if have_feature('mosek') || have_feature('sdpt3') || have_feature('sedumi')
     tests{end+1} = 't_opf_sdpopf';
     tests{end+1} = 't_insolvablepf';
     tests{end+1} = 't_insolvablepf_limitQ';

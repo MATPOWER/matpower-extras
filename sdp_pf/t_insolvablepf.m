@@ -35,8 +35,8 @@ else
     verbose = 0;
 end
 
-if have_fcn('octave')
-    if have_fcn('octave', 'vnum') >= 4
+if have_feature('octave')
+    if have_feature('octave', 'vnum') >= 4
         file_in_path_warn_id = 'Octave:data-file-in-path';
     else
         file_in_path_warn_id = 'Octave:load-file-in-path';
@@ -88,7 +88,7 @@ t_is(Vslack_min, Vslack_min_soln / sqrt(mult), 3, [t ' Vslack_min']);
 t_is(sigma, sigma_soln * sqrt(10), 3, [t ' sigma']);
 t_is(eta, eta_soln * mult, 3, [t ' eta']);
 
-if have_fcn('octave')
+if have_feature('octave')
     warning(s1.state, file_in_path_warn_id);
 end
 

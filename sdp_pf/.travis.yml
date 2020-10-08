@@ -1,4 +1,3 @@
-sudo: required
 dist: xenial
 
 language: generic
@@ -43,7 +42,6 @@ script:
 
 # build and install SeDuMi file
 - cd $OPT_PKG_BUILD_DIR/sedumi
-- patch blksdp.h < $TRAVIS_BUILD_DIR/.travis/f77blas_h.patch
 - mv vec.m vec.m.disabled
 - octave-cli --no-gui --eval "install_sedumi('-rebuild'); savepath"
 
