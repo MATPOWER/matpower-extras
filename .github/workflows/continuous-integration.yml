@@ -1,10 +1,16 @@
 name: CI
 
-on: [push]
+# controls when action will run
+on:
+  # triggers workflow on push events
+  push:
+  # allows workflow to be triggered manually from Actions tab
+  workflow_dispatch:
 
 jobs:
   build:
     strategy:
+      fail-fast: false
       matrix:
 #        os: [macos-10.15, macos-11.0, ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
         os: [macos-latest, ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
@@ -12,98 +18,77 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - name: Check out repository
+      uses: actions/checkout@v2
 
-    - name: Initialize Package Manager (Linux)
+    - name: Install Octave (Linux)
       if: startsWith(matrix.os, 'ubuntu')
-      run: sudo apt-get update -qq
+      uses: MATPOWER/action-install-octave-linux@v1
+      with:
+        ipopt-libs: true
 
-    - name: Initialize Package Manager (Mac)
+    - name: Install Octave (macOS)
       if: startsWith(matrix.os, 'macos')
-      run: brew update
+      uses: MATPOWER/action-install-octave-macos@v1
 
-    - name: Install bash (Mac)
-      if: startsWith(matrix.os, 'macos')
-      run: brew install bash
-
-    - name: Install GNU Octave / IPOPT (Linux)
-      if: startsWith(matrix.os, 'ubuntu')
-      run: |
-        sudo apt-get install -y -qq libopenblas-dev coinor-libipopt-dev liboctave-dev octave
-        octave-cli --no-gui --eval ver
-        echo "OCTAVE_VER=`octave-cli --no-gui --eval "fprintf('%s', ver('octave').Version)"`" >> $GITHUB_ENV
-
-    - name: Install GNU Octave (Mac)
-      if: startsWith(matrix.os, 'macos')
-      run: |
-        brew install octave
-        octave-cli --no-gui --eval ver
-        echo "OCTAVE_VER=`octave-cli --no-gui --eval "fprintf('%s', ver('octave').Version)"`" >> $GITHUB_ENV
+    - name: ${{ env.ML_NAME }} ${{ env.ML_VER }} Installed
+      run: $ML_CMD ver
 
     - name: Include IPOPT?
       if: startsWith(env.OCTAVE_VER, '4.0') != 1
-      run: |
-        mkdir $HOME/build
-        echo "INCLUDE_IPOPT=1" >> $GITHUB_ENV
+      run: echo "INCLUDE_IPOPT=1" >> $GITHUB_ENV
 
-    - name: Cache IPOPT Libs
-      if: startsWith(matrix.os, 'macos') && env.INCLUDE_IPOPT
+    - name: Cache IPOPT Libs (macOS)
+      if: env.INCLUDE_IPOPT && startsWith(matrix.os, 'macos')
       id: cache-ipopt-libs
+      env:
+        cache-name: ipopt-libs
       uses: actions/cache@v2
       with:
         path: ~/install
-        key: ${{ matrix.os }}-ipopt-libs
+        key: ${{ matrix.os }}-${{ env.cache-name }}
 
-    - name: Cache IPOPT
+    - name: Build IPOPT (macOS)
+      if: env.INCLUDE_IPOPT && startsWith(matrix.os, 'macos') && steps.cache-ipopt-libs.outputs.cache-hit != 'true'
+      uses: MATPOWER/action-build-ipopt-macos@v1
+
+    - name: Cache IPOPT interface for Octave
       if: env.INCLUDE_IPOPT
       id: cache-ipopt
+      env:
+        cache-name: ipopt
       uses: actions/cache@v2
       with:
         path: ~/build/ipopt
-        key: ${{ matrix.os }}-ipopt
+        key: ${{ matrix.os }}-${{ env.cache-name }}
 
-    - name: Build IPOPT from source (Mac)
-      if: startsWith(matrix.os, 'macos') && env.INCLUDE_IPOPT && steps.cache-ipopt-libs.outputs.cache-hit != 'true'
-      run: |
-        git clone https://www.github.com/coin-or/coinbrew
-        cd coinbrew
-        ./coinbrew fetch Ipopt --no-prompt
-        ./coinbrew build Ipopt --prefix=$HOME/install --test --no-prompt
-        ./coinbrew install Ipopt
-
-    - name: Build IPOPT Octave interface
-      if: env.INCLUDE_IPOPT && steps.cache-ipopt.outputs.cache-hit != 'true'
-      env:
-        IPOPT_VER: 3.11.9
-      run: |
-        export PKG_CONFIG_PATH=$HOME/install/lib/pkgconfig
-        curl -SL https://github.com/coin-or/Ipopt/archive/releases/${IPOPT_VER}.tar.gz | tar -xzC $HOME/build
-        mv $HOME/build/Ipopt-releases-${IPOPT_VER}/Ipopt/contrib/MatlabInterface $HOME/build/ipopt
-        mv $GITHUB_WORKSPACE/.github/ipopt/Makefile $HOME/build/ipopt/src
-        make -C $HOME/build/ipopt/src
-        mv $HOME/build/ipopt/src/*.mex $HOME/build/ipopt/
-
-    - name: Install IPOPT Octave interface
+    - name: Install IPOPT interface for Octave
       if: env.INCLUDE_IPOPT
-      run: octave-cli --no-gui --eval "addpath('$HOME/build/ipopt'); savepath"
+      uses: MATPOWER/action-install-ipopt-octave@v1
+      with:
+        cached: ${{ steps.cache-ipopt.outputs.cache-hit == 'true' }}
+
+    - name: Install OpenBLAS (Linux)
+      if: startsWith(matrix.os, 'ubuntu')
+      run: sudo apt-get install -y -qq libopenblas-dev
 
     - name: Build/Install SeDuMi
       run: |
         git clone --depth=1 https://github.com/sqlp/sedumi.git $HOME/sedumi
         cd $HOME/sedumi
         mv vec.m vec.m.disabled
-        octave-cli --no-gui --eval "install_sedumi('-rebuild'); savepath"
+        $ML_CMD "install_sedumi('-rebuild'); savepath"
 
     - name: Build/Install SDPT3
       run: |
         git clone --depth=1 https://github.com/sqlp/sdpt3.git $HOME/sdpt3
         cd $HOME/sdpt3
-        octave-cli --no-gui --eval "install_sdpt3('-rebuild'); savepath"
+        $ML_CMD "install_sdpt3('-rebuild'); savepath"
 
     - name: Install YALMIP
       run: |
         git clone --depth=1 -b R20180817 https://github.com/yalmip/YALMIP.git $HOME/yalmip
-        octave-cli --no-gui --eval "addpath(genpath('$HOME/yalmip', '.git', 'o_win', 'dev'), '-end'); savepath"
+        $ML_CMD "addpath(genpath('$HOME/yalmip', '.git', 'o_win', 'dev'), '-end'); savepath"
 
     - name: Install MP-Test, Set MPTEST_PATH
       run: |
@@ -124,41 +109,41 @@ jobs:
       run: |
         git clone --depth=1 https://github.com/MATPOWER/matpower.git $HOME/matpower
         ln -s ${GITHUB_WORKSPACE} $HOME/matpower/extras
-        octave-cli --no-gui -p $HOME/matpower --eval "install_matpower(1,1,1)"
-        octave-cli --no-gui --eval mpver
+        env $ML_PATHVAR=$HOME/matpower $ML_CMD "install_matpower(1,1,1)"
+        $ML_CMD mpver
         echo "TEST_PATH=${MP_OPT_MODEL_PATH}" >> $GITHUB_ENV
 
     - name: Test IPOPT availability, print version number
       if: env.INCLUDE_IPOPT
       run:  |
-        octave-cli --no-gui --eval "if ~have_feature('ipopt'), exit(1); end"
-        octave-cli --no-gui --eval "qps_ipopt([],[1; 1],[1 1],[2],[2],[1; 1],[1; 1],[1; 1],struct('verbose', 2));"
+        $ML_CMD "if ~have_feature('ipopt'), exit(1); end"
+        $ML_CMD "qps_ipopt([],[1; 1],[1 1],[2],[2],[1; 1],[1; 1],[1; 1],struct('verbose', 2));"
 
     - name: Test SeDuMi availability, print version number
       run:  |
-        octave-cli --no-gui --eval "if ~have_feature('sedumi'), exit(1); end"
-        octave-cli --no-gui --eval "x = sedumi([1 1], 1, [1;2]);"
+        $ML_CMD "if ~have_feature('sedumi'), exit(1); end"
+        $ML_CMD "x = sedumi([1 1], 1, [1;2]);"
 
     - name: Test SDPT3 availability, print version number
       run:  |
-        octave-cli --no-gui --eval "if ~have_feature('sdpt3'), exit(1); end"
-        octave-cli --no-gui --eval "help sdpt3"
+        $ML_CMD "if ~have_feature('sdpt3'), exit(1); end"
+        $ML_CMD "help sdpt3"
 
     - name: Test YALMIP availability, print version number
       run:  |
-        octave-cli --no-gui --eval "if ~have_feature('yalmip'), exit(1); end"
-        octave-cli --no-gui --eval "yalmip('version')"
+        $ML_CMD "if ~have_feature('yalmip'), exit(1); end"
+        $ML_CMD "yalmip('version')"
 
     - name: Test mx-maxloadlim
       if: startsWith(env.OCTAVE_VER, '4.0') != 1
-      run: octave-cli --no-gui -p $TEST_PATH --eval "test_mll_main(0,1)"
+      run: env $ML_PATHVAR=$TEST_PATH $ML_CMD "test_mll_main(0,1)"
 
     - name: Test SDP_PF
-      run: octave-cli --no-gui -p $TEST_PATH --eval "test_sdp_pf(0,1)"
+      run: env $ML_PATHVAR=$TEST_PATH $ML_CMD "test_sdp_pf(0,1)"
 
     - name: Test SmartMarket
-      run: octave-cli --no-gui -p $TEST_PATH --eval "test_smartmarket(0,1)"
+      run: env $ML_PATHVAR=$TEST_PATH $ML_CMD "test_smartmarket(0,1)"
 
     - name: Test Syngrid
       if: startsWith(env.OCTAVE_VER, '4.0') != 1
-      run: octave-cli --no-gui -p $TEST_PATH --eval "test_syngrid(0,1)"
+      run: env $ML_PATHVAR=$TEST_PATH $ML_CMD "test_syngrid(0,1)"
