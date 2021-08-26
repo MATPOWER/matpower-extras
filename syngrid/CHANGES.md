@@ -2,6 +2,13 @@ Change history for SynGrid
 ==========================
 
 
+since latest release
+--------------------
+
+#### 9/23/20
+  - Use `have_feature()` everywhere in place of deprecated `have_fcn()`.
+
+
 Version 1.0.1 - *Jun 20, 2019*
 ------------------------------
 

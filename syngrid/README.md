@@ -52,9 +52,9 @@ Installation
             *   `<SYNGRID>/lib`
             *   `<SYNGRID>/lib/t`
 
-3.  At the MATLAB prompt, type `test_syngrid` to run the test suite and
-    verify that SynGrid is properly installed and functioning. The result
-    should resemble the following:
+3.  At the MATLAB/Octave prompt, type `test_syngrid` to run the test suite
+    and verify that SynGrid is properly installed and functioning. The
+    result should resemble the following:
 
 ```matlab
     >> test_syngrid

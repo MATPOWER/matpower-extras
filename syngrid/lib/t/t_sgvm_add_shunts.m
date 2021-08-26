@@ -6,8 +6,8 @@ if nargin < 1
 end
 
 %% turn off warnings
-if have_fcn('octave')
-    if have_fcn('octave', 'vnum') >= 4
+if have_feature('octave')
+    if have_feature('octave', 'vnum') >= 4
         file_in_path_warn_id = 'Octave:data-file-in-path';
     else
         file_in_path_warn_id = 'Octave:load-file-in-path';
@@ -49,6 +49,6 @@ t_ok(max(out.bus(:,VM)) <= 1.05 - opt.shift_in, [t, 'VMAX'])
 t_end
 
 %% turn warnings back on
-if have_fcn('octave')
+if have_feature('octave')
     warning(s1.state, file_in_path_warn_id);
 end

@@ -103,7 +103,7 @@ if nargout > 1
 %   threshold = full(0.05*max(abs([Hf(:);Ht(:)])));
 %     threshold = min(0.01, threshold);
     threshold = 0.05*max(max(abs(Hf), abs(Ht)),[], 2);
-    if have_fcn('octave')
+    if have_feature('octave')
         Ht(full(abs(Ht)) < full(threshold)) = 0;
     else
         Ht(abs(Ht) < threshold) = 0;
@@ -113,7 +113,7 @@ else
 %   threshold = min(0.01, threshold);
     threshold = 0.05*max(abs(Hf),[], 2);
 end
-if have_fcn('octave')
+if have_feature('octave')
     Hf(full(abs(Hf)) < full(threshold)) = 0;
 else
     Hf(abs(Hf) < threshold) = 0;

@@ -134,7 +134,7 @@ classdef sgvm_IndClass < handle
                 obj.mpc.branch(:,BR_R); obj.mpc.branch(:,BR_X); obj.mpc.branch(:,BR_B);...
                 obj.mpc.branch(:,TAP); obj.mpc.branch(:,SHIFT); obj.mpc.gen(GEN_BUS)];
             str = mat2str(data,8);
-            if have_fcn('octave')
+            if have_feature('octave')
                 obj.id = hash('SHA256', str);
             else
                 md = java.security.MessageDigest.getInstance('SHA-256');

@@ -54,7 +54,7 @@ t_is(sgopt.vm.smpl.ngbuses, -1, 12, [t 'vm.smpl.ngbuses'])
 t_is(sgopt.vm.smpl.usegen2load, 1, 12, [t 'vm.smpl.usegen2load'])
 t_is(sgopt.vm.smpl.baseMVA_default, 100, 12, [t 'vm.smpl.baseMVA_default'])
 t_is(sgopt.vm.smpl.rate_a_default, 400, 12, [t 'vm.smpl.rate_a_default'])
-if have_fcn('ipopt')
+if have_feature('ipopt')
     t_ok(strcmp(sgopt.mpopt.opf.ac.solver, 'IPOPT'), [t 'AC OPF solver = ''IPOPT''']);
     t_is(sgopt.mpopt.ipopt.opts.max_iter, 500, 12, [t 'mpopt.ipopt.opts.max_iter'])
     t_is(sgopt.mpopt.ipopt.opts.tol, 1e-6, 12, [t 'mpopts.ipopt.opts.tol'])
@@ -62,10 +62,10 @@ if have_fcn('ipopt')
     t_is(sgopt.mpopt.ipopt.opts.acceptable_tol, 1e-6, 12, [t 'mpopts.ipopt.opts.acceptable_tol'])
     t_is(sgopt.mpopt.ipopt.opts.dual_inf_tol, 1e-5, 12, [t 'mpopts.ipopt.opts.dual_inf_tol'])
     % check that MIPS is default if IPOPT not available
-    have_fcn('ipopt', 0);
+    have_feature('ipopt', 0);
     sgopt = sg_options();
     t_ok(strcmp(sgopt.mpopt.opf.ac.solver, 'DEFAULT'), [t 'AC OPF solver = ''DEFAULT''']);
-    have_fcn('ipopt', 1);
+    have_feature('ipopt', 1);
 else
     t_skip(6, 'IPOPT not installed')
     t_ok(strcmp(sgopt.mpopt.opf.ac.solver, 'DEFAULT'), [t 'AC OPF solver = ''DEFAULT''']);
@@ -99,7 +99,7 @@ t_ok(isequal(sgopt.bm.loading, 'H'), [t 'bm.loading']);
 t_is(sgopt.bm.br2b_ratio, 2.5, 12, [t 'bm.br2b_ratio']);
 t_is(sgopt.bm.bta_method, 0, 12, [t 'bm.bta_method']);
 
-if have_fcn('ipopt')
+if have_feature('ipopt')
     t = 'sg_options(ov3) + IPOPT : ';
     ov3 = struct('mpopt', mpoption('ipopt.opts.max_iter', 300, 'ipopt.opts.tol', 1e-4));
     sgopt = sg_options(ov3);
@@ -137,7 +137,7 @@ t_is(sgopt.bm.br2b_ratio, 2.5, 12, [t 'bm.br2b_ratio']);
 t_ok(sgopt.vm.smpl.lincost == 150, [t 'vm.smpl.lincost']);
 t_is(sgopt.vm.shunts.tmag, 0.5, 12, [t 'vm.shunts.tmag']);
 
-if have_fcn('ipopt')
+if have_feature('ipopt')
     t = 'sg_options(sgopt0, name, val ...) + IPOPT : ';
     sgopt = sg_options(sgopt0, 'mpopt.ipopt.opts.max_iter', 300, 'mpopt.ipopt.opts.tol', 1e-4);
     t_ok(sgopt.verbose == 2, [t 'verbose']);
@@ -158,7 +158,7 @@ t_is(sgopt.bm.br2b_ratio, 2.5, 12, [t 'bm.br2b_ratio']);
 t_ok(sgopt.vm.smpl.lincost == 150, [t 'vm.smpl.lincost']);
 t_is(sgopt.vm.shunts.tmag, 0.5, 12, [t 'vm.shunts.tmag']);
 
-if have_fcn('ipopt')
+if have_feature('ipopt')
     t = 'sg_options(sgopt0, ov) + IPOPT : ';
     ov3 = struct('mpopt', mpoption('ipopt.opts.max_iter', 300, 'ipopt.opts.tol', 1e-4));
     sgopt = sg_options(sgopt0, ov3);

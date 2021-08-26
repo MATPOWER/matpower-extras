@@ -22,7 +22,7 @@ if nargin < 1
     quiet = 0;
 end
 
-if have_fcn('octave')   %% currently SLOW, only do the smallest
+if have_feature('octave')   %% currently SLOW, only do the smallest
     NN = [30];
 else
     NN = [30 150 300];
@@ -37,10 +37,10 @@ end
 mpopt = mpoption('out.all', 0, 'opf.dc.solver', 'MIPS', 'verbose', verbose);
 
 %% turn off warnings
-if have_fcn('octave')
+if have_feature('octave')
     warn_id1 = 'Octave:nearly-singular-matrix';
     warn_id2 = 'Octave:singular-matrix';
-    if have_fcn('octave', 'vnum') >= 4
+    if have_feature('octave', 'vnum') >= 4
         file_in_path_warn_id = 'Octave:data-file-in-path';
     else
         file_in_path_warn_id = 'Octave:load-file-in-path';
@@ -119,6 +119,6 @@ t_end;
 %% turn warnings back on
 warning(s1.state, warn_id1);
 warning(s2.state, warn_id2);
-if have_fcn('octave')
+if have_feature('octave')
     warning(s3.state, file_in_path_warn_id);
 end

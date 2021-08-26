@@ -1,0 +1,120 @@
+name: CI
+
+# controls when action will run
+on:
+  # triggers workflow on push events
+  push:
+  # allows workflow to be triggered manually from Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [octave]
+#        os: [macos-10.15, macos-11.0, ubuntu-18.04, ubuntu-20.04]
+        os: [macos-latest, ubuntu-18.04, ubuntu-20.04]
+        include:
+        - platform: matlab
+          os: ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Include IPOPT?
+      if: matrix.platform == 'matlab' || matrix.os != 'ubuntu-16.04'
+      run: echo "INCLUDE_IPOPT=1" >> $GITHUB_ENV
+
+    - name: Cache IPOPT Libs (macOS)
+      if: env.INCLUDE_IPOPT && startsWith(matrix.os, 'macos')
+      id: cache-ipopt-libs
+      env:
+        cache-name: ipopt-libs
+      uses: actions/cache@v2
+      with:
+        path: ~/install
+        key: ${{ env.cache-name }}-${{ matrix.os }}
+
+    - name: Build IPOPT (macOS)
+      if: env.INCLUDE_IPOPT && startsWith(matrix.os, 'macos') && steps.cache-ipopt-libs.outputs.cache-hit != 'true'
+      uses: MATPOWER/action-build-ipopt-macos@v1
+
+    - name: Cache IPOPT interface
+      if: env.INCLUDE_IPOPT
+      id: cache-ipopt
+      env:
+        cache-name: ipopt
+      uses: actions/cache@v2
+      with:
+        path: ~/build/ipopt
+        key: ${{ env.cache-name }}-${{ matrix.platform }}-${{ matrix.os }}
+
+    - name: Install Octave (Linux)
+      if: matrix.platform == 'octave' && startsWith(matrix.os, 'ubuntu')
+      uses: MATPOWER/action-install-octave-linux@v1
+      with:
+        ipopt-libs: ${{ env.INCLUDE_IPOPT == 1 }}
+
+    - name: Install Octave (macOS)
+      if: matrix.platform == 'octave' && startsWith(matrix.os, 'macos')
+      uses: MATPOWER/action-install-octave-macos@v1
+
+    - name: Install MATLAB
+      if: matrix.platform == 'matlab'
+      uses: matlab-actions/setup-matlab@v1
+
+    - name: Configure MATLAB
+      if: matrix.platform == 'matlab'
+      uses: MATPOWER/action-configure-matlab@v1
+      with:
+        os: ${{ matrix.os }}
+        nojvm: false
+        ipopt: ${{ env.INCLUDE_IPOPT == 1 }}
+        ipopt-cached: ${{ steps.cache-ipopt.outputs.cache-hit == 'true' }}
+
+    - name: Install IPOPT interface for Octave
+      if: env.INCLUDE_IPOPT && matrix.platform == 'octave'
+      uses: MATPOWER/action-install-ipopt-octave@v1
+      with:
+        cached: ${{ steps.cache-ipopt.outputs.cache-hit == 'true' }}
+
+    - name: ${{ env.ML_NAME }} ${{ env.ML_VER }} Installed
+      run: $ML_CMD ver
+
+    - name: Install MP-Test, Set MPTEST_PATH
+      run: |
+        git clone --depth=1 https://github.com/MATPOWER/mptest.git $HOME/mptest
+        echo "MPTEST_PATH=$HOME/mptest/lib:$HOME/mptest/lib/t" >> $GITHUB_ENV
+
+    - name: Install MIPS, Set MIPS_PATH
+      run: |
+        git clone --depth=1 https://github.com/MATPOWER/mips.git $HOME/mips
+        echo "MIPS_PATH=$HOME/mips/lib:$HOME/mips/lib/t:${MPTEST_PATH}" >> $GITHUB_ENV
+
+    - name: Install MP-Opt-Model, Set MP_OPT_MODEL_PATH
+      run: |
+        git clone --depth=1 https://github.com/MATPOWER/mp-opt-model.git $HOME/mp-opt-model
+        echo "MP_OPT_MODEL_PATH=$HOME/mp-opt-model/lib:$HOME/mp-opt-model/lib/t:${MIPS_PATH}" >> $GITHUB_ENV
+
+    - name: Install MATPOWER
+      run: |
+        git clone --depth=1 https://github.com/MATPOWER/matpower.git $HOME/matpower
+        env $ML_PATHVAR=$HOME/matpower $ML_CMD "install_matpower(0,1,1)"
+        ln -s ./startup.m .octaverc
+        $ML_CMD mpver
+        echo "TEST_PATH=${GITHUB_WORKSPACE}/lib:${GITHUB_WORKSPACE}/lib/t:${MP_OPT_MODEL_PATH}" >> $GITHUB_ENV
+
+    - name: Test IPOPT availability, print version number
+      if: env.INCLUDE_IPOPT
+      run:  |
+        $ML_CMD "if ~have_feature('ipopt'), exit(1); end"
+        $ML_CMD "qps_ipopt([],[1; 1],[1 1],[2],[2],[1; 1],[1; 1],[1; 1],struct('verbose', 2));"
+
+    - name: Test SynGrid
+      run: |
+        env $ML_PATHVAR=$TEST_PATH $ML_CMD mpver
+        env $ML_PATHVAR=$TEST_PATH $ML_CMD "test_syngrid(1,1)"

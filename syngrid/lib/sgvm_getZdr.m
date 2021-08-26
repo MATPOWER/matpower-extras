@@ -35,7 +35,7 @@ if full
     Zdr = diag(Ybus\speye(nb));
 else
     npca = min(100, round(0.1*nb));
-    if have_fcn('octave')
+    if have_feature('octave')
         [U,S,V] = svds(Ybus, npca, 0);
     else
         [U,S,V] = svds(Ybus, npca, 'smallest');

@@ -229,7 +229,7 @@ if ~sgopt.mpoptprint
 end
 
 %% set default AC OPF solver to IPOPT, if available
-if strcmp(sgopt.mpopt.opf.ac.solver, 'DEFAULT') && have_fcn('ipopt')
+if strcmp(sgopt.mpopt.opf.ac.solver, 'DEFAULT') && have_feature('ipopt')
     sgopt.mpopt = mpoption(sgopt.mpopt, 'opf.ac.solver', 'IPOPT');
 end
 

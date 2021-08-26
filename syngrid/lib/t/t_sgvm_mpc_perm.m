@@ -36,6 +36,6 @@ opt   = struct('ea', struct('generations', 10, 'inds', 5, 'select', 5, 'randnew'
 % data = sgvm_mpc2data(mpcsamp);
 [~, topo] = sgvm_mpc2data(mpcsamp);
 %N = 3000;
-% have_fcn('ipopt', 0);
+% have_feature('ipopt', 0);
 %[mpc_array, status] = syngrid(topo, mpcsamp);%, opt);
 [mpc_array, status] = syngrid(topo, mpcsamp, struct('verbose', 1));
