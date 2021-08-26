@@ -1,0 +1,86 @@
+name: CI
+
+# controls when action will run
+on:
+  # triggers workflow on push events
+  push:
+  # allows workflow to be triggered manually from Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [octave]
+#        os: [macos-10.15, macos-11.0, ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
+        os: [macos-latest, ubuntu-16.04, ubuntu-18.04, ubuntu-20.04]
+        include:
+        - platform: matlab
+          os: ubuntu-latest
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+
+    - name: Install OpenBLAS (Linux)
+      if: startsWith(matrix.os, 'ubuntu') && matrix.platform == 'octave'
+      run: sudo apt-get install -y -qq libopenblas-dev
+
+    - name: Install Octave (Linux)
+      if: matrix.platform == 'octave' && startsWith(matrix.os, 'ubuntu')
+      uses: MATPOWER/action-install-octave-linux@v1
+
+    - name: Install Octave (macOS)
+      if: matrix.platform == 'octave' && startsWith(matrix.os, 'macos')
+      uses: MATPOWER/action-install-octave-macos@v1
+
+    - name: Install MATLAB
+      if: matrix.platform == 'matlab'
+      uses: matlab-actions/setup-matlab@v1
+
+    - name: Configure MATLAB
+      if: matrix.platform == 'matlab'
+      uses: MATPOWER/action-configure-matlab@v1
+
+    - name: ${{ env.ML_NAME }} ${{ env.ML_VER }} Installed
+      run: |
+        $ML_CMD ver
+        ${{ matrix.platform == 'matlab' }} && export SAVEPATH_CMD="savepath('${GITHUB_WORKSPACE}/pathdef.m')" || export SAVEPATH_CMD=savepath
+        echo "SAVEPATH_CMD=$SAVEPATH_CMD" >> $GITHUB_ENV
+
+    - name: Build/Install SeDuMi
+      run: |
+        git clone --depth=1 https://github.com/sqlp/sedumi.git $HOME/sedumi
+        mv $HOME/sedumi/vec.m $HOME/sedumi/vec.m.disabled
+        $ML_CMD "cd $HOME/sedumi; install_sedumi('-rebuild'); $SAVEPATH_CMD"
+
+    - name: Build/Install SDPT3
+      run: |
+        git clone --depth=1 https://github.com/sqlp/sdpt3.git $HOME/sdpt3
+        $ML_CMD "cd $HOME/sdpt3; install_sdpt3('-rebuild'); $SAVEPATH_CMD"
+
+    - name: Install YALMIP
+      run: |
+        git clone --depth=1 -b R20180817 https://github.com/yalmip/YALMIP.git $HOME/yalmip
+        $ML_CMD "addpath('$HOME/yalmip', '$HOME/yalmip/demos', '$HOME/yalmip/extras', genpath('$HOME/yalmip/modules'), '$HOME/yalmip/operators', '$HOME/yalmip/solvers', '-end'); $SAVEPATH_CMD"
+
+    - name: Install MATPOWER
+      run: |
+        git clone --depth=1 https://github.com/MATPOWER/matpower.git $HOME/matpower
+        env $ML_PATHVAR=$HOME/matpower $ML_CMD "install_matpower(0,1,1)"
+        ln -s ./startup.m .octaverc
+
+    - name: Test SeDuMi availability, print version number
+      run: $ML_CMD "x = sedumi([1 1], 1, [1;2]); if ~have_feature('sedumi'), exit(1); end"
+
+    - name: Test SDPT3 availability, print version number
+      run: $ML_CMD "help sdpt3, if ~have_feature('sdpt3'), exit(1); end"
+
+    - name: Test YALMIP availability, print version number
+      run: $ML_CMD "yalmip('version'), if ~have_feature('yalmip'), exit(1); end"
+
+    - name: Test SDP_PF
+      run: $ML_CMD "mpver; test_sdp_pf(1,1)"
