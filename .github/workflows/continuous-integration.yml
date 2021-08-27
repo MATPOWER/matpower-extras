@@ -134,9 +134,7 @@ jobs:
 
     - name: Test IPOPT availability, print version number
       if: env.INCLUDE_IPOPT
-      run:  |
-        $ML_CMD "if ~have_feature('ipopt'), exit(1); end"
-        $ML_CMD "qps_ipopt([],[1; 1],[1 1],[2],[2],[1; 1],[1; 1],[1; 1],struct('verbose', 2));"
+      run: env $ML_PATHVAR=$MP_OPT_MODEL_PATH $ML_CMD "qps_ipopt([],[1; 1],[1 1],[2],[2],[1; 1],[1; 1],[1; 1],struct('verbose', 2)); if ~have_feature('ipopt'), exit(1); end"
 
     - name: Test SeDuMi availability, print version number
       run: $ML_CMD "x = sedumi([1 1], 1, [1;2]); if ~have_feature('sedumi'), exit(1); end"
