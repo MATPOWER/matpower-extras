@@ -49,6 +49,6 @@ if ~isempty(idx_var_gen)
     idx_A_var_gen_j = [idx_var_gen;(n_g+n_vl+1)*ones(nb_var_gen,1)]; % Generator number and alpha column (column in constraint matrix)
     vals_A_var_gen = [ones(nb_var_gen,1);-nonzeros(mpc.dir_var_gen_all)];
     A_var_gen = sparse(idx_A_var_gen_i,idx_A_var_gen_j,vals_A_var_gen,nb_var_gen,n_g+n_vl+1);
-    om.add_constraints('dir_var_gen',A_var_gen,...
+    om.add_lin_constraint('dir_var_gen',A_var_gen,...
         Pg0,Pg0,{'Pg','alpha'});
 end

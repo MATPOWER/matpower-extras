@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:MATPOWER/mx-maxloadlim
 	branch = master
-	commit = 2a6f03a63e839aef5ce0fcf236117a16929d5dfc
-	parent = d2a20201edb59f7652e8f75e2a1c6a717c71c8b4
+	commit = 6ab1a7b2e9816b4e1affcdfbfe4e2be6cb16d89a
+	parent = 590a6f5ce6516d180e1fedf8ee4d67614eb0a697
 	cmdver = 0.4.3
 	method = merge
