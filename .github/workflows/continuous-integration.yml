@@ -106,7 +106,7 @@ jobs:
     - name: Install YALMIP
       run: |
         git clone --depth=1 -b R20180817 https://github.com/yalmip/YALMIP.git $HOME/yalmip
-        $ML_CMD "addpath('$HOME/yalmip', '$HOME/yalmip/demos', '$HOME/yalmip/extras', genpath('$HOME/yalmip/modules'), '$HOME/yalmip/operators', '$HOME/yalmip/solvers', '-end'); $SAVEPATH_CMD"
+        $ML_CMD "addpath('$HOME/yalmip', '$HOME/yalmip/demos', '$HOME/yalmip/extras', genpath('$HOME/yalmip/modules'), '$HOME/yalmip/operators', '$HOME/yalmip/solvers'); $SAVEPATH_CMD"
 
     - name: Install MP-Test, Set MPTEST_PATH
       run: |
