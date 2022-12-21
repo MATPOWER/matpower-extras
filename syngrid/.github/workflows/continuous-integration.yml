@@ -13,8 +13,8 @@ jobs:
       fail-fast: false
       matrix:
         platform: [octave]
-#        os: [macos-10.15, macos-11.0, ubuntu-18.04, ubuntu-20.04]
-        os: [macos-latest, ubuntu-18.04, ubuntu-20.04]
+#        os: [macos-10.15, macos-11.0, macos-12.0, ubuntu-18.04, ubuntu-20.04, ubuntu-22.04]
+        os: [macos-latest, ubuntu-20.04, ubuntu-22.04]
         include:
         - platform: matlab
           os: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
 
     steps:
     - name: Check out repository
-      uses: actions/checkout@v2
+      uses: actions/checkout@v3
 
     - name: Include IPOPT?
       if: matrix.platform == 'matlab' || matrix.os != 'ubuntu-16.04'
@@ -34,7 +34,7 @@ jobs:
       id: cache-ipopt-libs
       env:
         cache-name: ipopt-libs
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/install
         key: ${{ env.cache-name }}-${{ matrix.os }}
@@ -48,7 +48,7 @@ jobs:
       id: cache-ipopt
       env:
         cache-name: ipopt
-      uses: actions/cache@v2
+      uses: actions/cache@v3
       with:
         path: ~/build/ipopt
         key: ${{ env.cache-name }}-${{ matrix.platform }}-${{ matrix.os }}
@@ -76,14 +76,14 @@ jobs:
         ipopt: ${{ env.INCLUDE_IPOPT == 1 }}
         ipopt-cached: ${{ steps.cache-ipopt.outputs.cache-hit == 'true' }}
 
+    - name: ${{ env.ML_NAME }} ${{ env.ML_VER }} Installed
+      run: $ML_CMD ver
+
     - name: Install IPOPT interface for Octave
       if: env.INCLUDE_IPOPT && matrix.platform == 'octave'
       uses: MATPOWER/action-install-ipopt-octave@v1
       with:
         cached: ${{ steps.cache-ipopt.outputs.cache-hit == 'true' }}
-
-    - name: ${{ env.ML_NAME }} ${{ env.ML_VER }} Installed
-      run: $ML_CMD ver
 
     - name: Install MP-Test, Set MPTEST_PATH
       run: |
@@ -110,11 +110,7 @@ jobs:
 
     - name: Test IPOPT availability, print version number
       if: env.INCLUDE_IPOPT
-      run:  |
-        $ML_CMD "if ~have_feature('ipopt'), exit(1); end"
-        $ML_CMD "qps_ipopt([],[1; 1],[1 1],[2],[2],[1; 1],[1; 1],[1; 1],struct('verbose', 2));"
+      run: $ML_CMD "qps_ipopt([],[1; 1],[1 1],[2],[2],[1; 1],[1; 1],[1; 1],struct('verbose', 2)); if ~have_feature('ipopt'), exit(1); end"
 
     - name: Test SynGrid
-      run: |
-        env $ML_PATHVAR=$TEST_PATH $ML_CMD mpver
-        env $ML_PATHVAR=$TEST_PATH $ML_CMD "test_syngrid(1,1)"
+      run: env $ML_PATHVAR=$TEST_PATH $ML_CMD "mpver; test_syngrid(1,1)"
