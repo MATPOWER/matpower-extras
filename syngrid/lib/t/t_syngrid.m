@@ -56,6 +56,18 @@ s2 = warning('query', warn_id2);
 warning('off', warn_id1);
 warning('off', warn_id2);
 
+% check for availability of MP-Core
+if exist('have_feature_mp_core')
+    st = have_feature('mp_core');
+else
+    st = 0;
+end
+
+% turn off MP-Core
+if st
+    have_feature('mp_core', 0);
+end
+
 t_begin(num_tests, quiet);
 
 %% test syngrid(N)
@@ -121,4 +133,9 @@ warning(s1.state, warn_id1);
 warning(s2.state, warn_id2);
 if have_feature('octave')
     warning(s3.state, file_in_path_warn_id);
+end
+
+%% turn MP-Core back on, if we turned it off
+if st
+    have_feature('mp_core', 1);
 end
