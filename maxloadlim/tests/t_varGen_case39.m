@@ -13,6 +13,19 @@ function t_varGen_case39(quiet)
 if nargin < 1
     quiet = 0;
 end
+
+% check for availability of MP-Core
+if exist('have_feature_mp_core')
+    st = have_feature('mp_core');
+else
+    st = 0;
+end
+
+% turn off MP-Core
+if st
+    have_feature('mp_core', 0);
+end
+
 define_constants;
 % Loading the case
 mpc = loadcase('case39');
@@ -70,3 +83,8 @@ for i = 1:nb_dir_load
     end
 end
 t_end
+
+%% turn MP-Core back on, if we turned it off
+if st
+    have_feature('mp_core', 1);
+end

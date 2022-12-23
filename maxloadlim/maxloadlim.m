@@ -86,7 +86,7 @@ while iter <= iter_max && repeat
     
     %% Run opf
     % Turning off the printing and initializing from the base case
-    mpopt = mpoption('verbose',options.verbose,'opf.init_from_mpc',1);
+    mpopt = mpoption('verbose',options.verbose,'opf.start',2);
     mpopt = mpoption(mpopt,'out.all',0);
     % Decreasing the threshold for the relative complementarity constraints
     mpopt = mpoption(mpopt,'mips.comptol',1e-8);
