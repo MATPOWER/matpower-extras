@@ -1,0 +1,12 @@
+; DO NOT EDIT (unless you know what you are doing)
+;
+; This subdirectory is a git "subrepo", and this file is maintained by the
+; git-subrepo command. See https://github.com/ingydotnet/git-subrepo#readme
+;
+[subrepo]
+	remote = git@github.com:MATPOWER/mx-simulink_matpower.git
+	branch = main
+	commit = b47a770d2946057a6346a88c30a8c919c43e4655
+	parent = 9d276b545a3df0290c881c37a5c830d278527b61
+	method = merge
+	cmdver = 0.4.5
