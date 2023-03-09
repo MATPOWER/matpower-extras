@@ -9,6 +9,9 @@ The idea is the following: MATPOWER provides us with a power flow
 solver. Simulink provides a graphic interface. Let's bring these two
 together and enable people to use MATPOWER in Simulink.
 
+>   **Note:** SimulinkMATPOWER is part of [MATPOWER Extras][8],
+    which is included in MATPOWER zip distributions in the
+    `extras/simulink_matpower` directory.
 
 How it works
 ------------
@@ -32,8 +35,13 @@ blocks that get voltage magnitudes etc).
 Setup
 -----
 
-1. Add toolbox to Matlab path _(INCLUDING SUBFOLDERS)_.
-2. [Install MATPOWER][4].
+1. [Install MATPOWER][4].
+2. Add the toolbox directory **with sub-directories** to the Matlab path.
+
+   > _**Note:** Step 2 is necessary **only** if SimulinkMATPOWER
+      was not already included with your MATPOWER distribution (in
+      `extras/simulink_matpower`)._
+
 3. Go into `ac_testbed_setup.m` and change the code in line 16 to load
    the MATPOWER case file you want to work with.
 4. Run `ac_testbed_setup` (in `example.slx` it is automatically run by
@@ -146,3 +154,4 @@ SimulinkMATPOWER is distributed under the [3-clause BSD license][7].
 [5]: CITATION
 [6]: https://doi.org/10.48550/arXiv.2212.07795
 [7]: LICENSE
+[8]: https://github.com/MATPOWER/matpower-extras
