@@ -234,5 +234,6 @@ function LdPwrMod = addShntPwr(LdPwr, ShntPwr, LdInd, ShntInd)
 % * LdPwrMod: array; modified load power.
 
 LdPwrMod = LdPwr;
-indx = ismember( LdInd, ShntInd);
-LdPwrMod(indx) = LdPwr(indx) + ShntPwr;
+LdIndx  = ismember( LdInd, ShntInd);
+ShntPwrInd = ismember( ShntInd, LdInd(LdIndx));
+LdPwrMod(LdIndx) = LdPwr(LdIndx) + ShntPwr(ShntPwrInd);

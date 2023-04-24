@@ -57,7 +57,7 @@ function [noisyMeas, CompleteObsIdx, sigma_mod] = genMsrmnt(casename, Strtgy, P,
 
 
 % Return the observable states indices
-CompleteObsIdx = selectObsrvblStates(casename, Strtgy);
+CompleteObsIdx = selectObsrvblStates(casename, Strtgy, MpcInd);
 
 % Extract specific data
 meas = extrctMeas(P, Q, V, baseMVA, MpcInd, CompleteObsIdx);
@@ -147,9 +147,8 @@ end
 fn_sigma = fieldnames(sigma);
 
 % Create field names for "sigma" structure
-for i = 1:numel(fn_sigma)
-    fn{i} = erase(fn_sigma{i}, 'sigma_');
-end
+ErasFun = @(x) erase(x, 'sigma_');
+fn = cellfun(ErasFun, fn_sigma ,'UniformOutput',false);
 
 % Extension to matrix 
 for i = 1:numel(fn_sigma)
