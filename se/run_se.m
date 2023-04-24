@@ -18,6 +18,8 @@ function [baseMVA, bus, gen, branch, success, et, z, z_est, error_sqrsum] = ...
 %   by Rui Bo
 %   and Ray Zimmerman, PSERC Cornell
 %
+%   Modified by Sami Aldalahmeh 2023/2/15.
+%
 %   This file is part of MATPOWER/mx-se.
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
 %   See https://github.com/MATPOWER/mx-se/ for more info.
@@ -52,19 +54,18 @@ t0 = tic;
 [V, success, iterNum, z, z_est, error_sqrsum] = ...
     doSE(baseMVA, bus, gen, branch, Ybus, Yf, Yt, V0, ref, pv, pq, measure, idx, sigma);
 
-% update Pg and Qg using estimated values
+% update Pg and Qg using estimated values idx.idx_zPD
 if length(idx.idx_zPG) > 0
     cnt = length(idx.idx_zPF) + length(idx.idx_zPT);
     gen(idx.idx_zPG, PG) = z_est([cnt+1:cnt+length(idx.idx_zPG)]) * baseMVA;
 end
 if length(idx.idx_zQG) > 0
-    cnt = length(idx.idx_zPF) + length(idx.idx_zPT) + length(idx.idx_zPG) + ...
+   cnt = length(idx.idx_zPF) + length(idx.idx_zPT) + length(idx.idx_zPG) + ...
             length(idx.idx_zVa) + length(idx.idx_zQF) + length(idx.idx_zQT);
     gen(idx.idx_zQG, QG) = z_est([cnt+1:cnt+length(idx.idx_zQG)]) * baseMVA;
 end
 
 %% update data matrices with solution, ie, V
-% [bus, gen, branch] = updatepfsoln(baseMVA, bus, gen, branch, Ybus, V, ref, pv, pq);
 [bus, gen, branch] = pfsoln(baseMVA, bus, gen, branch, Ybus, Yf, Yt, V, ref, pv, pq);
 et = toc(t0);
 
