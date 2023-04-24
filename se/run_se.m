@@ -1,5 +1,5 @@
 function [baseMVA, bus, gen, branch, success, et, z, z_est, error_sqrsum] = ...
-    run_se_ext(casename, measure, idx, sigma, type_initialguess, V0)
+    run_se(casename, measure, idx, sigma, type_initialguess, V0)
 %RUN_SE  Run state estimation.
 %   [INPUT PARAMETERS]
 %   measure: measurements

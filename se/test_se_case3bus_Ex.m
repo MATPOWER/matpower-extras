@@ -13,7 +13,7 @@ function test_se_case3bus_Ex
 %   See https://github.com/MATPOWER/mx-se/ for more info.
 %
 %%------------------------------------------------------
-%% which measurements are available
+%% Available measurements 
 idx.idx_zPD = [3]; % P3  -> Power demand at bus 3
 idx.idx_zQD = [];  
 idx.idx_zPF = [2]; % P13 -> 2nd entry in the branch matrix
