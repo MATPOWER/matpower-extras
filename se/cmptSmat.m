@@ -3,17 +3,17 @@ function [Sfe, Ste] = cmptSmat(V, Ybus, branch)
 % "Ste.
 % Inputs:
 % ------------------------------------------------------------------------
-% V     : Complex array of bus voltages in the bus system.
-% Ybus  : Admittance (Y) matrix of lines in the power system.
-% branch: Matrix of branch vlaues produced by the LOADCASE function
+% V     : (array) Complex array of bus voltages in the bus system.
+% Ybus  : (matrix) Admittance (Y) matrix of lines in the power system.
+% branch: (matrix) Matrix of branch vlaues produced by the LOADCASE function
 % provided by the MATPOWER package.
 %
 % Outputs:
 % ------------------------------------------------------------------------
-% Sfe : Complex power matrix of the power (from-to) buses, where the row
-% index is the source (from) and column index is the destination (to).
-% Ste : Complex power matrix of the power (to-from) buses, where the row
-% index is the destination (to) and column index is the source (from).
+% Sfe : (matrix) Complex power matrix of the power (from-to) buses, where 
+% the row index is the source (from) and column index is the destination (to).
+% Ste : (matrix) Complex power matrix of the power (to-from) buses, where 
+% the row index is the destination (to) and column index is the source (from).
 % 
 % by Sami Aldalahmeh 2023/2/15.
 %
