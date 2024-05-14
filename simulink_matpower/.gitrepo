@@ -6,7 +6,7 @@
 [subrepo]
 	remote = git@github.com:MATPOWER/mx-simulink_matpower.git
 	branch = main
-	commit = 8631fb3b98a8867299d54f9d89551e038bfd4b88
-	parent = 3dd324c2df0b50ee39abe5e5a19c36a704d71c87
+	commit = a48505844b4ec41ae6c2ee573776f79bf350e92c
+	parent = 0c3ed79f0dbdf20e1211248494c3cc910951a9b0
 	method = merge
-	cmdver = 0.4.5
+	cmdver = 0.4.6
