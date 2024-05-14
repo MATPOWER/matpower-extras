@@ -2,8 +2,14 @@ Change history for SynGrid
 ==========================
 
 
-since latest release
---------------------
+Version 1.0.2 - *May 14, 2024*
+------------------------------
+
+#### 4/14/24
+  - Release 1.0.2.
+
+#### 12/22/22
+  - Turn off MP-Core for tests in `t_syngrid`.
 
 #### 9/23/20
   - Use `have_feature()` everywhere in place of deprecated `have_fcn()`.

@@ -19,12 +19,12 @@ acknowledge that fact by citing one or more of the following references:
 
 The SynGrid User's Manual should also be cited explicitly in work that
 refers to or is derived from its content. The citation and DOI can be
-version-specific or general, as appropriate. For version 1.0.1, use:
+version-specific or general, as appropriate. For version 1.0.2, use:
 
   Z. Wang, H. Sadeghian, S. H. Elyas, R. D. Zimmerman, E. Schweitzer,
-  A. Scaglione. SynGrid User's Manual, Version 1.0.1. 2019. [Online].
-  Available: https://matpower.org/docs/SynGrid-manual-1.0.1.pdf
-  doi: 10.5281/zenodo.3251099
+  A. Scaglione. SynGrid User's Manual, Version 1.0.2. 2024. [Online].
+  Available: https://matpower.org/docs/SynGrid-manual-1.0.2.pdf
+  doi: 10.5281/zenodo.11194332
 
 For a version non-specific citation, use the following citation and DOI,
 with <YEAR> replaced by the year of the most recent release:

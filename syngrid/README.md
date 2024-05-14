@@ -186,12 +186,12 @@ acknowledge that fact by citing one or more of the following references:
 
 The [SynGrid User's Manual][6] should also be cited explicitly in work that
 refers to or is derived from its content. The citation and DOI can be
-version-specific or general, as appropriate. For version 1.0.1, use:
+version-specific or general, as appropriate. For version 1.0.2, use:
 
 >   Z. Wang, H. Sadeghian, S. H. Elyas, R. D. Zimmerman, E. Schweitzer,
-    A. Scaglione. *SynGrid User's Manual, Version 1.0.1*. 2019. [Online].
-    Available: https://matpower.org/docs/SynGrid-manual-1.0.1.pdf  
-    doi: [10.5281/zenodo.3251099](https://doi.org/10.5281/zenodo.3251099)
+    A. Scaglione. *SynGrid User's Manual, Version 1.0.2*. 2024. [Online].
+    Available: https://matpower.org/docs/SynGrid-manual-1.0.2.pdf  
+    doi: [10.5281/zenodo.11194332](https://doi.org/10.5281/zenodo.11194332)
 
 For a version non-specific citation, use the following citation and DOI,
 with *\<YEAR\>* replaced by the year of the most recent release:
@@ -220,8 +220,8 @@ SynGrid is distributed under the [3-clause BSD license][10].
 ----
 [1]: https://github.com/MATPOWER/mx-syngrid
 [2]: https://matpower.org
-[3]: https://arpa-e.energy.gov/?q=slick-sheet-project/synthetic-data-power-grid-rd
-[3b]: https://arpa-e.energy.gov/?q=arpa-e-programs/grid-data
+[3]: https://arpa-e.energy.gov/technologies/projects/synthetic-data-power-grid-rd
+[3b]: https://arpa-e.energy.gov/technologies/programs/grid-data
 [4]: https://github.com/MATPOWER/matpower
 [5]: https://github.com/MATPOWER/matpower-extras
 [6]: docs/SynGrid-manual.pdf
