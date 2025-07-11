@@ -95,12 +95,14 @@ jobs:
         cached: ${{ steps.cache-ipopt.outputs.cache-hit == 'true' }}
 
     - name: Build/Install SeDuMi
+      if: startsWith(matrix.os, 'ubuntu')
       run: |
-        git clone --depth=1 https://github.com/sqlp/sedumi.git $HOME/sedumi
+        git clone --depth=1 --branch=v1.3.7 https://github.com/sqlp/sedumi.git $HOME/sedumi
         mv $HOME/sedumi/vec.m $HOME/sedumi/vec.m.disabled
         $ML_CMD "cd $HOME/sedumi; install_sedumi('-rebuild'); $SAVEPATH_CMD"
 
     - name: Build/Install SDPT3
+      if: startsWith(matrix.os, 'ubuntu')
       run: |
         git clone --depth=1 https://github.com/sqlp/sdpt3.git $HOME/sdpt3
         $ML_CMD "cd $HOME/sdpt3; install_sdpt3('-rebuild'); $SAVEPATH_CMD"
@@ -139,9 +141,11 @@ jobs:
       run: env $ML_PATHVAR=$MP_OPT_MODEL_PATH $ML_CMD "qps_ipopt([],[1; 1],[1 1],[2],[2],[1; 1],[1; 1],[1; 1],struct('verbose', 2)); if ~have_feature('ipopt'), exit(1); end"
 
     - name: Test SeDuMi availability, print version number
+      if: startsWith(matrix.os, 'ubuntu')
       run: $ML_CMD "x = sedumi([1 1], 1, [1;2]); if ~have_feature('sedumi'), exit(1); end"
 
     - name: Test SDPT3 availability, print version number
+      if: startsWith(matrix.os, 'ubuntu')
       run: $ML_CMD "help sdpt3, if ~have_feature('sdpt3'), exit(1); end"
 
     - name: Test YALMIP availability, print version number
