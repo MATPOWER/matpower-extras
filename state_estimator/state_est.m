@@ -5,7 +5,7 @@ function [V, converged, i] = state_est(branch, Ybus, Yf, Yt, Sbus, V0, ref, pv, 
 %   State estimator (under construction) based on code from James S. Thorp.
 
 %   MATPOWER
-%   Copyright (c) 1996-2016, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2026, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %   based on code by James S. Thorp, June 2004
 %
@@ -113,14 +113,14 @@ chusqu = err' * WInv * err;
      
 %% check tolerance
 if mpopt.verbose > 1
-    fprintf('\n it     norm( F )       step size');
-    fprintf('\n----  --------------  --------------');
-    fprintf('\n%3d    %10.3e      %10.3e', i, normF, 0);
+    mp_printf('\n it     norm( F )       step size');
+    mp_printf('\n----  --------------  --------------');
+    mp_printf('\n%3d    %10.3e      %10.3e', i, normF, 0);
 end
 if normF < tol
     converged = 1;
     if mpopt.verbose > 1
-        fprintf('\nConverged!\n');
+        mp_printf('\nConverged!\n');
     end
 end
 
@@ -199,18 +199,18 @@ while (~converged && ibd <= max_it_bad_data)
         %% check for convergence
         step = dx' * dx;
         if mpopt.verbose > 1
-            fprintf('\n%3d    %10.3e      %10.3e', i, normF, step);
+            mp_printf('\n%3d    %10.3e      %10.3e', i, normF, step);
         end
         if (step < tol) 
             converged = 1;
             if mpopt.verbose
-                fprintf('\nState estimator converged in %d iterations.\n', i);
+                mp_printf('\nState estimator converged in %d iterations.\n', i);
             end
         end
     end
     if mpopt.verbose
         if ~converged
-            fprintf('\nState estimator did not converge in %d iterations.\n', i);
+            mp_printf('\nState estimator did not converge in %d iterations.\n', i);
         end
     end
     
@@ -238,10 +238,10 @@ while (~converged && ibd <= max_it_bad_data)
         baddata = 1;
         converged = 0;
         if mpopt.verbose
-            fprintf('\nRejecting %d measurement(s) as bad data:\n', length(rejected));
-            fprintf('\tindex\t      B\n');
-            fprintf('\t-----\t-------------\n');
-            fprintf('\t%4d\t%10.2f\n', [ vv(rejected), B(rejected) ]' );
+            mp_printf('\nRejecting %d measurement(s) as bad data:\n', length(rejected));
+            mp_printf('\tindex\t      B\n');
+            mp_printf('\t-----\t-------------\n');
+            mp_printf('\t%4d\t%10.2f\n', [ vv(rejected), B(rejected) ]' );
         end
         
         %% update measurement index vector
@@ -253,8 +253,8 @@ while (~converged && ibd <= max_it_bad_data)
     if (baddata == 0) 
         converged = 1;
         if mpopt.verbose
-            fprintf('\nNo remaining bad data, after discarding data %d time(s).\n', ibd-1);
-            fprintf('Largest value of B = %.2f\n', maxB);
+            mp_printf('\nNo remaining bad data, after discarding data %d time(s).\n', ibd-1);
+            mp_printf('Largest value of B = %.2f\n', maxB);
         end
     end
     ibd = ibd + 1;

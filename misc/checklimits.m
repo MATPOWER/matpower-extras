@@ -14,7 +14,7 @@ function [Fv, Pv, Qv, Vv] = checklimits(mpc, ac, quiet)
 %   Work-in-progress:   At this point, the code *is* the documentation.
 
 %   MATPOWER
-%   Copyright (c) 2014-2019, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 2014-2026, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MATPOWER Extras.
@@ -135,15 +135,15 @@ Vv.v  = Vv.v(k);
 Vv.V  = Vv.V(K);
 
 if ~quiet
-    fprintf('\n');
+    mp_printf('\n');
     if isempty(Fv.ic)
-        fprintf('No Branch Flow Emergency Rating Violations\n');
+        mp_printf('No Branch Flow Emergency Rating Violations\n');
     else
-        fprintf('Branch Flow Emergency Rating Violations\n');
-        fprintf(' branch     from       to        flow        limit     violation  %% violation\n');
-        fprintf('--------  --------  --------  ----------  ----------  ----------  ----------\n');
+        mp_printf('Branch Flow Emergency Rating Violations\n');
+        mp_printf(' branch     from       to        flow        limit     violation  %% violation\n');
+        mp_printf('--------  --------  --------  ----------  ----------  ----------  ----------\n');
         for k = 1:length(Fv.ic);
-            fprintf('%7d  %8d  %8d  %10.1f  %10.1f  %10.2f  %10.1f\n', Fv.ic(k), ...
+            mp_printf('%7d  %8d  %8d  %10.1f  %10.1f  %10.2f  %10.1f\n', Fv.ic(k), ...
                 mpc.branch(Fv.ic(k), F_BUS), ...
                 mpc.branch(Fv.ic(k), T_BUS), ...
                 F(Fv.ic(k)), ...
@@ -154,13 +154,13 @@ if ~quiet
         end
     end
     if isempty(Fv.ib)
-        fprintf('No Branch Flow Short Term Rating Violations\n');
+        mp_printf('No Branch Flow Short Term Rating Violations\n');
     else
-        fprintf('Branch Flow Short Term Rating Violations\n');
-        fprintf(' branch     from       to        flow        limit     violation  %% violation\n');
-        fprintf('--------  --------  --------  ----------  ----------  ----------  ----------\n');
+        mp_printf('Branch Flow Short Term Rating Violations\n');
+        mp_printf(' branch     from       to        flow        limit     violation  %% violation\n');
+        mp_printf('--------  --------  --------  ----------  ----------  ----------  ----------\n');
         for k = 1:length(Fv.ib);
-            fprintf('%7d  %8d  %8d  %10.1f  %10.1f  %10.2f  %10.1f\n', Fv.ib(k), ...
+            mp_printf('%7d  %8d  %8d  %10.1f  %10.1f  %10.2f  %10.1f\n', Fv.ib(k), ...
                 mpc.branch(Fv.ib(k), F_BUS), ...
                 mpc.branch(Fv.ib(k), T_BUS), ...
                 F(Fv.ib(k)), ...
@@ -171,13 +171,13 @@ if ~quiet
         end
     end
     if isempty(Fv.i)
-        fprintf('No Branch Flow Normal Rating Violations\n');
+        mp_printf('No Branch Flow Normal Rating Violations\n');
     else
-        fprintf('Branch Flow Normal Rating Violations\n');
-        fprintf(' branch     from       to        flow        limit     violation  %% violation\n');
-        fprintf('--------  --------  --------  ----------  ----------  ----------  ----------\n');
+        mp_printf('Branch Flow Normal Rating Violations\n');
+        mp_printf(' branch     from       to        flow        limit     violation  %% violation\n');
+        mp_printf('--------  --------  --------  ----------  ----------  ----------  ----------\n');
         for k = 1:length(Fv.i);
-            fprintf('%7d  %8d  %8d  %10.1f  %10.1f  %10.2f  %10.1f\n', Fv.i(k), ...
+            mp_printf('%7d  %8d  %8d  %10.1f  %10.1f  %10.2f  %10.1f\n', Fv.i(k), ...
                 mpc.branch(Fv.i(k), F_BUS), ...
                 mpc.branch(Fv.i(k), T_BUS), ...
                 F(Fv.i(k)), ...
@@ -188,16 +188,16 @@ if ~quiet
         end
     end
 
-    fprintf('\n');
-    fprintf('Generator Active Limit Violations\n');
+    mp_printf('\n');
+    mp_printf('Generator Active Limit Violations\n');
     if isempty(Pv.i)
-        fprintf('No Pmin Violations\n');
+        mp_printf('No Pmin Violations\n');
     else
-        fprintf('Pmin Violations\n');
-        fprintf('  gen       bus        Pmin         Pg         Pmax     violation  %% violation\n');
-        fprintf('--------  --------  ----------  ----------  ----------  ----------  ----------\n');
+        mp_printf('Pmin Violations\n');
+        mp_printf('  gen       bus        Pmin         Pg         Pmax     violation  %% violation\n');
+        mp_printf('--------  --------  ----------  ----------  ----------  ----------  ----------\n');
         for k = 1:length(Pv.i);
-            fprintf('%7d  %8d  %10.1f  %10.1f  %10.1f  %10.2f  %10.1f\n', Pv.i(k), ...
+            mp_printf('%7d  %8d  %10.1f  %10.1f  %10.1f  %10.2f  %10.1f\n', Pv.i(k), ...
                 mpc.gen(Pv.i(k), GEN_BUS), ...
                 mpc.gen(Pv.i(k), PMIN), ...
                 Pg(Pv.i(k)), ...
@@ -208,13 +208,13 @@ if ~quiet
         end
     end
     if isempty(Pv.I)
-        fprintf('No Pmax Violations\n');
+        mp_printf('No Pmax Violations\n');
     else
-        fprintf('Pmax Violations\n');
-        fprintf('  gen       bus        Pmin         Pg         Pmax     violation  %% violation\n');
-        fprintf('--------  --------  ----------  ----------  ----------  ----------  ----------\n');
+        mp_printf('Pmax Violations\n');
+        mp_printf('  gen       bus        Pmin         Pg         Pmax     violation  %% violation\n');
+        mp_printf('--------  --------  ----------  ----------  ----------  ----------  ----------\n');
         for k = 1:length(Pv.I);
-            fprintf('%7d  %8d  %10.1f  %10.1f  %10.1f  %10.2f  %10.1f\n', Pv.I(k), ...
+            mp_printf('%7d  %8d  %10.1f  %10.1f  %10.1f  %10.2f  %10.1f\n', Pv.I(k), ...
                 mpc.gen(Pv.I(k), GEN_BUS), ...
                 mpc.gen(Pv.I(k), PMIN), ...
                 Pg(Pv.I(k)), ...
@@ -225,16 +225,16 @@ if ~quiet
         end
     end
 
-    fprintf('\n');
-    fprintf('Generator Reactive Limit Violations\n');
+    mp_printf('\n');
+    mp_printf('Generator Reactive Limit Violations\n');
     if isempty(Qv.i)
-        fprintf('No Qmin Violations\n');
+        mp_printf('No Qmin Violations\n');
     else
-        fprintf('Qmin Violations\n');
-        fprintf('  gen       bus        Qmin         Qg         Qmax     violation  %% violation\n');
-        fprintf('--------  --------  ----------  ----------  ----------  ----------  ----------\n');
+        mp_printf('Qmin Violations\n');
+        mp_printf('  gen       bus        Qmin         Qg         Qmax     violation  %% violation\n');
+        mp_printf('--------  --------  ----------  ----------  ----------  ----------  ----------\n');
         for k = 1:length(Qv.i);
-            fprintf('%7d  %8d  %10.1f  %10.1f  %10.1f  %10.2f  %10.1f\n', Qv.i(k), ...
+            mp_printf('%7d  %8d  %10.1f  %10.1f  %10.1f  %10.2f  %10.1f\n', Qv.i(k), ...
                 mpc.gen(Qv.i(k), GEN_BUS), ...
                 mpc.gen(Qv.i(k), QMIN), ...
                 Qg(Qv.i(k)), ...
@@ -245,13 +245,13 @@ if ~quiet
         end
     end
     if isempty(Qv.I)
-        fprintf('No Qmax Violations\n');
+        mp_printf('No Qmax Violations\n');
     else
-        fprintf('Qmax Violations\n');
-        fprintf('  gen       bus        Qmin         Qg         Qmax     violation  %% violation\n');
-        fprintf('--------  --------  ----------  ----------  ----------  ----------  ----------\n');
+        mp_printf('Qmax Violations\n');
+        mp_printf('  gen       bus        Qmin         Qg         Qmax     violation  %% violation\n');
+        mp_printf('--------  --------  ----------  ----------  ----------  ----------  ----------\n');
         for k = 1:length(Qv.I);
-            fprintf('%7d  %8d  %10.1f  %10.1f  %10.1f  %10.2f  %10.1f\n', Qv.I(k), ...
+            mp_printf('%7d  %8d  %10.1f  %10.1f  %10.1f  %10.2f  %10.1f\n', Qv.I(k), ...
                 mpc.gen(Qv.I(k), GEN_BUS), ...
                 mpc.gen(Qv.I(k), QMIN), ...
                 Qg(Qv.I(k)), ...
@@ -262,16 +262,16 @@ if ~quiet
         end
     end
 
-    fprintf('\n');
-    fprintf('Bus Voltage Limit Violations\n');
+    mp_printf('\n');
+    mp_printf('Bus Voltage Limit Violations\n');
     if isempty(Vv.i)
-        fprintf('No Vmin Violations\n');
+        mp_printf('No Vmin Violations\n');
     else
-        fprintf('Vmin Violations\n');
-        fprintf('   bus        Vmin         Vm         Vmax     violation  %% violation\n');
-        fprintf(' --------  ----------  ----------  ----------  ----------  ----------\n');
+        mp_printf('Vmin Violations\n');
+        mp_printf('   bus        Vmin         Vm         Vmax     violation  %% violation\n');
+        mp_printf(' --------  ----------  ----------  ----------  ----------  ----------\n');
         for k = 1:length(Vv.i);
-            fprintf('%8d  %10.2f  %10.2f  %10.2f  %10.2f  %10.2f\n', Vv.i(k), ...
+            mp_printf('%8d  %10.2f  %10.2f  %10.2f  %10.2f  %10.2f\n', Vv.i(k), ...
                 mpc.bus(Vv.i(k), VMIN), ...
                 Vm(Vv.i(k)), ...
                 mpc.bus(Vv.i(k), VMAX), ...
@@ -281,13 +281,13 @@ if ~quiet
         end
     end
     if isempty(Vv.I)
-        fprintf('No Vmax Violations\n');
+        mp_printf('No Vmax Violations\n');
     else
-        fprintf('Vmax Violations\n');
-        fprintf('   bus        Vmin         Vm         Vmax     violation  %% violation\n');
-        fprintf(' --------  ----------  ----------  ----------  ----------  ----------\n');
+        mp_printf('Vmax Violations\n');
+        mp_printf('   bus        Vmin         Vm         Vmax     violation  %% violation\n');
+        mp_printf(' --------  ----------  ----------  ----------  ----------  ----------\n');
         for k = 1:length(Vv.I);
-            fprintf('%8d  %10.2f  %10.2f  %10.2f  %10.2f  %10.2f\n', Vv.I(k), ...
+            mp_printf('%8d  %10.2f  %10.2f  %10.2f  %10.2f  %10.2f\n', Vv.I(k), ...
                 mpc.bus(Vv.I(k), VMIN), ...
                 Vm(Vv.I(k)), ...
                 mpc.bus(Vv.I(k), VMAX), ...

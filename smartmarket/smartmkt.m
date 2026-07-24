@@ -5,7 +5,7 @@ function [co, cb, r, dispatch, success] = ...
 %       OFFERS, BIDS, MKT, MPOPT) runs the ISO smart market.
 
 %   MATPOWER
-%   Copyright (c) 1996-2016, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2026, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MATPOWER Extras.
@@ -68,7 +68,7 @@ r.genoffer = r.gencost;     %% save the gencost used to run the OPF
 r.gencost  = mpc.gencost;   %% and restore the original gencost
 [bus, gen] = deal(r.bus, r.gen);
 if mpopt.verbose && ~success
-    fprintf('\nSMARTMARKET: non-convergent UOPF');
+    mp_printf('\nSMARTMARKET: non-convergent UOPF');
 end
 
 %%-----  compute quantities, prices & costs  -----

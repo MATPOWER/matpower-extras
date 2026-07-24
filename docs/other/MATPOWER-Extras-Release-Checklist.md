@@ -38,7 +38,7 @@ Pre-release
 Release
 -------
 - Merge latest `prep-for-release` into `master`.
-- Tag with version number, e.g. `8.0`.
+- Tag with version number, e.g. `8.1`.
 - Push `master` to GitHub.
 - Publish new release on GitHub: https://github.com/MATPOWER/matpower-extras/releases/new
 

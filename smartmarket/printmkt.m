@@ -10,7 +10,7 @@ function printmkt(r, t, dispatch, success, fd, mpopt)
 %   See also SMARTMKT.
 
 %   MATPOWER
-%   Copyright (c) 1996-2016, Power Systems Engineering Research Center (PSERC)
+%   Copyright (c) 1996-2026, Power Systems Engineering Research Center (PSERC)
 %   by Ray Zimmerman, PSERC Cornell
 %
 %   This file is part of MATPOWER Extras.
@@ -44,50 +44,50 @@ pay = dispatch(:, PRICE) .* dispatch(:, QUANTITY) * t;
 cost = dispatch(:, FCOST) + dispatch(:, VCOST) + dispatch(:, SCOST) + dispatch(:, PENALTY);
 if mpopt.out.all
     %% dispatch data
-    fprintf(fd, '\n================================================================================');
-    fprintf(fd, '\n|     Market Summary                                                           |');
-    fprintf(fd, '\n================================================================================');
-    fprintf(fd, '\nDispatch period duration: %.2f hours', t);
-    fprintf(fd, '\nGen  Bus     Pg      Price    Revenue   Fix+Var   Strt/Stp   Total    Earnings');
-    fprintf(fd, '\n #    #     (MW)    ($/MWh)     ($)     Cost ($)  Cost ($)  Cost ($)     ($)  ');
-    fprintf(fd, '\n---  ---  --------  --------  --------  --------  --------  --------  --------');
+    mp_printf(fd, '\n================================================================================');
+    mp_printf(fd, '\n|     Market Summary                                                           |');
+    mp_printf(fd, '\n================================================================================');
+    mp_printf(fd, '\nDispatch period duration: %.2f hours', t);
+    mp_printf(fd, '\nGen  Bus     Pg      Price    Revenue   Fix+Var   Strt/Stp   Total    Earnings');
+    mp_printf(fd, '\n #    #     (MW)    ($/MWh)     ($)     Cost ($)  Cost ($)  Cost ($)     ($)  ');
+    mp_printf(fd, '\n---  ---  --------  --------  --------  --------  --------  --------  --------');
     for i = 1:size(gen, 1)
         if gen(i, PG)
-            fprintf(fd, '\n%3d%5d%9.2f%10.3f%10.2f%10.2f%10.2f%10.2f%10.2f', ...
+            mp_printf(fd, '\n%3d%5d%9.2f%10.3f%10.2f%10.2f%10.2f%10.2f%10.2f', ...
                 i, gen(i, GEN_BUS), dispatch(i, QUANTITY), dispatch(i, PRICE), pay(i), ...
                 dispatch(i, FCOST) + dispatch(i, VCOST), ...
                 dispatch(i, SCOST), cost(i), pay(i) - cost(i));
         else
             if dispatch(i, SCOST) || dispatch(i, PENALTY)
-                fprintf(fd, '\n%3d%5d      -  %10.3f       -         -  %10.2f%10.2f%10.2f', ...
+                mp_printf(fd, '\n%3d%5d      -  %10.3f       -         -  %10.2f%10.2f%10.2f', ...
                     i, gen(i, GEN_BUS), dispatch(i, PRICE), dispatch(i, SCOST), ...
                     cost(i), pay(i) - cost(i));
             else
-                fprintf(fd, '\n%3d%5d      -  %10.3f       -         -         -         -         -', ...
+                mp_printf(fd, '\n%3d%5d      -  %10.3f       -         -         -         -         -', ...
                     i, gen(i, GEN_BUS), dispatch(i, PRICE));
             end
         end
         if dispatch(i, PENALTY)
-            fprintf(fd, '%10.2f penalty (included in total cost)', dispatch(i, PENALTY));
+            mp_printf(fd, '%10.2f penalty (included in total cost)', dispatch(i, PENALTY));
         end
     end
-    fprintf(fd, '\n          --------            --------  --------  --------  --------  --------');
-    fprintf(fd, '\nTotal:  %9.2f          %10.2f%10.2f%10.2f%10.2f%10.2f', ...
+    mp_printf(fd, '\n          --------            --------  --------  --------  --------  --------');
+    mp_printf(fd, '\nTotal:  %9.2f          %10.2f%10.2f%10.2f%10.2f%10.2f', ...
         sum(dispatch(:, QUANTITY)), sum(pay), sum(dispatch(:, FCOST)) + sum(dispatch(:, VCOST)), ...
         sum(dispatch(:, SCOST)), sum(cost), sum(pay-cost));
     if sum(dispatch(:, PENALTY))
-        fprintf(fd, '%10.2f penalty (included in total cost)', sum(dispatch(:, PENALTY)));
+        mp_printf(fd, '%10.2f penalty (included in total cost)', sum(dispatch(:, PENALTY)));
     end
-    fprintf(fd, '\n');
+    mp_printf(fd, '\n');
 end
 
 %% print raw data for Perl database interface
 if OUT_RAW
-    fprintf(fd, '----------  raw PW::Dispatch data below  ----------\n');
-    fprintf(fd, 'dispatch\n');
-    fprintf(fd, '%d\t%.8g\t%.8g\t%.8g\t%.8g\t%.8g\t%.8g\t%.8g\n', ...
+    mp_printf(fd, '----------  raw PW::Dispatch data below  ----------\n');
+    mp_printf(fd, 'dispatch\n');
+    mp_printf(fd, '%d\t%.8g\t%.8g\t%.8g\t%.8g\t%.8g\t%.8g\t%.8g\n', ...
                 [(1:ng)' dispatch(:, [QUANTITY, PRICE, FCOST, VCOST, SCOST, PENALTY]) pay-cost]');
-    fprintf(fd, '----------  raw PW::Dispatch data above  ----------\n');
+    mp_printf(fd, '----------  raw PW::Dispatch data above  ----------\n');
 end
 
 %% print remaining opf output
