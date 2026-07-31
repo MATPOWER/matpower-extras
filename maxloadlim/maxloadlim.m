@@ -71,7 +71,7 @@ settings = varargin;
 
 while iter <= iter_max && repeat
     if options.verbose
-        fprintf(1,'Beginning of iteration %d\n',iter);
+        mp_printf(1,'Beginning of iteration %d\n',iter);
     end
     iter = iter + 1;
     
