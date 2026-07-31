@@ -102,7 +102,7 @@ sdpopts = yalmip_options([], mpopt);
 
 if enforce_Qlimits
     if verbose > 0
-        fprintf('Generator reactive power limits are enforced. Using function insolvablepf_limitQ.\n');
+        mp_printf('Generator reactive power limits are enforced. Using function insolvablepf_limitQ.\n');
     end
     [insolvable,eta,mineigratio] = insolvablepf_limitQ(mpc,mpopt);
     Vslack_min = nan;
@@ -378,7 +378,7 @@ for i=1:nmaxclique
     end
     
     if verbose >= 2 && mod(i,ndisplay) == 0
-        fprintf('Loop identification: Loop %i of %i\n',i,nmaxclique);
+        mp_printf('Loop identification: Loop %i of %i\n',i,nmaxclique);
     end
 end
 
@@ -422,7 +422,7 @@ for i=1:size(E,1)
     end
     
     if verbose >= 2 && mod(i,ndisplay) == 0
-        fprintf('Counting beta: %i of %i\n',i,size(E,1));
+        mp_printf('Counting beta: %i of %i\n',i,size(E,1));
     end
 end
 
@@ -473,7 +473,7 @@ for i=1:size(E,1)
     end
     
     if verbose >= 2 && mod(i,ndisplay) == 0
-        fprintf('SDP linking: %i of %i\n',i,size(E,1));
+        mp_printf('SDP linking: %i of %i\n',i,size(E,1));
     end
     
 end
@@ -542,7 +542,7 @@ for k=1:nbus
     end
    
     if verbose >= 2 && mod(k,ndisplay) == 0
-        fprintf('SDP creation: Bus %i of %i\n',k,nbus);
+        mp_printf('SDP creation: Bus %i of %i\n',k,nbus);
     end
     
 end % Loop through all buses
@@ -576,7 +576,7 @@ if ~have_feature('octave') || have_feature('octave', 'vnum') >= 4.001
 end
 
 if verbose >= 2
-    fprintf('Solver exit message: %s\n',sdpinfo.info);
+    mp_printf('Solver exit message: %s\n',sdpinfo.info);
 end
 
 %% Calculate rank characteristics of the solution

@@ -67,7 +67,7 @@ sdpopts = yalmip_options([], mpopt);
 
 if enforce_Qlimits
     if verbose > 0
-        fprintf('Generator reactive power limits are enforced. Using function insolvablepfsos_limitQ.\n');
+        mp_printf('Generator reactive power limits are enforced. Using function insolvablepfsos_limitQ.\n');
     end
     insolvable = insolvablepfsos_limitQ(mpc,mpopt);
     return;
@@ -140,7 +140,7 @@ Vmag(mpc.gen(:,GEN_BUS)) = mpc.gen(:,VG);
 % We need a Vd and Vq for each bus
 
 if verbose >= 2
-    fprintf('Creating variables.\n');
+    mp_printf('Creating variables.\n');
 end
 
 Vd = sdpvar(nbus,1);
@@ -151,7 +151,7 @@ V = [1; Vd; Vq];
 %% Create polynomials
 
 if verbose >= 2
-    fprintf('Creating polynomials.\n');
+    mp_printf('Creating polynomials.\n');
 end
 
 deg = 0;
@@ -184,7 +184,7 @@ end
 %% Create power flow equation polynomials
 
 if verbose >= 2
-    fprintf('Creating power flow equations.\n');
+    mp_printf('Creating power flow equations.\n');
 end
 
 % Make P equations
@@ -232,7 +232,7 @@ end
 %% Form the test polynomial
 
 if verbose >= 2
-    fprintf('Forming the test polynomial.\n');
+    mp_printf('Forming the test polynomial.\n');
 end
 
 sospoly = 1;
@@ -260,7 +260,7 @@ sospoly = -sospoly;
 %% Solve the SOS problem
 
 if verbose >= 2
-    fprintf('Solving the sum of squares problem.\n');
+    mp_printf('Solving the sum of squares problem.\n');
 end
 
 sosopts = sdpsettings(sdpopts,'sos.newton',1,'sos.congruence',1);
@@ -296,7 +296,7 @@ if ~have_feature('octave') || have_feature('octave', 'vnum') >= 4.001
 end
 
 if verbose >= 2
-    fprintf('Solver exit message: %s\n',sol.info);
+    mp_printf('Solver exit message: %s\n',sol.info);
 end
 
 if sol.problem

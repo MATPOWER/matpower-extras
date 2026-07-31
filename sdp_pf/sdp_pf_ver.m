@@ -27,5 +27,5 @@ if nargout > 0
         rv = v.Version;
     end
 else
-    fprintf('%-22s Version %-9s  %11s\n', v.Name, v.Version, v.Date);
+    mp_printf('%-22s Version %-9s  %11s\n', v.Name, v.Version, v.Date);
 end

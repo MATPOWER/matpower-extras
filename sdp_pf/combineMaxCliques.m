@@ -119,7 +119,7 @@ if length(maxcliques) > maxNumberOfCliques
         end
         
         if mod(size(E,1),ndisplay) == 0
-            fprintf('combineLoops: %i maximal cliques of maxNumberOfCliques = %i\n',size(E,1),maxNumberOfCliques);
+            mp_printf('combineLoops: %i maximal cliques of maxNumberOfCliques = %i\n',size(E,1),maxNumberOfCliques);
         end
 
     end

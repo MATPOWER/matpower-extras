@@ -234,7 +234,7 @@ for k=1:nbus
     end
     
     if verbose >= 2 && mod(k,ndisplay) == 0
-        fprintf('SDP creation: Bus %i of %i\n',k,nbus);
+        mp_printf('SDP creation: Bus %i of %i\n',k,nbus);
     end
     
 end % Loop through all buses
@@ -266,7 +266,7 @@ if ~have_feature('octave') || have_feature('octave', 'vnum') >= 4.001
 end
 
 if verbose >= 2
-    fprintf('Solver exit message: %s\n',sdpinfo.info);
+    mp_printf('Solver exit message: %s\n',sdpinfo.info);
 end
 
 

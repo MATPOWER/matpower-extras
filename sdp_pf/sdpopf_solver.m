@@ -78,11 +78,11 @@ end
 
 if verbose > 0
     v = sdp_pf_ver('all');
-    fprintf('SDPOPF Version %s, %s', v.Version, v.Date);
+    mp_printf('SDPOPF Version %s, %s', v.Version, v.Date);
     if ~isempty(sdpopts.solver)
-        fprintf('  --  Using %s.\n\n',upper(sdpopts.solver));
+        mp_printf('  --  Using %s.\n\n',upper(sdpopts.solver));
     else
-        fprintf('\n\n');
+        mp_printf('\n\n');
     end
 end
 
@@ -409,7 +409,7 @@ for i=1:nmaxclique
     end
     
     if verbose >= 2 && mod(i,ndisplay) == 0
-        fprintf('Loop identification: Loop %i of %i\n',i,nmaxclique);
+        mp_printf('Loop identification: Loop %i of %i\n',i,nmaxclique);
     end
 end
 
@@ -453,7 +453,7 @@ for i=1:size(E,1)
     end
     
     if verbose >= 2 && mod(i,ndisplay) == 0
-        fprintf('Counting beta: %i of %i\n',i,size(E,1));
+        mp_printf('Counting beta: %i of %i\n',i,size(E,1));
     end
 end
 
@@ -504,7 +504,7 @@ for i=1:size(E,1)
     end
     
     if verbose >= 2 && mod(i,ndisplay) == 0
-        fprintf('SDP linking: %i of %i\n',i,size(E,1));
+        mp_printf('SDP linking: %i of %i\n',i,size(E,1));
     end
     
 end
@@ -902,7 +902,7 @@ for k=1:nbus
     % -----------------------------------------------------------------
     
     if verbose >= 2 && mod(k,ndisplay) == 0
-        fprintf('SDP creation: Bus %i of %i\n',k,nbus);
+        mp_printf('SDP creation: Bus %i of %i\n',k,nbus);
     end
     
 end % Loop through all buses
@@ -955,7 +955,7 @@ for i=1:nbranch
     end
     
     if verbose >= 2 && mod(i,ndisplay) == 0
-        fprintf('SDP creation: Branch %i of %i\n',i,nbranch);
+        mp_printf('SDP creation: Branch %i of %i\n',i,nbranch);
     end
     
 end
@@ -1001,7 +1001,7 @@ end
 tsolve = sdpinfo.solvertime;
 
 if verbose >= 2
-    fprintf('Solver exit message: %s\n',sdpinfo.info);
+    mp_printf('Solver exit message: %s\n',sdpinfo.info);
 end
 
 objval = double(cost);
@@ -1070,14 +1070,14 @@ for r = 1:length(recover_voltage_loop)
     
     if recover_voltage_loop(r) == 1
         if verbose >= 2
-            fprintf('Recovering dual solution.\n');
+            mp_printf('Recovering dual solution.\n');
         end
         u = dual_u;
         eval = dual_eval;
         mineigratio = dual_mineigratio;
     elseif recover_voltage_loop(r) == 2
         if verbose >= 2
-            fprintf('Recovering primal solution.\n');
+            mp_printf('Recovering primal solution.\n');
         end
         u = primal_u;
         eval = primal_eval;
@@ -1197,7 +1197,7 @@ for r = 1:length(recover_voltage_loop)
 
     if (maxmuU < binding_lagrange) && (maxmuL < binding_lagrange)
         if verbose > 1
-            fprintf('No binding voltage magnitude. Attempting solution recovery from line-flow constraints.\n');
+            mp_printf('No binding voltage magnitude. Attempting solution recovery from line-flow constraints.\n');
         end
 
         % No voltage magnitude limits are binding. 
@@ -1279,21 +1279,21 @@ end
 
 if recover_voltage == 3
     if dual_PQerr > primal_PQerr
-        fprintf('dual_PQerr: %g MW. primal_PQerr: %g MW. Using primal solution.\n',dual_PQerr,primal_PQerr)
+        mp_printf('dual_PQerr: %g MW. primal_PQerr: %g MW. Using primal solution.\n',dual_PQerr,primal_PQerr)
         Vopt = Vopt_primal;
     else
-        fprintf('dual_PQerr: %g MW. primal_PQerr: %g MW. Using dual solution.\n',dual_PQerr,primal_PQerr)
+        mp_printf('dual_PQerr: %g MW. primal_PQerr: %g MW. Using dual solution.\n',dual_PQerr,primal_PQerr)
         Vopt = Vopt_dual;
     end
 elseif recover_voltage == 4
     if primal_mineigratio > dual_mineigratio
         if verbose >= 2
-            fprintf('dual_mineigratio: %g. primal_mineigratio: %g. Using primal solution.\n',dual_mineigratio,primal_mineigratio)
+            mp_printf('dual_mineigratio: %g. primal_mineigratio: %g. Using primal solution.\n',dual_mineigratio,primal_mineigratio)
         end
         Vopt = Vopt_primal;
     else
         if verbose >= 2
-            fprintf('dual_mineigratio: %g. primal_mineigratio: %g. Using dual solution.\n',dual_mineigratio,primal_mineigratio)
+            mp_printf('dual_mineigratio: %g. primal_mineigratio: %g. Using dual solution.\n',dual_mineigratio,primal_mineigratio)
         end
         Vopt = Vopt_dual;
     end
