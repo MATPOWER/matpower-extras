@@ -102,13 +102,13 @@ end
 tstart = tic;
 %% initialize first generation
 if opt.verbose > 0
-  fprintf('Initializing first generation of %d cases...\n', opt.vm.ea.inds)
+  mp_printf('Initializing first generation of %d cases...\n', opt.vm.ea.inds)
 end
 psi = sgvm_GenerationClass(mpc, opt.vm.ea.inds, opt);
 if opt.verbose > 0
-  fprintf('\tinitialization complete (%0.3f sec).\n', toc(tstart))
+  mp_printf('\tinitialization complete (%0.3f sec).\n', toc(tstart))
   if opt.verbose > 1
-    fprintf('Current stats:\n')
+    mp_printf('Current stats:\n')
     psi.stats()
   end
 end
@@ -116,24 +116,24 @@ end
 for g = 1:opt.vm.ea.generations
   tgen = tic;
   if opt.verbose > 0
-    fprintf('-------------------------------------------------------\n')
-    fprintf('---- Generation Loop %d\n', g)
-    fprintf('-------------------------------------------------------\n')
+    mp_printf('-------------------------------------------------------\n')
+    mp_printf('---- Generation Loop %d\n', g)
+    mp_printf('-------------------------------------------------------\n')
   end
   %% update gen count
   psi.update_gen();
   %% branch permutation
   tbperm = tic;
   if opt.verbose > 0
-    fprintf('Performing branch permutation loop (%d cases)...\n', length(psi.inds))
+    mp_printf('Performing branch permutation loop (%d cases)...\n', length(psi.inds))
   end
     psi.perm_loop('branch', opt);
   if opt.verbose > 0
-    fprintf('\tbranch permutation loop completed (%0.3f sec).\n', toc(tbperm))
+    mp_printf('\tbranch permutation loop completed (%0.3f sec).\n', toc(tbperm))
     if opt.verbose > 1 && ~psi.exitflag
-      fprintf('Current stats:\n')
+      mp_printf('Current stats:\n')
       psi.stats()
-      fprintf('Stash stats:\n')
+      mp_printf('Stash stats:\n')
       psi.stash.stats()
     end
   end
@@ -142,9 +142,9 @@ for g = 1:opt.vm.ea.generations
     psi.picksoln(opt.vm.ea.select);
     if psi.exitflag
       if opt.verbose > 0
-        fprintf('---- Solution exit flag satisfied (%0.3f sec) \n', g, toc(tgen))
-        fprintf('\tObjective Range: %0.5g -- %0.5g\n', psi.soln{1}.mpc.f, psi.soln{end}.mpc.f)
-        fprintf('-------------------------------------------------------\n')
+        mp_printf('---- Solution exit flag satisfied (%0.3f sec) \n', g, toc(tgen))
+        mp_printf('\tObjective Range: %0.5g -- %0.5g\n', psi.soln{1}.mpc.f, psi.soln{end}.mpc.f)
+        mp_printf('-------------------------------------------------------\n')
       end
       psi.inds = {};
       break
@@ -156,15 +156,15 @@ for g = 1:opt.vm.ea.generations
   %% node permutation
   tnperm = tic;
   if opt.verbose > 0
-    fprintf('Performing node permutation loop (%d cases)...\n', length(psi.inds))
+    mp_printf('Performing node permutation loop (%d cases)...\n', length(psi.inds))
   end
     psi.perm_loop('node', opt);
   if opt.verbose > 0
-    fprintf('\tnode permutation loop completed (%0.3f sec).\n', toc(tnperm))
+    mp_printf('\tnode permutation loop completed (%0.3f sec).\n', toc(tnperm))
     if opt.verbose > 1
-      fprintf('Current stats:\n')
+      mp_printf('Current stats:\n')
       psi.stats()
-      fprintf('Stash stats:\n')
+      mp_printf('Stash stats:\n')
       psi.stash.stats()
     end
   end
@@ -173,8 +173,8 @@ for g = 1:opt.vm.ea.generations
     psi.picksoln(opt.vm.ea.select);
     if psi.exitflag
       if opt.verbose > 0
-        fprintf('---- Solution exit flag satisfied (%0.3f sec) \n', g, toc(tgen))
-        fprintf('\tObjective Range: %0.5g -- %0.5g\n', psi.soln{1}.mpc.f, psi.soln{end}.mpc.f)
+        mp_printf('---- Solution exit flag satisfied (%0.3f sec) \n', g, toc(tgen))
+        mp_printf('\tObjective Range: %0.5g -- %0.5g\n', psi.soln{1}.mpc.f, psi.soln{end}.mpc.f)
       end
       psi.inds = {};
       break
@@ -184,9 +184,9 @@ for g = 1:opt.vm.ea.generations
   if g < opt.vm.ea.generations
     psi.select(opt.vm.ea.inds - opt.vm.ea.randnew, opt.vm.ea.randnew, opt);
     if opt.verbose > 0
-      fprintf('---- Generation Loop %d Complete (%0.3f sec) \n', g, toc(tgen))
-      fprintf('\tObjective Range: %0.5g -- %0.5g\n', psi.inds{1}.mpc.f, psi.inds{end}.mpc.f)
-      fprintf('\t Total possible solutions found: %d\n', length(psi.solnlist))
+      mp_printf('---- Generation Loop %d Complete (%0.3f sec) \n', g, toc(tgen))
+      mp_printf('\tObjective Range: %0.5g -- %0.5g\n', psi.inds{1}.mpc.f, psi.inds{end}.mpc.f)
+      mp_printf('\t Total possible solutions found: %d\n', length(psi.solnlist))
     end
   else
     if length(psi.soln) < opt.vm.ea.select
@@ -201,28 +201,28 @@ for g = 1:opt.vm.ea.generations
       psi.picksoln(opt.vm.ea.select);
       psi.inds = {};
       if opt.verbose > 0
-        fprintf('---- Final Generation Loop %d Complete (%0.3f sec) \n', g, toc(tgen))
-        fprintf('\tObjective Range: %0.5g -- %0.5g\n', psi.soln{1}.mpc.f, psi.soln{end}.mpc.f)
-        fprintf('\t Total possible solutions found: %d\n', length(psi.solnlist))
+        mp_printf('---- Final Generation Loop %d Complete (%0.3f sec) \n', g, toc(tgen))
+        mp_printf('\tObjective Range: %0.5g -- %0.5g\n', psi.soln{1}.mpc.f, psi.soln{end}.mpc.f)
+        mp_printf('\t Total possible solutions found: %d\n', length(psi.solnlist))
       end
   end
 end
 %% Reactive planning
 if opt.verbose > 0
   tshunts = tic;
-  fprintf('-------------------------------------------------------\n')
-  fprintf('---- Reactive Planning Stage \n')
-  fprintf('\tAdding shunts to %d cases...\n', length(psi.soln))
+  mp_printf('-------------------------------------------------------\n')
+  mp_printf('---- Reactive Planning Stage \n')
+  mp_printf('\tAdding shunts to %d cases...\n', length(psi.soln))
 end
 psi.reactive_planning(opt);
 if opt.verbose > 0
-  fprintf('\tReactive planning completed (%0.3f sec).\n', toc(tshunts))
+  mp_printf('\tReactive planning completed (%0.3f sec).\n', toc(tshunts))
 end
 %%
 if opt.verbose > 0
-  fprintf('-------------------------------------------------------\n')
-  fprintf('---- Completed (%0.3f sec).\n', toc(tstart))
-  fprintf('\tObjective Range: %0.5g -- %0.5g\n', psi.soln{1}.mpc.f, psi.soln{end}.mpc.f)
+  mp_printf('-------------------------------------------------------\n')
+  mp_printf('---- Completed (%0.3f sec).\n', toc(tstart))
+  mp_printf('\tObjective Range: %0.5g -- %0.5g\n', psi.soln{1}.mpc.f, psi.soln{end}.mpc.f)
   psi.stats('soln')
 end
 

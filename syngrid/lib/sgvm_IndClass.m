@@ -66,7 +66,7 @@ classdef sgvm_IndClass < handle
                 end
                 opt.vm.branchperm.overload_frac = obj.overload_frac;
                 if opt.vm.branchperm.verbose > 0
-                  fprintf('\t(child of %s) overload_frac = %0.3f\n', obj.pid(1:6), obj.overload_frac);
+                  mp_printf('\t(child of %s) overload_frac = %0.3f\n', obj.pid(1:6), obj.overload_frac);
                 end
                 [obj.mpc, flag] = sgvm_branch_perm(mpc, opt);
                 obj.setid();
@@ -74,12 +74,12 @@ classdef sgvm_IndClass < handle
                   obj.clear_shunts();
                   obj.solve(opt);
                 elseif opt.vm.branchperm.verbose > 0
-                  fprintf('\t(child of %s) Identity permutation returned (i.e no improvement).\n', obj.pid(1:6));
+                  mp_printf('\t(child of %s) Identity permutation returned (i.e no improvement).\n', obj.pid(1:6));
                 end
               case 'node'
                 obj.call = 'node';
                 if opt.vm.nodeperm.verbose > 0 && ~opt.vm.parallel.use
-                  fprintf('\t(child of %s)---Time stats:\n', obj.pid(1:6));
+                  mp_printf('\t(child of %s)---Time stats:\n', obj.pid(1:6));
                 end
                 [~, nviolations] = obj.checkoverloads(mpc);
                 if nviolations < 10
@@ -92,16 +92,16 @@ classdef sgvm_IndClass < handle
                 tcalc = tic;
                 [Pbus,Qbus] = sgvm_calc_injection_delta(mpc, opt);
                 if opt.vm.nodeperm.verbose > 0
-                  fprintf('\t(child of %s) injection calc: scale_s = %0.3f, time %0.3f\n', obj.pid(1:6), obj.scale_s, toc(tcalc));
+                  mp_printf('\t(child of %s) injection calc: scale_s = %0.3f, time %0.3f\n', obj.pid(1:6), obj.scale_s, toc(tcalc));
                 end
                 tperm = tic;
                 perm = sgvm_deltainjection2perm(Pbus, Qbus, opt);
                 if opt.vm.nodeperm.verbose > 0
-                  fprintf('\t(child of %s) sgvm_deltainjection2perm: time %0.3f\n', obj.pid(1:6), toc(tperm));
+                  mp_printf('\t(child of %s) sgvm_deltainjection2perm: time %0.3f\n', obj.pid(1:6), toc(tperm));
                 end
                 if all(perm == (1:size(mpc.bus,1)).')
                   if opt.vm.nodeperm.verbose > 0
-                     fprintf('\t(child of %s) Identity permutation returned (i.e no improvement).\n', obj.pid(1:6));
+                     mp_printf('\t(child of %s) Identity permutation returned (i.e no improvement).\n', obj.pid(1:6));
                   end
                   obj.mpc = mpc;
                 else
@@ -112,7 +112,7 @@ classdef sgvm_IndClass < handle
                   obj.clear_shunts();
                   obj.solve(opt);
                   if opt.vm.nodeperm.verbose > 0
-                    fprintf('\tInd %s (child of %s) solve time: %0.3f\n', obj.id(1:6), obj.pid(1:6), toc(tsolve));
+                    mp_printf('\tInd %s (child of %s) solve time: %0.3f\n', obj.id(1:6), obj.pid(1:6), toc(tsolve));
                   end
                 end
             end
@@ -179,13 +179,13 @@ classdef sgvm_IndClass < handle
             while true
               if opt.verbose > 1
                 maxit = sgvm_get_max_iter(mpopt);
-                fprintf('  Ind %s (child of %s): solving with %d max iterations\n', obj.id(1:6), obj.pid(1:6), maxit);
+                mp_printf('  Ind %s (child of %s): solving with %d max iterations\n', obj.id(1:6), obj.pid(1:6), maxit);
               end
               obj.mpc = rundcopf(obj.mpc, mpopt);
               mpopt.opf.start = 2;
               r = runopf(obj.mpc, mpopt);
               if opt.verbose > 1
-                fprintf('  Ind %s (child of %s): runopf complete with status %d\n', obj.id(1:6), obj.pid(1:6), r.success);
+                mp_printf('  Ind %s (child of %s): runopf complete with status %d\n', obj.id(1:6), obj.pid(1:6), r.success);
               end
               if ~r.success
                 % if initial solution fails try using a powerflow initialization
@@ -194,7 +194,7 @@ classdef sgvm_IndClass < handle
                     'gencost', r.gencost);
                 rpf = runpf(tmp, opt.mpopt);
                 if opt.verbose > 1
-                  fprintf('  Ind %s (child of %s): runpf complete with status %d\n', obj.id(1:6), obj.pid(1:6), rpf.success);
+                  mp_printf('  Ind %s (child of %s): runpf complete with status %d\n', obj.id(1:6), obj.pid(1:6), rpf.success);
                 end
                 if rpf.success
                   obj.mpc_from_pf(rpf, r.softlims);
@@ -429,7 +429,7 @@ classdef sgvm_IndClass < handle
                 end
                 opt.mpopt.opf.start = 2;
                 if opt.verbose > 1
-                    fprintf('  Ind %s (child of %s): solving.\n', obj.id(1:6), obj.pid(1:6) );
+                    mp_printf('  Ind %s (child of %s): solving.\n', obj.id(1:6), obj.pid(1:6) );
                 end
                 [r, ~] = sgvm_add_shunts(obj.mpc, opt.mpopt, opt.vm.shunts);
                 if ~r.success
@@ -438,7 +438,7 @@ classdef sgvm_IndClass < handle
                     return
                 end
                 if opt.vm.shunts.verbose > 0
-                    fprintf('  Ind %s (child of %s): sgvm_add_shunts complete.\n', obj.id(1:6), obj.pid(1:6));
+                    mp_printf('  Ind %s (child of %s): sgvm_add_shunts complete.\n', obj.id(1:6), obj.pid(1:6));
                 end
                 if (obj.branch_violations(r) == 0) || (cnt > 5)
                     if isfield(r, 'softlims')
@@ -451,7 +451,7 @@ classdef sgvm_IndClass < handle
                     % solve WITHOUT softlims
                     tmp = runopf(r, opt.mpopt);
                     if opt.vm.shunts.verbose > 1
-                        fprintf('result with No softlimits:\n')
+                        mp_printf('result with No softlimits:\n')
                         printpf(tmp)
                     end
                     % update the saved backup
@@ -463,23 +463,23 @@ classdef sgvm_IndClass < handle
                     end
                     if (min(tmp.bus(:, LAM_P)) > 0 )
                         if opt.vm.shunts.verbose > 0
-                            fprintf('  Ind %s (child of %s): successful completion.\n', obj.id(1:6), obj.pid(1:6));
+                            mp_printf('  Ind %s (child of %s): successful completion.\n', obj.id(1:6), obj.pid(1:6));
                         end
                         break
                     elseif cnt > 5
                         if opt.vm.shunts.verbose > 0
-                            fprintf('  Ind %s (child of %s): shunt iteration threshold exceeded.\n', obj.id(1:6), obj.pid(1:6));
+                            mp_printf('  Ind %s (child of %s): shunt iteration threshold exceeded.\n', obj.id(1:6), obj.pid(1:6));
                         end
                         break
                     elseif opt.vm.shunts.shift_in > 0.04
                         if opt.vm.shunts.verbose > 0
-                            fprintf('  Ind %s (child of %s): Maximum shift_in of 0.5 reached.\n', obj.id(1:6), obj.pid(1:6));
+                            mp_printf('  Ind %s (child of %s): Maximum shift_in of 0.5 reached.\n', obj.id(1:6), obj.pid(1:6));
                         end
                         break
                     else
                         opt.vm.shunts.shift_in = opt.vm.shunts.shift_in + 0.005;
                         if opt.vm.shunts.verbose > 0
-                            fprintf('  Ind %s (child of %s): negative LMP detected, tightning opt.vm.shunts.shift_in to %0.3f.\n', obj.id(1:6), obj.pid(1:6), opt.vm.shunts.shift_in);
+                            mp_printf('  Ind %s (child of %s): negative LMP detected, tightning opt.vm.shunts.shift_in to %0.3f.\n', obj.id(1:6), obj.pid(1:6), opt.vm.shunts.shift_in);
                         end
                         continue
                     end
@@ -499,7 +499,7 @@ classdef sgvm_IndClass < handle
                         type = 'branch';
                     end
                     if opt.vm.shunts.verbose > 0
-                        fprintf('  Ind %s (child of %s): %d overloaded branches detected. Performing %s permutation.\n', obj.id(1:6), obj.pid(1:6), nviolations, type)
+                        mp_printf('  Ind %s (child of %s): %d overloaded branches detected. Performing %s permutation.\n', obj.id(1:6), obj.pid(1:6), nviolations, type)
                         if nviolations < 10
                             obj.print_flow_stats(idx)
                         end
@@ -527,7 +527,7 @@ classdef sgvm_IndClass < handle
             %
             %% solve WITHOUT softlims
             %tmp = runopf(r, opt.mpopt);
-                %fprintf('result with No softlimits:\n')
+                %mp_printf('result with No softlimits:\n')
                 %printpf(tmp)
 
             obj.mpc = tmp;
@@ -542,12 +542,12 @@ classdef sgvm_IndClass < handle
             sf = sqrt(obj.mpc.branch(idx, PF).^2 + obj.mpc.branch(idx, QF).^2);
             st = sqrt(obj.mpc.branch(idx, PT).^2 + obj.mpc.branch(idx, QT).^2);
             ra = obj.mpc.branch(idx, RATE_A);
-            fprintf('----------------------------------------------------\n')
-            fprintf('   flow statistic\n')
-            fprintf('----------------------------------------------------\n')
-            fprintf(' branch id  |  SF (MVA)  |  SF (MVA)  | RATE (MVA) |\n')
-            fprintf('------------|------------|------------|------------|\n')
-            fprintf('%11d |%11.4f |%11.4f |%11.4f |\n', [idx, sf, st, ra].')
+            mp_printf('----------------------------------------------------\n')
+            mp_printf('   flow statistic\n')
+            mp_printf('----------------------------------------------------\n')
+            mp_printf(' branch id  |  SF (MVA)  |  SF (MVA)  | RATE (MVA) |\n')
+            mp_printf('------------|------------|------------|------------|\n')
+            mp_printf('%11d |%11.4f |%11.4f |%11.4f |\n', [idx, sf, st, ra].')
         end
 
         %% ------  private methods  -----------

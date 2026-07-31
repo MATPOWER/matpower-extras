@@ -139,7 +139,7 @@ if N < 25
 end
 
 if sgopt.verbose
-    fprintf('SynGrid v%s : creating %d bus synthetic MATPOWER case.\n', sgver, N);
+    mp_printf('SynGrid v%s : creating %d bus synthetic MATPOWER case.\n', sgver, N);
 end
 
 if isempty(topo)    %% create a nested small-world topology from scratch

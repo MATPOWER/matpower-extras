@@ -113,7 +113,7 @@ if ~r.success
 end
 
 if opt.verbose > 1
-  fprintf('Result in sgvm_add_shunts:\n')
+  mp_printf('Result in sgvm_add_shunts:\n')
   printpf(r)
 end
 %% Convert generators to shunt elements

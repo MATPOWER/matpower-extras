@@ -110,7 +110,7 @@ H = sgvm_acptdf(mpc, nluse);
 % [rxqq, cxqq, vxqq] = find(H(nl+nluse, nb + 1: 2*nb));
 clear H;
 if opt.vm.nodeperm.verbose > 1
-    fprintf('\t   AC-PTDF time %0.3f sec\n', toc(tptdf));
+    mp_printf('\t   AC-PTDF time %0.3f sec\n', toc(tptdf));
 end
 % overwrite nl to be the number of considered branches
 % nl    = length(nluse);
@@ -448,7 +448,7 @@ if usedv
 %     prob.x0(vars.sv.first:vars.sv.last) = max(0, max(Vmin - V0, V0 - Vmax));
 end
 if opt.vm.nodeperm.verbose > 1
-    fprintf('\t   problem setup time %0.3f sec\n', toc(tsetup));
+    mp_printf('\t   problem setup time %0.3f sec\n', toc(tsetup));
 end
 %% solve
 tsolve = tic;
@@ -458,7 +458,7 @@ end
 prob.opt.grb_opt.BarConvTol = 1e-4;
 [x, f, eflag, output, lambda] = qps_matpower(prob);
 if opt.vm.nodeperm.verbose > 1
-    fprintf('\t   solve time %0.3f sec\n', toc(tsolve));
+    mp_printf('\t   solve time %0.3f sec\n', toc(tsolve));
 end
 if eflag
     dPb = x(vars.xp.first:vars.xp.last);

@@ -128,7 +128,7 @@ classdef sgvm_GenerationClass < handle
                 obj.exitflag = true;
               else
                 if opt.verbose > 0
-                  fprintf('Empty inds cell encountered, restarting with a new initial generation.\n')
+                  mp_printf('Empty inds cell encountered, restarting with a new initial generation.\n')
                 end
                   tmp = sgvm_GenerationClass(obj, opt.vm.ea.inds, opt);
                   obj.merge(tmp);

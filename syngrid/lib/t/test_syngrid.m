@@ -35,6 +35,18 @@ tests{end+1} = 't_sgvm_data2mpc';
 tests{end+1} = 't_syngrid';
 tests{end+1} = 't_syngrid_vm';
 
+%% warning for bug in Octave 11.x
+is_octave11 = have_feature('octave') && floor(have_feature('octave', 'vnum')) == 11;
+if is_octave11
+    persistent show_octave11_warning_once;
+    if isempty(show_octave11_warning_once)
+        show_octave11_warning_once = 1;
+        warning(sprintf('\n###############################################################################\n#  GNU Octave 11.x has a bug (https://savannah.gnu.org/bugs/index.php?68227)  #\n#  that results in lots of warnings when running MATPOWER. One workaround is  #\n#  to turn off all warnings using:  warning off                               #\n#  (applied automatically and temporarily for test_syngrid)                   #\n###############################################################################\n'));
+    end
+    w = warning();
+    warning('off');
+end
+
 %% run the tests
 all_ok = t_run_tests( tests, verbose );
 

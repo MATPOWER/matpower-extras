@@ -16,9 +16,9 @@ function rv = sgver(varargin)
 %   Covered by the 3-clause BSD License (see LICENSE file for details).
 
 v = struct( 'Name',     'SynGrid', ... 
-            'Version',  '1.0.2', ...
+            'Version',  '1.0.2+', ...
             'Release',  '', ...
-            'Date',     '14-May-2024' );
+            'Date',     '23-Jul-2026' );
 if nargout > 0
     if nargin > 0
         rv = v;
@@ -26,5 +26,5 @@ if nargout > 0
         rv = v.Version;
     end
 else
-    fprintf('%-22s Version %-9s  %11s\n', v.Name, v.Version, v.Date);
+    mp_printf('%-22s Version %-9s  %11s\n', v.Name, v.Version, v.Date);
 end

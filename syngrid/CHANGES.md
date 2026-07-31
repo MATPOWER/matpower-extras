@@ -2,6 +2,14 @@ Change history for SynGrid
 ==========================
 
 
+since 1.0.2
+-----------
+
+#### 7/23/26
+  - Use `mp_printf()`, recently included in [MP-Test](2), in place of
+    `fprintf()` everywhere to allow redirecting of console output.
+
+
 Version 1.0.2 - *May 14, 2024*
 ------------------------------
 
@@ -41,3 +49,4 @@ Version 1.0 - *Dec 18, 2018*
 ---
 
 [1]: https://github.com/MATPOWER/matpower-extras/issues/3
+[2]: https://github.com/MATPOWER/mptest
