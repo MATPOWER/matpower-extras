@@ -110,7 +110,7 @@ if nbus > maxSystemSize
 end
 
 if ~ignore_angle_lim && (any(mpc.branch(:,ANGMIN) ~= -360) || any(mpc.branch(:,ANGMAX) ~= 360))
-    warning('insolvablepf_limitQ: Angle difference constraints are not implemented in SDP_PF. Ignoring angle difference constraints.');
+    mp_warning('insolvablepf_limitQ: Angle difference constraints are not implemented in SDP_PF. Ignoring angle difference constraints.');
 end
 
 % Some of the larger system (e.g., case2746wp) have generators 
@@ -121,7 +121,7 @@ for i=1:ngen
     if isempty(busidx) || ~(mpc.bus(busidx,BUS_TYPE) == PV || mpc.bus(busidx,BUS_TYPE) == REF)
         mpc.bus(busidx,BUS_TYPE) = PV;
         if verbose >= 1
-            warning('insolvablepf_limitQ: Bus %s has generator(s) but is listed as a PQ bus. Changing to a PV bus.',int2str(busidx));
+            mp_warning('insolvablepf_limitQ: Bus %s has generator(s) but is listed as a PQ bus. Changing to a PV bus.',int2str(busidx));
         end
     end
 end
@@ -134,7 +134,7 @@ for i=1:nbus
         if isempty(genidx)
             mpc.bus(i,BUS_TYPE) = PQ;
             if verbose >= 1
-                warning('insolvablepf_limitQ: PV bus %i has no associated generator! Changing these buses to PQ.',i);
+                mp_warning('insolvablepf_limitQ: PV bus %i has no associated generator! Changing these buses to PQ.',i);
             end
         end
     end

@@ -118,11 +118,11 @@ if any(mpc.gencost(:,NCOST) > 3 & mpc.gencost(:,MODEL) == POLYNOMIAL)
 end
 
 if size(mpc.gencost,1) > ngen && verbose >= 1 % reactive power costs are specified
-    warning('sdpopf_solver: Reactive power costs are not implemented in SDPOPF. Ignoring reactive power costs.');
+    mp_warning('sdpopf_solver: Reactive power costs are not implemented in SDPOPF. Ignoring reactive power costs.');
 end
 
 if ~ignore_angle_lim && (any(mpc.branch(:,ANGMIN) ~= -360) || any(mpc.branch(:,ANGMAX) ~= 360))
-    warning('sdpopf_solver: Angle difference constraints are not implemented in SDPOPF. Ignoring angle difference constraints.');
+    mp_warning('sdpopf_solver: Angle difference constraints are not implemented in SDPOPF. Ignoring angle difference constraints.');
 end
 
 % Enforce a minimum resistance for all branches
@@ -1509,13 +1509,13 @@ for i=1:nbus
                     % typically pretty close. Use the solution but give a
                     % warning.
                     mpc.gen(gen_not_limited_q, PG) = double(Pg_q) * Sbase;
-                    warning('sdpopf_solver: Numeric inconsistency assigning active power injection to generators at bus %i.',busorder(i));
+                    mp_warning('sdpopf_solver: Numeric inconsistency assigning active power injection to generators at bus %i.',busorder(i));
                 else
                     % If there is any other error, just assign active power
                     % generation equally among all generators without
                     % regard for active power limits.
                     mpc.gen(gen_not_limited_q, PG) = (Pgen_remain / length(gen_not_limited_q))*Sbase;
-                    warning('sdpopf_solver: Error assigning active power injection to generators at bus %i. Assiging equally among all generators at this bus.',busorder(i));
+                    mp_warning('sdpopf_solver: Error assigning active power injection to generators at bus %i. Assiging equally among all generators at this bus.',busorder(i));
                 end
                 
             end
@@ -1543,7 +1543,7 @@ for i=1:nbus
             % the reactive generation available, assign the remainder to
             % equally to all generators at the bus.
             mpc.gen(genidx,QG) = mpc.gen(genidx,QG) + Qremaining / length(genidx);
-            warning('sdpopf_solver: Inconsistency in assigning reactive power to generators at bus index %i.',i);
+            mp_warning('sdpopf_solver: Inconsistency in assigning reactive power to generators at bus index %i.',i);
         end
     end
 end
@@ -1608,7 +1608,7 @@ for i=1:nbus
             c = -c1(genidx(k))*Pavg+alphak-c0k;
             R12 = (-b+sqrt(b^2-4*a*c)) / (2*a);
             if abs(imag(R12)) > 1e-3
-                warning('sdpopf_solver: R12 has a nonzero imaginary component. Lagrange multipliers for generator active power limits may be incorrect.');
+                mp_warning('sdpopf_solver: R12 has a nonzero imaginary component. Lagrange multipliers for generator active power limits may be incorrect.');
             end
             R12 = real(R12);
             

@@ -106,7 +106,7 @@ nbus = size(mpc.bus,1);
 Sbase = mpc.baseMVA;
 
 if ~ignore_angle_lim && (any(mpc.branch(:,ANGMIN) ~= -360) || any(mpc.branch(:,ANGMAX) ~= 360))
-    warning('testGlobalOpt: Angle difference constraints are not implemented in testGlobalOpt. Ignoring angle difference constraints.');
+    mp_warning('testGlobalOpt: Angle difference constraints are not implemented in testGlobalOpt. Ignoring angle difference constraints.');
 end
 
 
