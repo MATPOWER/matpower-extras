@@ -22,5 +22,5 @@ switch mpopt.opf.ac.solver
     case 'FMINCON'
         mpopt.fmincon.max_it = maxit;
   otherwise
-      warning('sgvm_IndClass/sgvm_set_max_iter: setting maximum iteration for solver %s unknown.', mpopt.opf.ac.solver)
+      mp_warning('sgvm_IndClass/sgvm_set_max_iter: setting maximum iteration for solver %s unknown.', mpopt.opf.ac.solver)
 end

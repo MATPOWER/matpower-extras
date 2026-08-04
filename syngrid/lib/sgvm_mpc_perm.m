@@ -53,7 +53,7 @@ if ~strcmp(opt.mpopt.opf.ac.solver, 'IPOPT')
          'Unfortunately results are too unstable with other interior-points solvers.\n',...
          'The IPOPT binaries via the PARDISO project for MATPOWER can be found at:\n',...
          '\thttps://pardiso-project.org/.']);
-  warning(errorstr);
+  mp_warning(errorstr);
 end
 
 %% add softlimits
@@ -82,7 +82,7 @@ opt.vm.softlims = struct('RATE_A', struct('hl_mod', 'remove', 'cost', rateacost)
 if opt.vm.parallel.numcores == 0
   opt.vm.parallel.use = 0;
 elseif opt.vm.parallel.use && ~exist('parfor','builtin')
-  warning('sgvm_mpc_perm: parallelization requested but it appears the Parallel Computing Toolbox is not installed. Setting parallel.use=0')
+  mp_warning('sgvm_mpc_perm: parallelization requested but it appears the Parallel Computing Toolbox is not installed. Setting parallel.use=0')
   opt.vm.parallel.use = 0;
 end
 if opt.vm.parallel.use

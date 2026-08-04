@@ -97,7 +97,7 @@ end
 branch(:,RATE_A) = round(branch(:,RATE_A));
 
 if all(branch(:,RATE_A) == 0) || all(isinf(branch(:,RATE_A)))
-  warning('sgvm_data2mpc: There are no line ratings in the data. Using default value of %d MVA for all lines', smpl_opt.rate_a_default)
+  mp_warning('sgvm_data2mpc: There are no line ratings in the data. Using default value of %d MVA for all lines', smpl_opt.rate_a_default)
   branch(:,RATE_A) = smpl_opt.rate_a_default;
 end
 %% node properties

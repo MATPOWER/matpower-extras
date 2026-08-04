@@ -96,17 +96,17 @@ r   = runopf(mpc,mpopt);
 
 if ~r.success
   if ~isinf(shunt_max)
-    warning('sgvm_add_shunts: OPF with Qg softlimits failed to converge. Removing shunt limits.')
+    mp_warning('sgvm_add_shunts: OPF with Qg softlimits failed to converge. Removing shunt limits.')
     opt.shunt_max = Inf;
     [out, bsh] = sgvm_add_shunts(out, mpopt, opt);
     return
   elseif ~soft_ratea
-    warning('sgvm_add_shunts: OPF with Qg softlimits failed to converge. Adding soft branch limits.')
+    mp_warning('sgvm_add_shunts: OPF with Qg softlimits failed to converge. Adding soft branch limits.')
     opt.soft_ratea = 1;
     [out, bsh] = sgvm_add_shunts(out, mpopt, opt);
     return
   end
-  warning('sgvm_add_shunts: No possible solution found! (Inf shunt limits and branch limits attempted).')
+  mp_warning('sgvm_add_shunts: No possible solution found! (Inf shunt limits and branch limits attempted).')
   out = r;
   bsh = zeros(nb,1);
   return

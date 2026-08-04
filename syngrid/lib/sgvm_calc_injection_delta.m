@@ -468,7 +468,7 @@ if eflag
 else
     if ~branch_slack
         if opt.verbose > 0
-            warning('sgvm_calc_injection_delta: optimization did not converge. Turning on branch slacks and retrying.')
+            mp_warning('sgvm_calc_injection_delta: optimization did not converge. Turning on branch slacks and retrying.')
         end
         opt.vm.nodeperm.branch_slack = true;
         [Pbus, Qbus] = sgvm_calc_injection_delta(mpc, opt);

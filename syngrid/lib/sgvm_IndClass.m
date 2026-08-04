@@ -208,17 +208,17 @@ classdef sgvm_IndClass < handle
                   %    case {'MIPS', 'IPOPT'}
                   %        maxit = sgvm_get_max_iter(mpopt, 1000);
                   %        if maxit < 1000
-                  %            warning('sgvm_IndClass/solve: increasing Ind %s (child of %s) maximum iteration to %d.', obj.id(1:6), obj.pid(1:6), 2*maxit)
+                  %            mp_warning('sgvm_IndClass/solve: increasing Ind %s (child of %s) maximum iteration to %d.', obj.id(1:6), obj.pid(1:6), 2*maxit)
                   %            mpopt = sgvm_set_max_iter(mpopt, 2*maxit);
                   %        else
                   %            obj.mpc = r;
-                  %            warning('sgvm_IndClass/solve: Unable to solve opf (Ind %s, child of %s).', obj.id(1:6), obj.pid(1:6))
+                  %            mp_warning('sgvm_IndClass/solve: Unable to solve opf (Ind %s, child of %s).', obj.id(1:6), obj.pid(1:6))
                   %            break
                   %        end
                   %    otherwise
                   else
                     obj.mpc = r;
-                    warning('sgvm_IndClass/solve: Unable to solve opf (Ind %s, child of %s).', obj.id(1:6), obj.pid(1:6))
+                    mp_warning('sgvm_IndClass/solve: Unable to solve opf (Ind %s, child of %s).', obj.id(1:6), obj.pid(1:6))
                     break
                   end
                 end
