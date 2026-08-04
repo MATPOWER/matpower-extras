@@ -86,7 +86,7 @@ NumberedSystem = ext2int(runpf(mpc)); %Just in case bus numbers are all out of w
 NumBuses = size(NumberedSystem.bus,1);
 
         if(NumBuses > 300)
-          warning('Large system: layout calculation may be quite slow')
+          mp_warning('Large system: layout calculation may be quite slow')
         end
     
     if (DoThevLayout == 1) %Use internode effective impedances as the basis for the projection
